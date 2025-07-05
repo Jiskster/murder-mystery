@@ -58,7 +58,9 @@ weapon.equipsfx = sfx_thok
 weapon.attacksfx = sfx_thok
 
 function weapon:onhit(self, p, p2)
-	COM_BufInsertText(p2, "say "..DEBATE_LINES[P_RandomRange(1, #DEBATE_LINES)])
+	if isserver or isdedicatedserver then
+		COM_BufInsertText(p2, "say "..DEBATE_LINES[P_RandomRange(1, #DEBATE_LINES)])
+	end
 end
 
 return weapon
