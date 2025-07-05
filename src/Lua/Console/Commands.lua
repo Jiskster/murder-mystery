@@ -1,7 +1,31 @@
 local wrapadd = MM.require("Libs/wrappedadd")
 
 local function debugOnly(p)
+	local easyDebugging = false
+	if (MM_N.waiting_for_players)
+	or (p == server)
+		easyDebugging = true
+	end
+	--if everyone else is bots, allow commands if so
+	do
+		local allbots = false
+		local bots,counted = 0,0
+		for play in players.iterate
+			if play == p then continue end
+			if IsPlayerAdmin(play) then continue end
+			if play.spectator then continue end
+			if play.bot or play.ai
+				bots = $ + 1
+			end
+			counted = $ + 1
+		end
+		if bots == counted
+			easyDebugging = true
+		end
+	end
+	
 	if not CV_MM.debug.value
+	and not easyDebugging
 		CONS_Printf(p, "This command can only be used in debug mode!")
 		return true
 	end
