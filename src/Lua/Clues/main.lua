@@ -17,6 +17,7 @@ local clueitemtiers = {
 		"snowball",
 	},
 	[3] = {
+		"bloxycola",
 		"burger",
 		"radio",
 	}
