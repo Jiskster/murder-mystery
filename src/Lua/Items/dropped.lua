@@ -220,10 +220,9 @@ local function manage_unpicked_weapon(mobj)
 	if def.dropthinker then
 		def.dropthinker(mobj)
 	end
-	MM.tryRunHook("DropItemThinker", def, mobj)
-	local hook_event = MM.events["AttackPlayer"]
+	local hook_event = MM.events["DropItemThinker"]
 	for i,v in ipairs(hook_event)
-		MM.tryRunHook("AttackPlayer", v, def, mobj)
+		MM.tryRunHook("DropItemThinker", v, def, mobj)
 	end
 	
 	// PICK ME UP. PICK ME UP.
