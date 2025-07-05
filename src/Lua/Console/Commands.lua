@@ -1,17 +1,7 @@
 local wrapadd = MM.require("Libs/wrappedadd")
 
-local function debugOnly(p)
-	if not CV_MM.debug.value
-		CONS_Printf(p, "This command can only be used in debug mode!")
-		return true
-	end
-	return false
-end
-
 COM_AddCommand("MM_GiveItem", function(p, name)
 	if not MM:isMM() then return end
-	--no macros :,(
-	if debugOnly(p) then return end
 
     if not MM.Items[name]
         CONS_Printf(p,"\x85".."Item name "..tostring(name).." not valid. \x82List of items:")
@@ -26,7 +16,6 @@ end, COM_ADMIN)
 
 COM_AddCommand("MM_EndGame", function(p)
 	if not MM:isMM() then return end
-	if debugOnly(p) then return end
 
 	MM:endGame(1)
 	MM_N.killing_end = false
@@ -38,14 +27,12 @@ end, COM_ADMIN)
 COM_AddCommand("MM_StartShowdown", function(p)
 	if not MM:isMM() then return end
 	if MM_N.showdown then return end
-	if debugOnly(p) then return end
 	
 	MM:startShowdown()
 end, COM_ADMIN)
 
 COM_AddCommand("MM_TimeTo0", function(p)
 	if not MM:isMM() then return end
-	if debugOnly(p) then return end
 	
 	MM_N.time = 0
 end, COM_ADMIN)
@@ -64,7 +51,6 @@ end, COM_LOCAL)
 
 COM_AddCommand("MM_toptextsay", function(p,time,header,...)
 	if not MM:isMM() then return end
-	if debugOnly(p) then return end
 	
 	if not tostring(time)
 		CONS_Printf(p,"mm_toptextsay <time> <header> <...>")
@@ -80,7 +66,6 @@ end, COM_ADMIN)
 
 COM_AddCommand("MM_stormradius", function(p,dest,time)
 	if not MM:isMM() then return end
-	if debugOnly(p) then return end
 	
 	if dest == nil then return end
 	if (time == nil) then return end
@@ -103,7 +88,6 @@ COM_AddCommand("MM_MakeMeA", function(p, newrole)
 	if not MM:isMM() then return end
 	if not (p.mm) then return end
 	if newrole == nil then return end
-	if debugOnly(p) then return end
 	
 	do
 		local todo = string.upper(newrole)
@@ -168,7 +152,6 @@ COM_AddCommand("MM_SetPerk", function(p, slot, newperk)
 	if not (p.mm) then return end
 	if slot == nil then return end
 	if newperk == nil then return end
-	if debugOnly(p) then return end
 	slot = string.lower($)
 	
 	do
@@ -304,7 +287,6 @@ end)
 COM_AddCommand("MM_AddRings", function(p, rings)
 	if not MM:isMM() then return end
 	if (tonumber(rings) == nil) then return end
-	if debugOnly(p) then return end
 	
 	p.mm_save.rings = wrapadd($, tonumber(rings))
 end, COM_ADMIN)
@@ -352,7 +334,6 @@ end, COM_LOCAL)
 
 COM_AddCommand("MM_SetTime", function(p,time)
 	if not MM:isMM() then return end
-	if debugOnly(p) then return end
 	
 	if (time == nil) then return end
 	
