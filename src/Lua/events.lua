@@ -56,6 +56,9 @@
 			Executes when a player uses a weapon that fires bullets.
 			- Return value: Boolean (override default behavior?)
 			
+		* "DropItemThinker", function(itemdef_t, mobj_t item)
+			Executes after dropped item thinker.
+
 		* "AttackPlayer", function(player_t inflictor, player_t target)
 			Executes when player "inflictor" uses a melee weapon and hits player "target."
 			- Return value: Boolean (don't hit target?, nil = use default behavior)
@@ -65,7 +68,6 @@
 			
 		* "ApplyAlias", function(player_t player, table alias)
 			Executes when the Body Swap Potion applies an alias for "player" when swapping with someone.
-			
 */
 
 local handler_snaptrue = {
@@ -100,6 +102,7 @@ events["CorpseThink"] = {}
 events["CorpseFound"] = {}
 events["GiveStartWeapon"] = {handler = handler_snapany}
 events["InventorySwitch"] = {}
+events["DropItemThinker"] = {}
 events["ItemDrop"] = {}
 events["ItemUse"] = {}
 events["AttackPlayer"] = {}

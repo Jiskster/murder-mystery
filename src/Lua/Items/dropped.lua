@@ -220,6 +220,7 @@ local function manage_unpicked_weapon(mobj)
 	if def.dropthinker then
 		def.dropthinker(mobj)
 	end
+	-- MM.tryRunHook("DropItemThinker", def, mobj)
 	
 	// PICK ME UP. PICK ME UP.
 	for p in players.iterate do
