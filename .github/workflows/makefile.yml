@@ -25,7 +25,7 @@ jobs:
         echo "BUILD_DATE=$(git rev-parse --abbrev-ref HEAD)-$(date +%Y-%m-%d)" >> $GITHUB_ENV
         options=("1329261667640541325" "1328478475459236041" "1332171698610507866")
         echo "EMOJI_LOL=${options[$RANDOM % 3]}" >> $GITHUB_ENV
-        options=("build time baby" "this build won't be a mystery" "murder :)")
+        options=("this build won't be a mystery" "epic build time" "this build brought to you by murder" "pk3? i prefer ak47 -the murderer" "i found this build on the corpse of Jisk" "help! the build bot uno reversed me!" "modern murder v6 build when" "i found all the clues and got this build")
         echo "NAME_LOL=${options[$RANDOM % 3]}" >> $GITHUB_ENV
 
     - name: Install dependencies
