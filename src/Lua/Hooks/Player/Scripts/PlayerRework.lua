@@ -18,6 +18,7 @@ local function ApplyMovementBalance(player)
             if adiff > 10*FU and player.speed > 18*FU 
             and P_IsObjectOnGround(pmo) then
                 pmo.skidscore = 3
+            	MM.hooksPassed("SkidStart", player)
             end
 			
             if pmo.skidscore then
@@ -27,6 +28,9 @@ local function ApplyMovementBalance(player)
 				end
 				
                 pmo.skidscore = $ - 1
+                if pmo.skidscore == 0 then
+                	MM.hooksPassed("SkidFinish", player)
+                end
             end
         end
 		
@@ -50,7 +54,7 @@ return function(p)
 	p.charability2 = CA2_NONE
 	p.jumpfactor = FixedMul(sonic.jumpfactor, jumpfactormulti)
 	p.runspeed = 9999*FU
-	
+
 	if (p.panim == PA_ABILITY)
 	or (p.panim == PA_ABILITY2)
 		P_ResetPlayer(p)
@@ -58,6 +62,61 @@ return function(p)
 		P_MovePlayer(p)
 	end
 	
+	p.thrustfactor = sonic.thrustfactor
+	p.accelstart = (sonic.accelstart*3)/2 -- Buff start acceleration
+	p.acceleration = sonic.acceleration
+	
+	p.rings = 0
+
+	p.powers[pw_shield] = 0
+	p.powers[pw_underwater] = 0
+	p.powers[pw_spacetime] = 0
+	
+	speedcap = FixedMul($, basespeedmulti)
+	speedcap = MM.hooksPassed("MovementSpeedCap", p, $) or $
+
+	if not P_IsObjectOnGround(p.mo) then
+		local me = p.mo
+		local airspeedcap = max(speedcap - 3*me.scale, 20 * me.scale)
+
+		if p.speed > airspeedcap then
+			local div = 16 * FU
+			local newspeed = p.speed - FixedDiv(p.speed - airspeedcap,div)
+			
+			me.momx = FixedMul(FixedDiv(me.momx, p.speed), newspeed)
+			me.momy = FixedMul(FixedDiv(me.momy, p.speed), newspeed)
+		end
+
+		speedcap = $ - 3*FU
+	end
+
+	-- reverse water effects
+	if (p.mo.eflags & (MFE_UNDERWATER|MFE_GOOWATER)) then
+		p.accelstart = 3*$/2
+		p.acceleration = 3*$/2
+		p.normalspeed = $*2
+		p.jumpfactor = FixedDiv($, FixedDiv(117*FU, 200*FU))
+		
+		if not P_IsObjectOnGround(p.mo)
+		and (p.mo.state ~= S_PLAY_SPRING) then
+		--probably used a spring
+			local grav = P_GetMobjGravity(p.mo)
+			p.mo.momz = $ + FixedMul(grav, 3*FU) - grav/3
+		end
+	--probably jumped out of water
+	elseif p.mo.last_weflag then
+		if (p.pflags & PF_JUMPED) then
+			p.mo.momz = FixedMul(
+				--get the last (hopefully corrected to normal grav) momz...
+				FixedMul(p.mo.last_momz or 0, FixedDiv(117*FU, 200*FU)),
+				--and reapply the extra thrust you get
+				FixedDiv(780*FU, 457*FU)
+			)
+		end
+	end
+
+	MM.hooksPassed("PreMovementTick", p)
+
 	local effects = p.mm.effects
 	for i,v in pairs(effects) do
 		if v.fuse then
@@ -86,9 +145,7 @@ return function(p)
 			end
 		end
 	end
-	
-	speedcap = FixedMul($, basespeedmulti)
-	
+
 	if p.powers[pw_carry] ~= CR_ZOOMTUBE
 		if p.mo.playergroundcap ~= nil then
 			if not P_IsObjectOnGround(p.mo) then
@@ -100,56 +157,10 @@ return function(p)
 	end
 	
 	ApplyMovementBalance(p)
-	
-	p.normalspeed = speedcap
-	if not P_IsObjectOnGround(p.mo)
-		local me = p.mo
-		local speedcap = max(speedcap - 3*me.scale, 20 * me.scale)
-		if p.speed > speedcap
-			local div = 16 * FU
-			
-			local newspeed = p.speed - FixedDiv(p.speed - speedcap,div)
-			me.momx = FixedMul(FixedDiv(me.momx, p.speed), newspeed)
-			me.momy = FixedMul(FixedDiv(me.momy, p.speed), newspeed)
-		end
-		p.normalspeed = $ - 3*FU
-	end
-	
-	p.thrustfactor = sonic.thrustfactor
-	p.accelstart = (sonic.accelstart*3)/2 -- Buff start acceleration
-	p.acceleration = sonic.acceleration
-	
-	p.rings = 0
 
-	p.powers[pw_shield] = 0
-	p.powers[pw_underwater] = 0
-	p.powers[pw_spacetime] = 0
-	
-	--reverse water effects
-	if (p.mo.eflags & (MFE_UNDERWATER|MFE_GOOWATER))
-		p.accelstart = 3*$/2
-		p.acceleration = 3*$/2
-		p.normalspeed = $*2
-		p.jumpfactor = FixedDiv($, FixedDiv(117*FU, 200*FU))
-		
-		if not P_IsObjectOnGround(p.mo)
-		--probably used a spring
-		and (p.mo.state ~= S_PLAY_SPRING)
-			local grav = P_GetMobjGravity(p.mo)
-			p.mo.momz = $ + FixedMul(grav, 3*FU) - grav/3
-		end
-	--probably jumped out of water
-	elseif p.mo.last_weflag
-		if (p.pflags & PF_JUMPED)
-			p.mo.momz = FixedMul(
-				--get the last (hopefully corrected to normal grav) momz...
-				FixedMul(p.mo.last_momz, FixedDiv(117*FU, 200*FU)),
-				--and reapply the extra thrust you get
-				FixedDiv(780*FU, 457*FU)
-			)
-		end
-	end
-	
+	p.normalspeed = speedcap
 	p.mo.last_weflag = p.mo.eflags & (MFE_UNDERWATER|MFE_GOOWATER)
 	p.mo.last_momz = p.mo.momz
+
+	MM.hooksPassed("PostMovementTick", p)
 end

@@ -39,7 +39,24 @@
 				Boolean (don't give item?)
 				or
 				Strings (item name, variable arguments)
-			
+	
+	--[Movement]--
+		* "PreMovementTick", function(player_t)
+			Executes after player variable nerfs, but not before movement logic.
+		
+		* "PostMovementTick", function(player_t)
+			Executes after movement logic and player variable nerfs.
+
+		* "SkidStart", function(player_t)
+			Once the player starts to skid, this hook runs.
+		
+		* "SkidFinish", function(player_t)
+			Once the player finishes skidding, this hook runs.
+		
+		* "MovementSpeedCap", function(player_t, fixed_t speedcap)
+			Executes upon setting the speed cap that the player should walk at.
+			- Return value: fixed_t (override speed cap?)
+	
 	--[Items]--
 		* "InventorySwitch", function(player_t player, int cur_slot, int new_slot, item_t cur_item, item_t new_item)
 			Executes when a player decides to switch inventory slots, but before
@@ -97,6 +114,11 @@ events["Init"] = {}
 events["PlayerInit"] = {}
 events["PlayerThink"] = {}
 events["DeadPlayerThink"] = {}
+events["SkidStart"] = {}
+events["SkidFinish"] = {}
+events["PreMovementTick"] = {}
+events["PostMovementTick"] = {}
+events["MovementSpeedCap"] = {}
 events["CorpseSpawn"] = {}
 events["CorpseThink"] = {}
 events["CorpseFound"] = {}
