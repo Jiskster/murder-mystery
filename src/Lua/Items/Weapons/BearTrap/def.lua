@@ -133,19 +133,18 @@ end
 weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
 	if item.ammoleft == nil then return end
 	if not selected
-		v.drawString(x, (y + 32*scale) - 8*FU,
+		v.slideDrawString(x, (y + 32*scale) - 8*FU,
 			item.ammoleft,
 			(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
-			"thin-fixed"
+			"thin-fixed", true
 		)
-		
 		return
 	end
 	
-	v.drawString(160*FU,y - 20*FU,
+	v.slideDrawString(160*FU,y - 20*FU,
 		"Traps: "..item.ammoleft,
 		(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
-		"thin-fixed-center"
+		"thin-fixed-center", true
 	)
 end
 
