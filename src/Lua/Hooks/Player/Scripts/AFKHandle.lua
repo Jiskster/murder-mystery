@@ -3,7 +3,7 @@ local activebuttons = BT_JUMP|BT_WEAPONNEXT|BT_WEAPONPREV|BT_ATTACK|BT_CUSTOM1|B
 rawset(_G,"AFK_TIMEOUT", 45*TICRATE)
 
 --minimum difference to be detected as "player input"
-local ANGLE_FUDGE = 3*FU
+local ANGLE_FUDGE = 7*FU
 
 local function handleTimeout(p)
 	if CV_MM.afkkickmode.value == 0 then return end
@@ -21,7 +21,7 @@ local function handleTimeout(p)
 		p.mm.afktimer = 0
 		
 		p.mm_save.timesafk = $ + 1
-		if p.mm_save.timesafk == 3
+		if p.mm_save.timesafk >= 3
 			p.mm_save.afkmode = true
 		end
 	else
