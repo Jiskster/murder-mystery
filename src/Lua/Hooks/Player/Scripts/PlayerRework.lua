@@ -110,7 +110,6 @@ return function(p)
 		local result = MM.tryRunHook("MovementSpeedCap", v, p, speedcap)
 		if type(result) == "number" then
 			speedcap = result
-			print "set"
 		end
 	end
 
