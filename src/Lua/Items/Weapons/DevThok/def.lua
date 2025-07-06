@@ -13,7 +13,8 @@ local DEBATE_LINES = {
 	"playing with the thok is easy, you just gotta learn the game",
 	"thok is kinda similar to homing attack. if u cant play with the thok, you suck",
 	"the only people who complain about the thok are the ones who are bad at the game",
-	"maybe the true thok was the friends we made along the way..." -- cinema
+	"maybe the true thok was the friends we made along the way...", -- cinema
+	"Fuck You I Want Your Entire Family Dead"
 }
 
 states[freeslot "S_MM_THOK"] = {
