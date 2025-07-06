@@ -88,7 +88,7 @@ local function getViewedPlayerRole(player, viewer)
 	local role = "Unknown"
 
 	if not player.mm then return "Unknown" end
-	if (player.mm_save.afkmode or player.mm.lastafkmode) and player.spectator
+	if (player.mm.lastafkmode) and player.spectator
 		return "AFKMode"
 	end
 	if player.mm.joinedmidgame then
