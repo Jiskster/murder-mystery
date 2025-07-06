@@ -178,14 +178,28 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	
 	--only apply AntiAdmin here
 	local no_prox_chat = false
+	local npc_nospectators = false
 	if (MM_N.gameover)
 	or (MM_N.showdown)
 	or (MM:pregame())
 	or (MM_N.waiting_for_players)
 	or (paused)
 		no_prox_chat = true
+		npc_nospectators = MM:pregame()
 	end
-	if no_prox_chat then return AntiAdmin(src,msg); end
+	if no_prox_chat
+		if npc_nospectators
+		and (
+			src
+			and src.mo
+			and src.mo.health
+			and src.mm
+			and not src.mm.spectator
+		)
+			return true
+		end
+		AntiAdmin(src,msg)
+	end
 	
 	local hook_event = MM.events["OnRawChat"]
 	for i,v in ipairs(hook_event)
