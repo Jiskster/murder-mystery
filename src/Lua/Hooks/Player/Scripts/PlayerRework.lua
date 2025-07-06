@@ -73,7 +73,14 @@ return function(p)
 	p.powers[pw_spacetime] = 0
 	
 	speedcap = FixedMul($, basespeedmulti)
-	speedcap = MM.hooksPassed("MovementSpeedCap", p, $) or $
+	
+	local hook_event = MM.events["MovementSpeedCap"]
+	for i,v in ipairs(hook_event)
+		local result = MM.tryRunHook("MovementSpeedCap", v, p, speedcap)
+		if type(result) == "number" then
+			speedcap = result
+		end
+	end
 
 	if not P_IsObjectOnGround(p.mo) then
 		local me = p.mo
