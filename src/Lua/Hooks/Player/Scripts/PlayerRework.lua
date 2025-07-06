@@ -140,8 +140,6 @@ return function(p)
 	ApplyMovementBalance(p)
 
 	p.normalspeed = speedcap
-	p.mo.last_weflag = p.mo.eflags & (MFE_UNDERWATER|MFE_GOOWATER)
-	p.mo.last_momz = p.mo.momz
 
 	-- reverse water effects
 	if (p.mo.eflags & (MFE_UNDERWATER|MFE_GOOWATER)) then
@@ -167,6 +165,8 @@ return function(p)
 			)
 		end
 	end
+	p.mo.last_weflag = p.mo.eflags & (MFE_UNDERWATER|MFE_GOOWATER)
+	p.mo.last_momz = p.mo.momz
 
 	MM.hooksPassed("PostMovementTick", p)
 end
