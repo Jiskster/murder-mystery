@@ -1,5 +1,9 @@
 -- Simple lua to run hooks for the mod.
 -- Adds easy modding support and more!
+/*
+	Original base created by UnmatchedBracket and Jisk
+	Using improved code from TakisHook lib
+*/
 
 /*
 	HOOK LIST:
@@ -132,6 +136,7 @@ events["CreateAlias"] = {}
 events["ApplyAlias"] = {}
 events["OnRawChat"] = {}
 events["KilledPlayer"] = {}
+MM.events = events
 
 MM.addHook = function(hooktype, func)
 	if events[hooktype] then
@@ -149,15 +154,15 @@ MM.tryRunHook = function(hooktype, v, ...)
 	local override = handler.initial
 
 	local results = {pcall(v.func, ...)}
-	local status = results[1]
+	local status = results[1] or nil
 	table.remove(results,1)
 	
-	if status then
+	if status ~= false then
 		override = {handler.func(
 			override,
 			unpack(results)
 		)}
-	elseif not v.errored then
+	elseif (status == false) and (not v.errored) then
 		v.errored = true
 		S_StartSound(nil,sfx_lose)
 		print("\x83MM: \x82WARNING:\x80 Hook " .. hooktype .. " handler #" .. i .. " error:")
@@ -166,12 +171,6 @@ MM.tryRunHook = function(hooktype, v, ...)
 	
 	if override == nil then return nil; end
 	return unpack(override)
-end
-
-MM.events = events
-MM.runHook = function()
-	error("MM.runHook is deprecated, please use MM.tryRunHook instead.")
-	return false
 end
 
 MM.hooksPassed = function(eventname, ...)

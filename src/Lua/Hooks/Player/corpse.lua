@@ -1,5 +1,4 @@
 local wrapadd = MM.require("Libs/wrappedadd")
-local hooksPassed = MM.hooksPassed
 
 freeslot("SPR2_OOF_")
 states[freeslot "S_PLAY_BODY"] = {
@@ -136,7 +135,13 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		
 		-- hmmm what if we made this an item variable, like item.ammokillincrease = 2
 		if attacker then
-			hooksPassed("KilledPlayer", attacker, target_player)
+			--there is no reason to use MM.hooksPassed since we never do anything with the result
+			--it would also prevent any other hooks from running which is not how these
+			--"one shot" hooks work.
+			local hook_event = MM.events["KilledPlayer"]
+			for i,v in ipairs(hook_event)
+				MM.tryRunHook("KilledPlayer", v, attacker, target_player)
+			end
 		end
 	end
 	
