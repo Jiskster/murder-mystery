@@ -21,7 +21,7 @@ local ImportantStuff = {
 --longer to shrink to minimum radius
 local BigRadius = 6144*FU
 local STORM_STARTINGTIME = 15*TICRATE
-local STORM_CLOSERADIUS = 512*FU
+local STORM_CLOSERADIUS = 612*FU
 
 --Stores everything important stored in MM_N.storm_point
 local function Backup(point)
