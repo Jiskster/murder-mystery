@@ -118,7 +118,7 @@ events["SkidStart"] = {}
 events["SkidFinish"] = {}
 events["PreMovementTick"] = {}
 events["PostMovementTick"] = {}
-events["MovementSpeedCap"] = {}
+events["MovementSpeedCap"] = {handler = handler_snapany}
 events["CorpseSpawn"] = {}
 events["CorpseThink"] = {}
 events["CorpseFound"] = {}
