@@ -517,14 +517,14 @@ MM:addPlayerScript(function(p)
 		and (p == displayplayer and camera or camera2).chase
 		and not inv.hidden
 			local me = p.mo
+			local ang = me.angle
 			local max_iter = 8
 			local max_dist = 128 * me.scale
 			local step = max_dist / max_iter
 			--close enough
 			--TODO: align these properly
-			local vstep = FixedMul(FixedMul(step, tofixed("1.25")), sin(p.aiming))
+			local vstep = FixedMul(step, SphereToCartesian(ang, p.aiming).z)
 			
-			local ang = me.angle
 			for i = -3, max_iter do
 				local move = step * i
 				local vmove = vstep * i
@@ -544,21 +544,6 @@ MM:addPlayerScript(function(p)
 				trail.radius = 2 * me.scale
 				trail.height = 4 * me.scale
 				trail.dontdrawforviewmobj = me
-				/*
-				trail.flags = $ &~(MF_NOCLIP|MF_NOBLOCKMAP)
-				if not P_CheckPosition(trail,
-					trail.x + P_ReturnThrustX(nil, ang, step),
-					trail.y + P_ReturnThrustY(nil, ang, step),
-					trail.z + FixedMul(32 * me.scale, sin(aim))
-				)
-					trail.translation = nil
-					trail.color = SKINCOLOR_RED
-					trail.spritexscale = FU/5
-					trail.spriteyscale = trail.spritexscale
-					--trail.blendmode = AST_SUBTRACT
-					break
-				end
-				*/
 			end
 		end
 	end
