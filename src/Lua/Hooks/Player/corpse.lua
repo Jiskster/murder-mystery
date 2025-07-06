@@ -205,7 +205,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 				R_PointToDist2(target.x, target.y, source.x, source.y), target.z,
 				0, source.z
 			)
-			local required_dist = FU*720
+			local required_dist = FU*800
 			local required_speed = FU*20
 			required_speed = FixedMul($, target.scale)
 			
