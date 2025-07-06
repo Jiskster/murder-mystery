@@ -1,6 +1,6 @@
 return function()
 	if CV_MM.debug.value or splitscreen then return end
-	if (leveltime == 0) then return end
+	if (leveltime == 0 or MM:pregame()) then return end
 	
 	local canEnd, endType = MM:canGameEnd()
 

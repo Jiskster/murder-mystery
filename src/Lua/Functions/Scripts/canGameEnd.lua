@@ -72,7 +72,5 @@ return function(self)
 		return false
 	end
 	
-
-	
 	return false
 end
