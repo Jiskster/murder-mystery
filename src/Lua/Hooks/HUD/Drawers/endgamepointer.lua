@@ -1,10 +1,19 @@
 local sglib = MM.require "Libs/sglib"
 local roles = MM.require "Variables/Data/Roles"
 
-local function HUD_EndGameDrawer(v,p,c)
-	if not MM_N.gameover then return end
+local snipe_count = 0
+local snipe_ticker = 0
+local snipe_frac = 0
 
-	if MM_N.sniped_end and not MM_N.voting then
+local function HUD_EndGameDrawer(v,p,c)
+	if not (MM_N.gameover and not MM_N.voting)
+		snipe_count = 0
+		snipe_ticker = 0
+		snipe_frac = 0
+		return
+	end
+
+	if MM_N.sniped_end then
 		local patch = v.cachePatch("MM_SNIPER_APPROVED")
 		local tic = MM_N.end_ticker - (TICRATE*3 + MM.sniper_theme_offset) + 6
 		if tic > 0 then
@@ -17,8 +26,30 @@ local function HUD_EndGameDrawer(v,p,c)
 				V_SNAPTOBOTTOM|V_SNAPTORIGHT
 			)
 		end
+		
+		if snipe_ticker <= 3*TICRATE
+			snipe_count = ease.outexpo(
+				snipe_ticker * (FU / (TICRATE*3)),
+				0, MM_N.sniped_dist
+			)
+			snipe_frac = $ + ease.outsine(
+				snipe_ticker * (FU / (TICRATE*3)),
+				2 * FU, 0
+			)
+		end
+		
+		snipe_ticker = $ + 1
+		while (snipe_frac > FU)
+			S_StartSound(nil, sfx_ptally)
+			snipe_frac = $ - FU
+		end
+		
+		v.drawString(160,150,
+			string.format("%.2f meter snipe!", snipe_count),
+			V_ALLOWLOWERCASE|V_SNAPTOBOTTOM,
+			"thin-center"
+		)
 	end
-	if MM_N.voting then return end
 	
 	if MM_N.end_killed and MM_N.end_killed.valid
 	and (MM_N.end_killed.player and MM_N.end_killed.player.valid)
