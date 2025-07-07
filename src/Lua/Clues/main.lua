@@ -245,7 +245,7 @@ MM:addPlayerScript(function(p)
 				
 				if not (#p.mm.clues.list) then
 					text = "YOU FOUND THEM ALL!"
-					subtext = "Your clues gave you a useful item!"
+					subtext = "Your clues gave you a weapon!"
 					local sub2 = nil
 					
 					local reward = ''
@@ -257,6 +257,7 @@ MM:addPlayerScript(function(p)
 								reward = clueitemtiers[1][P_RandomRange(1, #clueitemtiers[1])]
 							else
 								reward = clueitemtiers[2][P_RandomRange(1, #clueitemtiers[2])]
+								subtext = "Your clues gave you a useful item!"
 							end
 							
 							MM_N.clues_weaponsleft = $-1

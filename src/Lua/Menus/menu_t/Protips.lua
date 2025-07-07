@@ -71,7 +71,7 @@ MenuLib.addMenu({
 	
 	x = -2, y = -2,
 	width = BASEVIDWIDTH + 4,
-	height = BASEVIDHEIGHT + 4,
+	height = BASEVIDHEIGHT + 17,
 	color = 27,
 	
 	ps_flags = PS_DRAWTITLE|PS_NOSLIDEIN,
@@ -85,6 +85,121 @@ MenuLib.addMenu({
 			"Cycle with WEAPON NEXT/PREV",
 			V_ALLOWLOWERCASE, "thin"
 		)
+	end
+})
+
+local clue_text = {
+	"There are 3 tiers of \x82Items\x80 you can get from Clues. There's only a limited amount of ",
+	"\x82Tier 1 and 2\x80 items, so hurry if you want them. After those are gone, all you'll get ",
+	"is junk."
+}
+local function drawWeaponText(v, x,y, item_id, desc)
+	local itemdef_t = MM.Items[item_id]
+	local item_patch = v.cachePatch(itemdef_t.display_icon)
+	local p_width = item_patch.width * 2/3
+	local p_height = item_patch.height * 2/3
+	
+	local wid = p_width + 2 + v.stringWidth(itemdef_t.display_name,0,"thin")
+	local hei = p_height
+	for k, str in ipairs(desc)
+		wid = max($,
+			p_width + 2 + v.stringWidth(str,0,"thin")/2
+		)
+		if (5 * k > p_height)
+			hei = $ + 5
+		end
+	end
+	v.drawFill(x - 1,y - 1,
+		wid + 3,hei + 2, 30
+	)
+	
+	v.drawScaled(x*FU,y*FU, FU*2/3, item_patch, 0)
+	v.drawString(x + p_width + 2, y, itemdef_t.display_name, V_ALLOWLOWERCASE|V_YELLOWMAP, "thin")
+	x = $ + p_width + 2
+	y = $ + 8
+	
+	for k, str in ipairs(desc)
+		v.drawString(x,y,str, V_ALLOWLOWERCASE, "small-thin")
+		
+		y = $ + 5
+	end
+	return wid+2
+end
+
+MenuLib.addMenu({
+	stringId = "GuidePage_Clues",
+	title = "\x89".."Clues",
+	
+	x = BASEVIDWIDTH/2 - 300/2,
+	y = BASEVIDHEIGHT/2 - 150/2,
+	width = 300,
+	height = 150,
+	ps_flags = PS_DRAWTITLE,
+	
+	drawer = function(v, ML, menu, props)
+		local x,y = props.corner_x, props.corner_y
+		x = $ + 2
+		y = $ + 15
+		
+		for k,str in ipairs(clue_text)
+			v.drawString(x,y,str, V_ALLOWLOWERCASE, "small")
+			y = $ + 5
+		end
+		y = $ + 5
+		
+		v.drawString(x,y, "Tier 1 (8% chance to get)", V_ALLOWLOWERCASE|V_YELLOWMAP, "left")
+		v.drawFill(props.corner_x, y + 10, 300, 1, 73)
+		x = $ + 2; y = $ + 12
+		x = $ + drawWeaponText(v, x,y, "shotgun", {
+			"Fires spread out projectiles.",
+			"\x82".."Fire rate\x80: 3 seconds per shot",
+			"",
+		})
+		x = $ + drawWeaponText(v, x,y, "revolver", {
+			"Fires 1 fast bullet, with drop off.",
+			"\x82".."Fire rate\x80: 2 seconds per shot",
+			"",
+		})
+		x = $ + drawWeaponText(v, x,y, "sword", {
+			"A melee weapon that attacks in a",
+			"sweeping motion. Lunges mid-air.",
+			"\x82".."Fire rate\x80: 2 seconds per shot",
+		})
+		y = $ + 25
+		
+		x = props.corner_x + 2
+		v.drawString(x,y, "Tier 2", V_ALLOWLOWERCASE|V_YELLOWMAP, "left")
+		v.drawFill(props.corner_x, y + 10, 300, 1, 73)
+		x = $ + 2; y = $ + 12
+		x = $ + drawWeaponText(v, x,y, "loudspeaker", {
+			"When equipped, sending a message will broadcast it to everyone.",
+			"Single use.",
+		})
+		v.drawFill(x,y - 1, 70,23, 30)
+		drawWeaponText(v, props.corner_x + menu.width - 117,y, "snowball", {
+			"8 snowballs that can push people around.",
+			"Great for non-violent self defense.",
+		})
+		y = $ + 25
+		
+		x = props.corner_x + 2
+		v.drawString(x,y, "Tier 3", V_ALLOWLOWERCASE|V_AZUREMAP, "left")
+		v.drawFill(props.corner_x, y + 10, 300, 1, 145)
+		x = $ + 2; y = $ + 12
+		x = $ + drawWeaponText(v, x,y, "bloxycola", {
+			"Refreshing junk.                           ",
+			"Useless."
+		})
+		x = $ + drawWeaponText(v, x,y, "burger", {
+			"Yummy junk.                               ",
+			"Useless."
+		})
+		x = $ + drawWeaponText(v, x,y, "radio", {
+			"Cool junk. Press \x82[CUSTOM 2]\x80 to drop it ",
+			"and play some tunes.",
+			'Change its song in the "\x82User Settings\x80" menu.'
+		})
+		
 	end
 })
 
@@ -132,6 +247,13 @@ MenuLib.addMenu({
 				v.drawString((x + 65)*FU,
 					(y + 10)*FU, "+25 coins",
 					V_GREENMAP|V_ALLOWLOWERCASE, "thin-fixed"
+				)
+				
+				drawGenericButton(v,
+					x + 140,
+					y + 10,
+					"\x82".."More About Clues",
+					"Clues",true
 				)
 				
 				y = $ + FixedInt(patch.height * scale) + 3
@@ -594,7 +716,6 @@ MenuLib.addMenu({
 			
 			y = $ + 8
 			drawGenericButton(v,x,y, "\x82".."HUD", "HUDPU", true)
-			
 		end
 		
 		x = props.corner_x + 100
