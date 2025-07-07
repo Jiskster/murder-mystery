@@ -189,16 +189,16 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	end
 	if no_prox_chat
 		if npc_nospectators
-		and (
-			src
-			and src.mo
-			and src.mo.health
-			and src.mm
-			and not src.mm.spectator
-		)
+		--theyre dead and im not
+		and (not (
+			src and src.mo and src.mo.health
+			and src.mm and not (src.mm.spectator or src.spectator)
+		) and (consoleplayer and consoleplayer.mo and consoleplayer.mo.health
+			and consoleplayer.mm and not (consoleplayer.mm.spectator or consoleplayer.spectator)
+		)) then
 			return true
 		end
-		AntiAdmin(src,msg)
+		return AntiAdmin(src,msg)
 	end
 	
 	local hook_event = MM.events["OnRawChat"]
@@ -209,7 +209,8 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 			return true
 		end
 	end
-
+	
+	--if we're dead, see everyones chats
 	if not (consoleplayer
 	and consoleplayer.mo
 	and consoleplayer.mo.health
@@ -217,7 +218,8 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	and not consoleplayer.mm.spectator) then
 		return AntiAdmin(src,msg);
 	end
-
+	
+	--if theyre dead, dont see their chats at all
 	if not (src
 		and src.mo
 		and src.mo.health
