@@ -19,6 +19,7 @@ local clueItems = {
 	"loudspeaker",
 	"snowball",
 	
+	"bloxycola",
 	"burger",
 	"radio",
 }
