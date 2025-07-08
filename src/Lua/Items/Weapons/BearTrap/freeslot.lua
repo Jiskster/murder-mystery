@@ -12,6 +12,7 @@ SafeFreeslot("sfx_brtrap")
 sfxinfo[sfx_brtrap] = {
 	priority = 64,
 	flags = SF_X4AWAYSOUND,
+	caption = "Beartrap set off"
 }
 
 states[SafeFreeslot("S_MM_BEARTRAP_FRIENDLY")] = {
