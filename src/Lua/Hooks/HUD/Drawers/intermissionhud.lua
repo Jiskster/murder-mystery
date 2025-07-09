@@ -160,7 +160,6 @@ local function draw_hud(v)
 
 		local scale = FU/4
 		for k,map in ipairs(MM_N.mapVote.maps) do
-
 			local mapIcon = v.cachePatch(G_BuildMapName(map.map).."P")
 			local iconWidth = 160*scale
 			-- width = $+(offset*(maxMaps-1))
@@ -200,6 +199,11 @@ local function draw_hud(v)
 				y+((mapIcon.height+4)*scale),
 				G_BuildMapTitle(map.map),
 				V_ALLOWLOWERCASE|color|trans,
+				"thin-fixed-center")
+			v.drawString(x+(iconWidth/2),
+				y-((mapIcon.height-64)*scale),
+				map.gamemode,
+				V_ALLOWLOWERCASE|V_BLUEMAP|trans,
 				"thin-fixed-center")
 			
 			

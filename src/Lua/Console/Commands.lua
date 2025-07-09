@@ -347,3 +347,20 @@ COM_AddCommand("MM_SetTime", function(p,time, mode)
 	
 	MM_N.time = $ + time
 end, COM_ADMIN)
+
+COM_AddCommand("MM_NextGametype", function(p, modenum)
+	if not MM:isMM() then return end
+	if not (p.mm) then return end
+	
+	if (modenum == nil) then return CONS_Printf(p, "\x85\Invalid argument! #1 <modenum>") end
+	modenum = tonumber($)
+	if (modenum == nil) then return CONS_Printf(p, "\x85\Invalid argument! #1 <modenum>") end
+	
+	if MM.Gametypes[modenum] then
+		MM_N.next_gametype = modenum
+		
+		print("\x82\An admin has set the next gametype to: "..MM.Gametypes[modenum].name)
+	else
+		CONS_Printf(p, "\x85\Gametype does not exist!")
+	end
+end, COM_ADMIN)

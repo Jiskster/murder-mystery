@@ -47,8 +47,9 @@ return function(self)
 		if data.bonustype then continue end
 
 		table.insert(MM_N.mapVote.maps, {
-			map = map,
-			votes = 0
+			map = map;
+			votes = 0;
+			gametype = 1;
 		})
 		addedMaps = $+1
 	end

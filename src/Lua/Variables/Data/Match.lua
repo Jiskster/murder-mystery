@@ -1,4 +1,4 @@
-local match_time = 180*TICRATE
+local match_time = 3*60*TICRATE
 local duel_time = 60*TICRATE
 local pregame_time = 10*TICRATE
 
@@ -10,7 +10,8 @@ return {
 	dueling = false,
 	rounds = 0,
 	
-	gametype = "classic",
+	gametype = 1,
+	next_gametype = nil, -- changes to this gametype when map changes
 
 	special_count = 0,
 

@@ -145,8 +145,12 @@ return function(self, maploaded)
 		P_RemoveMobj(MM_N.end_camera)
 		MM_N.end_camera = nil
 	end
-    
+    local nextgametype = MM_N.next_gametype or 1
+	
 	MM_N = shallowCopy(matchVars)
+	MM_N.gametype = nextgametype
+	MM_N.time = MM.Gametypes[nextgametype].max_time + MM_N.pregame_time
+	MM_N.maxtime = MM.Gametypes[nextgametype].max_time
 	MM_N.safe_sectors = {}
 	MM_N.safe_sectors_UD = {}
 	MM_N.map_weather = PRECIP_BLANK
