@@ -21,7 +21,7 @@ return function(self)
 	local addedMaps = 0
 	local timesrejected = 0
 	while addedMaps < 4 do
-		local map = P_RandomRange(1, 1024)
+		local map = P_RandomRange(1, 1035)
 		if not mapheaderinfo[map] then continue end
 
 		local data = mapheaderinfo[map]
