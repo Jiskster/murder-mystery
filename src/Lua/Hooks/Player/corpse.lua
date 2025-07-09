@@ -481,6 +481,11 @@ addHook("ThinkFrame", function()
 				MM_N.knownDeadPlayers[corpse.playerid] = true
 				body_found = true
 				
+				if CV_MM.wip_dynamic_time.value then
+					MM_N.time = $ + 15*TICRATE
+					MM_N.uncap_timer = true
+				end
+				
 				local marker = P_SpawnMobjFromMobj(corpse, 0,0,
 					FixedDiv(corpse.height, corpse.scale),
 					MT_THOK

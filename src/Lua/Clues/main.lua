@@ -284,6 +284,12 @@ MM:addPlayerScript(function(p)
 				if p == displayplayer then
 					MMHUD:PushToTop(3*TICRATE, text, subtext, sub2)
 				end
+				
+				if CV_MM.wip_dynamic_time.value then
+					MM_N.time = max(30*TICRATE, $ - 30*TICRATE)
+					MM_N.uncap_timer = true
+				end
+				
 				break
 			end
 		end

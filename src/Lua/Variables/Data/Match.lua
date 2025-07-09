@@ -28,6 +28,8 @@ return {
 	clues_singlemode = false,
 	clues_positions = {},
 	clues = {},
+	
+	uncap_timer = false,
 
 	speed_cap = 23*FU,
 
