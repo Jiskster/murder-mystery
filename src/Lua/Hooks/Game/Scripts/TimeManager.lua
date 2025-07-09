@@ -80,9 +80,10 @@ return function()
 	if not (MM_N.time)
 	and not (MM_N.overtime or MM_N.showdown) then
 		if not MM_N.dueling
-			if MM_N.peoplekilled >= MM_N.minimum_killed
-			or MM_N.showdown
-			or (CV_MM.debug.value)
+			if (MM_N.peoplekilled >= MM_N.minimum_killed
+				or MM_N.showdown
+				or (CV_MM.debug.value)
+			) and not MM.Gametypes[MM_N.gametype].disable_overtime
 				MM:startOvertime()
 			else
 				MM:endGame(1)
