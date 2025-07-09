@@ -20,4 +20,3 @@ end
 MM.RegisterGametype("Classic")
 
 dofile("Gametypes/Freeze Tag/main")
-

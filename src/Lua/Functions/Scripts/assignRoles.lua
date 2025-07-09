@@ -91,6 +91,8 @@ return function(self, count, alreadychosen, murdorsherf)
 		if mp ~= sp
 		and not (murderers[mp])
 		and not (sheriffs[sp]) then
+			local disable_sheriff = (MM.Gametypes[MM_N.gametype].disable_sheriff == true)
+			
 			if murdorsherf == nil or (murdorsherf == true) then
 				mp.mm.role = MMROLE_MURDERER
 				mp.mm_save.murderer_chance_multi = 1
@@ -105,18 +107,20 @@ return function(self, count, alreadychosen, murdorsherf)
 				murderers[mp] = true
 			end
 			
-			if murdorsherf == nil or (murdorsherf == false) then
-				sp.mm.role = MMROLE_SHERIFF
-				sp.mm_save.sheriff_chance_multi = 1
-				
-				if murdorsherf ~= nil
-					if CV_MM.debug.value
-						chatprint("\x83*" .. sp.name .. "\x83 has been magically made a \x84Sheriff!\x82")
-					else
-						chatprintf(sp, "\x83*You have been magically made a \x84Sheriff!\x82")
+			if not disable_sheriff then
+				if (murdorsherf == nil or (murdorsherf == false)) then
+					sp.mm.role = MMROLE_SHERIFF
+					sp.mm_save.sheriff_chance_multi = 1
+					
+					if murdorsherf ~= nil
+						if CV_MM.debug.value
+							chatprint("\x83*" .. sp.name .. "\x83 has been magically made a \x84Sheriff!\x82")
+						else
+							chatprintf(sp, "\x83*You have been magically made a \x84Sheriff!\x82")
+						end
 					end
+					sheriffs[sp] = true
 				end
-				sheriffs[sp] = true
 			end
 			i = $+1
 		end

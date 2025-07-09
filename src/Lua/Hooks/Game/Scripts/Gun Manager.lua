@@ -64,6 +64,7 @@ local function refillSlots()
 end
 
 return function()
+	if (MM.Gametypes[MM_N.gametype].disable_sheriff) then return end
 	if (MM_N.dueling) then return end
 	refillSlots()
 	if (CV_MM.debug.value) then return end
