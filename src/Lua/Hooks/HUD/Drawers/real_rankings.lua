@@ -88,7 +88,7 @@ local function getViewedPlayerRole(player, viewer)
 	local role = "Unknown"
 
 	if not player.mm then return "Unknown" end
-	if (player.mm.lastafkmode) and player.spectator
+	if (player.mm.afkmodelast) and player.spectator
 		return "AFKMode"
 	end
 	if player.mm.joinedmidgame then
@@ -174,7 +174,7 @@ local function HUD_TabScoresDrawer(v)
 	for p in players.iterate do
 		if p and p.valid then
 			local isafk = false
-			if (p.mm_save and p.mm_save.afkmode and p.spectator)
+			if (p.mm_save and p.mm.afkmodelast and p.spectator)
 				isafk = true
 			end
 			
