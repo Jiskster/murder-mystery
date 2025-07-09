@@ -332,11 +332,18 @@ COM_AddCommand("MM_OpenMenu", function()
 	MenuLib.initMenu(MenuLib.findMenu("MainMenu"))
 end, COM_LOCAL)
 
-COM_AddCommand("MM_SetTime", function(p,time)
+COM_AddCommand("MM_SetTime", function(p,time, mode)
 	if not MM:isMM() then return end
 	
 	if (time == nil) then return end
+	time = tonumber($)
+	if (time == nil) then return end
 	
-	time = abs(tonumber($) or 0)
+	if mode == "seconds"
+		time = $ * TICRATE
+	elseif mode == "minutes"
+		time = $ * 60 * TICRATE
+	end
+	
 	MM_N.time = $ + time
 end, COM_ADMIN)
