@@ -147,7 +147,7 @@ MenuLib.addMenu({
 		end
 		y = $ + 5
 		
-		v.drawString(x,y, "Tier 1 (8% chance to get)", V_ALLOWLOWERCASE|V_YELLOWMAP, "left")
+		v.drawString(x,y, "Tier 1 (1 out of 8 chance to get)", V_ALLOWLOWERCASE|V_YELLOWMAP, "left")
 		v.drawFill(props.corner_x, y + 10, 300, 1, 73)
 		x = $ + 2; y = $ + 12
 		x = $ + drawWeaponText(v, x,y, "shotgun", {
