@@ -9,13 +9,13 @@ local function ApplyMovementBalance(player)
         local pta = R_PointToAngle2(0, 0, pmo.momx, pmo.momy)
 		
         if pmo.lastpta ~= nil then
-            local adiff = AngleFixed(pta)-AngleFixed(pmo.lastpta)
+            local adiff = FixedAngle(AngleFixed(pta)-AngleFixed(pmo.lastpta))
 			
             if AngleFixed(adiff) > 180*FU
                 adiff = InvAngle($)
             end
             
-            if adiff > 10*FU and player.speed > 18*FU 
+            if abs(AngleFixed(adiff)) > 10*FU and player.speed > 18*FU 
             and P_IsObjectOnGround(pmo) then
                 pmo.skidscore = 3
             	MM.hooksPassed("SkidStart", player)
