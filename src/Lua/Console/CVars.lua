@@ -27,3 +27,10 @@ CV_MM.skid_dust = CV_RegisterVar({
 	flags = CV_NETVAR,
 	PossibleValue = CV_OnOff
 })
+
+CV_MM.wip_dynamic_time = CV_RegisterVar({
+	name = "mm_wip_dynamic_time",
+	defaultvalue = "Off",
+	flags = CV_NETVAR,
+	PossibleValue = CV_OnOff
+})
