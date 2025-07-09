@@ -45,7 +45,7 @@ return function()
 				end
 				-- Fisher-Yates shuffle algorithm
 				for i = #pool, 2, -1 do
-				local j = P_RandomRange(1, i)
+					local j = P_RandomRange(1, i)
 					pool[i], pool[j] = pool[j], pool[i]
 				end
 				MM_N.mapVote.pool = pool
@@ -89,7 +89,7 @@ return function()
 		and (MM_N.killing_end) then
 			local theme = MM.themes[MM_N.theme or "srb2"]
 			mapmusname = theme.music or "CHRSEL"
-			S_ChangeMusic(mapmusname, true, nil, 0,0, MUSICRATE)
+			S_ChangeMusic(mapmusname, true, nil, 0,0)
 		end
 		return
 	end
