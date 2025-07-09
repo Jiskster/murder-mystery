@@ -90,7 +90,7 @@ addHook("MobjThinker",function(mo)
 end,MT_MM_KNIFE_PROJECT)
 
 addHook("MobjMoveBlocked",function(mo)
-	if (mo and mo.valid and mo.health)
+	if (mo and mo.valid and mo.health and not mo.safeknife)
 		P_KillMobj(mo)
 	end
 end,MT_MM_KNIFE_PROJECT)
