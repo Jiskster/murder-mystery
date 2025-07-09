@@ -80,17 +80,6 @@ local function distchecks(item, p, target)
 	return true
 end
 
-MM.addHook("ItemUse", function(p)
-	local inv = p.mm.inventory
-	local item = inv.items[inv.cur_sel]
-	
-	if item.id ~= "knife" then return end
-	
-	if item.altfiretime
-		return true
-	end
-end)
-
 weapon.unequip = function(item,p)
 	if item.altfiretime
 		item.cooldown = TICRATE * 3/4
@@ -138,46 +127,6 @@ weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
 	end
 	
 	--v.drawString(x,y, timer.."/"..maxtime, flags, "thin-fixed")
-end
-
-MM.MeleeWhiffFX = function(p)
-	local me = p.mo
-	
-	if not (me and me.valid) then return end
-	
-	local angle = p.cmd.angleturn << 16
-	local dist = 16*FU
-	local whiff = P_SpawnMobjFromMobj(me,
-		P_ReturnThrustX(nil,angle, dist) + me.momx,
-		P_ReturnThrustY(nil,angle, dist) + me.momy,
-		FixedDiv(me.height,me.scale)/2,
-		MT_THOK
-	)
-	whiff.state = S_MM_KNIFE_WHIFF
-	whiff.fuse = -1 --whiff.tics
-	whiff.angle = angle
-	whiff.renderflags = $|RF_NOSPLATBILLBOARD|RF_SLOPESPLAT
-	whiff.scale = FixedMul($, tofixed("1.8"))
-	whiff.height = 0
-	
-	local aiming = AngleFixed(p.aiming + ANGLE_90)
-	--clamp so it doesnt distort so much
-	aiming = max(50*FU,min(130*FU,$))
-	aiming = FixedAngle($) - ANGLE_90
-	
-	P_CreateFloorSpriteSlope(whiff)
-	local slope = whiff.floorspriteslope
-	slope.o = {
-		x = whiff.x, y = whiff.y, z = whiff.z
-	}
-	slope.zangle = aiming
-	slope.xydirection = angle
-	
-	--wumbo steve
-	whiff.spritexscale = whiff.scale
-	whiff.spriteyscale = FixedMul(cos(slope.zangle), whiff.scale + (slope.zangle == ANGLE_90 - 1 and 1024 or 0))
-	
-	me.whiff_fx = whiff
 end
 
 weapon.attack = function(item,p)
