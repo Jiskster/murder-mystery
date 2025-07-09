@@ -481,7 +481,7 @@ addHook("ThinkFrame", function()
 				MM_N.knownDeadPlayers[corpse.playerid] = true
 				body_found = true
 				
-				if CV_MM.wip_dynamic_time.value then
+				if CV_MM.wip_dynamic_time.value and MM_N.time > 30*TICRATE then
 					MM_N.time = $ + 15*TICRATE
 					MM_N.uncap_timer = true
 				end
