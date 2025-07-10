@@ -173,7 +173,9 @@ weapon.thinker = function(item, p)
 		if not distchecks(item,p,p2.mo) then continue end
 		
 		P_SpawnLockOn(p, p2.mo, S_LOCKON1)
+		break
 	end
+	item.mobj.translation = "MM_ToyKnife"
 end
 
 return weapon
