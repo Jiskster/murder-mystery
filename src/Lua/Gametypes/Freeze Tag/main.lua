@@ -134,8 +134,9 @@ MM:addPlayerScript(function(player)
 		player.unfreezecooldown = max(0, $ - 1)
 	end
 	
-	if player.mo and player.mo.valid then
+	if player.mo and player.mo.valid and player.mm then
 		if player.freezetagged then
+			player.mm.afktimer = 0
 			frozenTextThink(player)
 			frozenGhostThink(player)
 			player.powers[pw_nocontrol] = 2
