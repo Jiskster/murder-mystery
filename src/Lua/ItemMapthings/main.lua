@@ -34,6 +34,8 @@ local rolebits = {
 }
 
 addHook("MapThingSpawn",function(mo,mt)
+	if MM.Gametypes[MM_N.gametype].disable_item_mapthing then return end
+	
 	local item_id = mt.stringargs[0]
 	local item_cost = mt.args[0]
 	local item_pickuptime = mt.args[1]

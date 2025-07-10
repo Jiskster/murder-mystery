@@ -264,6 +264,10 @@ addHook("MobjThinker",function(point)
 		if not p.mm then continue end
 		if point.restrict & (rolebits[p.mm.role] or 0) then continue end
 		
+		if MM.Gametypes[MM_N.gametype].disable_item_mapthing and point.itemdrop then 
+			continue 
+		end
+		
 		MM.interactPoint(p, point, {
 			name = point.name,
 			intertext = point.desc,
