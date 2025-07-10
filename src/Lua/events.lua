@@ -133,13 +133,14 @@ events["GiveStartWeapon"] = {handler = handler_snapany}
 events["KeepingItem"] = {handler = handler_snapany}
 events["InventorySwitch"] = {}
 events["DropItemThinker"] = {}
+events["ShouldDamage"] = {handler = handler_snapany} -- TODO: Documentation
 events["ItemDrop"] = {}
 events["ItemUse"] = {}
-events["AttackPlayer"] = {}
+events["AttackPlayer"] = {handler = handler_snapany} -- TODO: Documentation
 events["CreateAlias"] = {}
 events["ApplyAlias"] = {}
 events["OnRawChat"] = {}
-events["KilledPlayer"] = {}
+events["KilledPlayer"] = {handler = handler_snapany} -- TODO: Documentation
 MM.events = events
 
 MM.addHook = function(hooktype, func)

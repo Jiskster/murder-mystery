@@ -609,13 +609,19 @@ MM:addPlayerScript(function(p)
 				end
 			end
 			
+			local ignore = false
 			local hook_event = MM.events["AttackPlayer"]
 			for i,v in ipairs(hook_event)
 				if MM.tryRunHook("AttackPlayer", v,
-					p, p2, item
+					p, p2, item, (item.damage or false)
 				) then
+					ignore = true
 					continue
 				end
+			end
+			
+			if ignore then
+				continue
 			end
 			
 			if item.damage then

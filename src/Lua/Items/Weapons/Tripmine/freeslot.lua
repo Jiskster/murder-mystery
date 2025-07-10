@@ -656,7 +656,12 @@ addHook("TouchSpecial",function(mine,me)
 		P_RemoveMobj(mine.aura)
 	end
 	
-	P_KillMobj(me,mine,mine.tracer,DMG_INSTAKILL)
+	if MM.Gametypes[MM_N.gametype].tamer_tripmine then
+		P_DamageMobj(me, mine, (mine.tracer and mine.tracer.valid) and mine.tracer or mine, 999, DMG_INSTAKILL)
+	else
+		P_KillMobj(me,mine,mine.tracer,DMG_INSTAKILL)
+	end
+	
 	me.color = SKINCOLOR_GALAXY
 	me.stormkilledme = true
 	me.colorized = true
@@ -726,7 +731,13 @@ addHook("MobjDeath",function(mine,_,src,dmgt)
 		end
 		
 		SpawnSparks(me)
-		P_KillMobj(me,mine, killer, DMG_INSTAKILL)
+		
+		if MM.Gametypes[MM_N.gametype].tamer_tripmine then
+			P_DamageMobj(me, mine, killer, 999, DMG_INSTAKILL)
+		else
+			P_KillMobj(me,mine, killer, DMG_INSTAKILL)
+		end
+		
 		me.color = SKINCOLOR_GALAXY
 		me.stormkilledme = true
 		me.colorized = true
