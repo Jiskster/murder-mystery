@@ -22,7 +22,7 @@ local freezetag_mode = MM.RegisterGametype("Freeze Tag", {
 	disable_sheriff = true;
 	disable_item_mapthing = true; -- includes interactions that drop items.
 	freezetag_core = true;
-	tamer_tripmine = true;
+	tamer_tripmine = true; -- uses damage function instead of kill
 })
 
 local function frozenTextThink(player)
