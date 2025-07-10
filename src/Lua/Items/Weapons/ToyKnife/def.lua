@@ -143,7 +143,7 @@ function weapon:onhit(player, player2)
 	if (player.mm and player2.mm) and
 	(mo1 and mo1.valid) and
 	(mo2 and mo2.valid) then
-		local power = 40*FU
+		local power = 70*FU
 		self.hit = 0
 		
 		S_StartSound(mo2, sfx_s3k7b)
