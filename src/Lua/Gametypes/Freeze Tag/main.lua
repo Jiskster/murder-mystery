@@ -125,6 +125,10 @@ local function unfreezePlayer(player)
 end
 
 MM:addPlayerScript(function(player)
+	if player.unfreezecooldown then
+		player.unfreezecooldown = max(0, $ - 1)
+	end
+	
 	if player.mo and player.mo.valid then
 		if player.freezetagged then
 			frozenTextThink(player)
@@ -232,10 +236,11 @@ addHook("MobjMoveCollide", function(tmthing, thing)
 		and tm_player.mm and player.mm 
 		and tm_player.mm.role == MMROLE_INNOCENT and player.mm.role == MMROLE_INNOCENT 
 		and not tm_player.powers[pw_invulnerability] and player.freezetagged 
-		and not tm_player.freezetagged then
+		and not tm_player.freezetagged and not tm_player.unfreezecooldown then
 			unfreezePlayer(player)
+			tm_player.unfreezecooldown = 5*TICRATE
 			thing.alpha = FRACUNIT -- come backk!!
-			player.powers[pw_invulnerability] = 105
+			player.powers[pw_invulnerability] = 85
 			S_StartSound(thing, sfx_ncitem)
 		end
 	end
