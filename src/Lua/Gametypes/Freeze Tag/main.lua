@@ -71,7 +71,18 @@ local function removeFreezeMobjs(player)
 	end
 end
 
+local function freezePlayer(player)
+	if not player.freezetagged and not player.powers[pw_invulnerability] then
+		S_StartSound(player.mo, sfx_iceb)
+		player.freezetagged = true
+	end
+end
+
 local function unfreezePlayer(player)
+	if player.freezetagged then
+		player.powers[pw_nocontrol] = 0
+	end
+	
 	player.freezetagged = false
 	removeFreezeMobjs(player)
 end
@@ -81,6 +92,7 @@ MM:addPlayerScript(function(player)
 		if player.freezetagged then
 			frozenTextThink(player)
 			frozenGhostThink(player)
+			player.powers[pw_nocontrol] = 2
 		else
 			removeFreezeMobjs(player)
 		end
@@ -107,10 +119,7 @@ local deathfunc = function(target, inflictor, source, damage)
 		
 		if attacker and attacker.player and (attacker.player.mm and tplayer.mm) 
 		and attacker.player.mm.role == MMROLE_MURDERER and attacker.player.mm.role ~= tplayer.mm.role then
-			if not tplayer.freezetagged then
-				S_StartSound(target, sfx_iceb)
-				tplayer.freezetagged = true
-			end
+			freezePlayer(tplayer)
 			
 			return true
 		end
@@ -132,14 +141,17 @@ local damagefunc = function(target, inflictor, source, damage)
 		
 		if attacker and attacker.player and (attacker.player.mm and tplayer.mm) 
 		and attacker.player.mm.role == MMROLE_MURDERER and attacker.player.mm.role ~= tplayer.mm.role then
-			if not tplayer.freezetagged then
-				S_StartSound(target, sfx_iceb)
-				tplayer.freezetagged = true
-			end
+			freezePlayer(tplayer)
 			
 			return false
 		end
 	end
+end
+
+local function zCollide(mo1, mo2)
+	if mo1.z > mo2.z+mo2.height then return false end
+	if mo2.z > mo1.z+mo1.height then return false end
+	return true
 end
 
 addHook("MobjDeath", deathfunc, MT_PLAYER);
@@ -150,10 +162,7 @@ MM.addHook("AttackPlayer", function(p, p2, item, isDamage)
 	if not MM.Gametypes[MM_N.gametype].freezetag_core then return end
 
 	if (p2.mo and p2.mo.valid) and p.mm.role == MMROLE_MURDERER and p2.mm.role ~= p.mm.role then
-		if not p2.freezetagged then
-			S_StartSound(p2.mo, sfx_iceb)
-			p2.freezetagged = true
-		end
+		freezePlayer(p2)
 		
 		return true
 	end	
@@ -163,10 +172,7 @@ MM.addHook("KilledPlayer", function(attacker, target)
 	if not MM.Gametypes[MM_N.gametype].freezetag_core then return end
 	
 	if attacker.mm.role == MMROLE_MURDERER then
-		if not target.freezetagged then
-			S_StartSound(target.mo, sfx_iceb)
-			target.freezetagged = true
-		end
+		freezePlayer(target)
 		
 		return true
 	end	
@@ -177,3 +183,22 @@ MM.addHook("PostMapLoad", function()
 		unfreezePlayer(player)
 	end
 end)
+
+addHook("MobjMoveCollide", function(tmthing, thing)
+	if not MM.Gametypes[MM_N.gametype].freezetag_core then return end
+	
+	if zCollide(tmthing, thing) then
+		local tm_player = tmthing.player
+		local player = thing.player
+		
+		if tm_player and tm_player.valid and player and player.valid 
+		and tm_player.mm and player.mm 
+		and tm_player.mm.role == MMROLE_INNOCENT and player.mm.role == MMROLE_INNOCENT 
+		and not tm_player.powers[pw_invulnerability] and player.freezetagged then
+			unfreezePlayer(player)
+			thing.alpha = FRACUNIT -- come backk!!
+			player.powers[pw_invulnerability] = 105
+			S_StartSound(thing, sfx_ncitem)
+		end
+	end
+end, MT_PLAYER)
