@@ -245,7 +245,8 @@ addHook("MobjMoveCollide", function(tmthing, thing)
 		and not tm_player.freezetagged and not tm_player.unfreezecooldown 
 		and not player.unfreezecooldown then
 			unfreezePlayer(player)
-			tm_player.unfreezecooldown = 5*TICRATE
+			tm_player.unfreezecooldown = 7*TICRATE
+			player.unfreezecooldown = 10*TICRATE
 			player.powers[pw_invulnerability] = 85
 			S_StartSound(thing, sfx_ncitem)
 		end
