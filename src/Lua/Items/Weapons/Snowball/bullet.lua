@@ -119,12 +119,8 @@ addHook("MobjMoveCollide", function(tmthing, thing)
 	if (thing.type ~= MT_PLAYER) then return end
 	if (tmthing.state ~= S_MM_SNOWBALL_B) then return end
 	
-	local power = 65*FRACUNIT
+	local power = 30*FRACUNIT
 	local punchangle = tmthing.angle
-	
-	if P_IsObjectOnGround(thing) then
-		power = $ * 3
-	end
 	
 	P_Thrust(thing, punchangle, power)
 	if (thing.player)

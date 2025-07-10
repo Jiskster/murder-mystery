@@ -148,6 +148,7 @@ function weapon:onhit(player, player2)
 		
 		S_StartSound(mo2, sfx_s3k7b)
 		P_InstaThrust(mo2, mo1.angle, power)
+		P_MovePlayer(mo2.player)
 		
 		if weapon.misssfx then
 			S_StopSoundByID(mo1, weapon.misssfx)
