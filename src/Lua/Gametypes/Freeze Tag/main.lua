@@ -1,3 +1,5 @@
+-- NOTE: I don't intend showdown to be in this mode - Jisk
+
 freeslot("MT_FROZENTEXTANIM", "S_FROZENTEXTANIM", "SPR_FROZENTEXTANIM")
 
 mobjinfo[MT_FROZENTEXTANIM] = {
@@ -71,10 +73,44 @@ local function removeFreezeMobjs(player)
 	end
 end
 
-local function freezePlayer(player)
+local function freezePlayer(player, attacker)
 	if not player.freezetagged and not player.powers[pw_invulnerability] then
 		S_StartSound(player.mo, sfx_iceb)
 		player.freezetagged = true
+		
+		local alivecount = 0
+		for p in players.iterate
+			if not (p.mm) then continue end
+			if not (p.mm_save) then continue end
+			if (p.mm.lastafkmode and p.spectator) then continue end
+			if (p.mm.role ~= MMROLE_INNOCENT) then continue end
+			if (p.freezetagged) then continue end
+			
+			alivecount = $ + 1
+		end
+		
+		if not alivecount then
+			S_StartSound(nil,sfx_buzz3)
+			S_StartSound(nil,sfx_s253)
+			local facingangle = player.drawangle + ANGLE_180
+			if (attacker.mo and attacker.mo.valid)
+				facingangle = R_PointToAngle2(player.mo.x,player.mo.y, attacker.mo.x,attacker.mo.y)
+			end
+			MM:endGame(2)
+			
+			MM:startEndCamera(player.mo,
+				facingangle,
+				200*FU,
+				6*TICRATE,
+				FU/16
+			)
+			
+			MM_N.killing_end = true
+			MM_N.end_killed = player.mo
+			MM_N.end_killer = attacker.mo
+			
+			MM:discordMessage("***The round has ended!***\n")
+		end
 	end
 end
 
@@ -119,7 +155,7 @@ local deathfunc = function(target, inflictor, source, damage)
 		
 		if attacker and attacker.player and (attacker.player.mm and tplayer.mm) 
 		and attacker.player.mm.role == MMROLE_MURDERER and attacker.player.mm.role ~= tplayer.mm.role then
-			freezePlayer(tplayer)
+			freezePlayer(tplayer, attacker.player)
 			
 			return true
 		end
@@ -141,7 +177,7 @@ local damagefunc = function(target, inflictor, source, damage)
 		
 		if attacker and attacker.player and (attacker.player.mm and tplayer.mm) 
 		and attacker.player.mm.role == MMROLE_MURDERER and attacker.player.mm.role ~= tplayer.mm.role then
-			freezePlayer(tplayer)
+			freezePlayer(tplayer, attacker.player)
 			
 			return false
 		end
@@ -162,7 +198,7 @@ MM.addHook("AttackPlayer", function(p, p2, item, isDamage)
 	if not MM.Gametypes[MM_N.gametype].freezetag_core then return end
 
 	if (p2.mo and p2.mo.valid) and p.mm.role == MMROLE_MURDERER and p2.mm.role ~= p.mm.role then
-		freezePlayer(p2)
+		freezePlayer(p2, p)
 		
 		return true
 	end	
@@ -172,7 +208,7 @@ MM.addHook("KilledPlayer", function(attacker, target)
 	if not MM.Gametypes[MM_N.gametype].freezetag_core then return end
 	
 	if attacker.mm.role == MMROLE_MURDERER then
-		freezePlayer(target)
+		freezePlayer(target, attacker)
 		
 		return true
 	end	
@@ -194,7 +230,8 @@ addHook("MobjMoveCollide", function(tmthing, thing)
 		if tm_player and tm_player.valid and player and player.valid 
 		and tm_player.mm and player.mm 
 		and tm_player.mm.role == MMROLE_INNOCENT and player.mm.role == MMROLE_INNOCENT 
-		and not tm_player.powers[pw_invulnerability] and player.freezetagged then
+		and not tm_player.powers[pw_invulnerability] and player.freezetagged 
+		and not tm_player.freezetagged then
 			unfreezePlayer(player)
 			thing.alpha = FRACUNIT -- come backk!!
 			player.powers[pw_invulnerability] = 105
