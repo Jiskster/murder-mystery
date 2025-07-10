@@ -19,6 +19,7 @@ states[S_FROZENTEXTANIM] = {
 }
 
 local freezetag_mode = MM.RegisterGametype("Freeze Tag", {
+	small_name = "FT"; -- unused: was for the rolling animation in the vote.
 	max_time = 4*60*TICRATE;
 	disable_overtime = true;
 	disable_sheriff = true;

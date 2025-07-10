@@ -200,11 +200,14 @@ local function draw_hud(v)
 				G_BuildMapTitle(map.map),
 				V_ALLOWLOWERCASE|color|trans,
 				"thin-fixed-center")
-			v.drawString(x+(iconWidth/2),
-				y-((mapIcon.height-64)*scale),
-				MM.Gametypes[map.gametype].name,
-				V_ALLOWLOWERCASE|V_BLUEMAP|trans,
-				"thin-fixed-center")
+				
+			if map.gametype > 1 then
+				v.drawString(x+(iconWidth/2),
+					y-((mapIcon.height-64)*scale),
+					MM.Gametypes[map.gametype].name,
+					V_ALLOWLOWERCASE|V_BLUEMAP|trans,
+					"thin-fixed-center")
+			end
 			
 			
 			-- v.drawString(x+(iconWidth/2),
@@ -221,7 +224,7 @@ local function draw_hud(v)
 		local max_ind = MM_N.mapVote.rollx/FU + 8
 		for k=min_ind,max_ind do
 			local map = MM_N.mapVote.pool[((k-1+#MM_N.mapVote.pool*5) % #MM_N.mapVote.pool)+1]
-			local mapIcon = v.cachePatch(G_BuildMapName(map).."P")
+			local mapIcon = v.cachePatch(G_BuildMapName(map.map).."P")
 
 			local x = 160*FU
 			x = $ - (iconWidth/2)
@@ -236,13 +239,14 @@ local function draw_hud(v)
 			if (FixedFloor(MM_N.mapVote.rollx+FU/2)/FU+1 == k) then
 				outline = "ACTIVE"
 			end
-
+			
 			v.drawScaled(x, y, scale, mapIcon, trans)
 			v.drawScaled(x, y, scale*2, v.cachePatch("MM_MAPVOTE_OUTLINE_" .. outline), trans)
 		end
 	elseif MM_N.mapVote.state == "done" then
 		local scale = FU/2
 		local map = MM_N.mapVote.selected_map
+		local selected_pool = MM_N.mapVote.selected_pool
 		local x = 160*FU
 		x = $ - (80/2)*FU
 
@@ -263,6 +267,13 @@ local function draw_hud(v)
 			G_BuildMapTitle(map),
 			V_ALLOWLOWERCASE|trans,
 			"fixed-center")
+		if selected_pool.gametype > 1 then
+			v.drawString(x+(FU*80/2),
+				y+(120*scale),
+				MM.Gametypes[selected_pool.gametype].name,
+				V_ALLOWLOWERCASE|V_BLUEMAP|trans,
+				"fixed-center")
+		end
 	end
 
 	// START IN

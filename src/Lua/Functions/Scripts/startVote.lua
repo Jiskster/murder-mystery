@@ -45,11 +45,16 @@ return function(self)
 			continue
 		end
 		if data.bonustype then continue end
-
+		local chosen_gametype = 1
+		
+		if P_RandomChance(FU/8) and #MM.Gametypes > 1 then
+			chosen_gametype = P_RandomRange(2, #MM.Gametypes)
+		end
+		
 		table.insert(MM_N.mapVote.maps, {
 			map = map;
 			votes = 0;
-			gametype = 1;
+			gametype = chosen_gametype;
 		})
 		addedMaps = $+1
 	end

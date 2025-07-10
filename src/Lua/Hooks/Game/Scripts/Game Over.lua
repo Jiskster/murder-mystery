@@ -27,20 +27,21 @@ return function()
 				if map.votes then
 					mapc = $ + 1
 					for _=1,map.votes do
-						table.insert(pool, map.map)
+						table.insert(pool, map)
 					end
 				end
 			end
 			if mapc == 1 then
 				MM_N.mapVote.state = "done"
-				MM_N.mapVote.selected_map = pool[1]
+				MM_N.mapVote.selected_map = pool[1].map
+				MM_N.mapVote.selected_pool = pool[1]
 				MM_N.mapVote.ticker = 5*TICRATE
 				MM_N.mapVote.unanimous = true
 				S_StartSound(nil, sfx_s3kb3)
 			else
 				if not #pool then
 					for _,map in ipairs(MM_N.mapVote.maps) do
-						table.insert(pool, map.map)
+						table.insert(pool, map)
 					end
 				end
 				-- Fisher-Yates shuffle algorithm
@@ -49,11 +50,13 @@ return function()
 					pool[i], pool[j] = pool[j], pool[i]
 				end
 				MM_N.mapVote.pool = pool
-				MM_N.mapVote.selected_map = pool[1]
+				MM_N.mapVote.selected_map = pool[1].map
+				MM_N.mapVote.selected_pool = pool[1]
 				MM_N.mapVote.state = "rolling"
 				MM_N.mapVote.ticker = P_RandomRange(4*TICRATE, 7*TICRATE)
 				MM_N.mapVote.rollvel = P_RandomRange(320, 480)
 				MM_N.mapVote.rollx = calcRollX(MM_N.mapVote.ticker)
+				
 			end
 		elseif MM_N.mapVote.state == "rolling" then
 			local newx = calcRollX(MM_N.mapVote.ticker)
@@ -68,6 +71,8 @@ return function()
 				S_StartSound(nil, sfx_s3kb3)
 			end
 		elseif MM_N.mapVote.state == "done" and MM_N.mapVote.ticker <= 0 then
+			MM_N.next_gametype = MM_N.mapVote.selected_pool.gametype
+			print("MM Gametype: "..MM.Gametypes[MM_N.next_gametype].name) 
 			G_SetCustomExitVars(MM_N.mapVote.selected_map, 2)
 			G_ExitLevel()
 		end
