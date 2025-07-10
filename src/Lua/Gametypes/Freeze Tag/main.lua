@@ -120,7 +120,7 @@ local function unfreezePlayer(player)
 	if player.freezetagged then
 		player.powers[pw_nocontrol] = 0
 		if player.mo and player.mo.valid then
-			player.mo.alpha = FRACUNIT
+			player.mo.alpha = FRACUNIT -- come backk!!
 		end
 	end
 	
@@ -243,7 +243,6 @@ addHook("MobjMoveCollide", function(tmthing, thing)
 		and not tm_player.freezetagged and not tm_player.unfreezecooldown then
 			unfreezePlayer(player)
 			tm_player.unfreezecooldown = 5*TICRATE
-			thing.alpha = FRACUNIT -- come backk!!
 			player.powers[pw_invulnerability] = 85
 			S_StartSound(thing, sfx_ncitem)
 		end
