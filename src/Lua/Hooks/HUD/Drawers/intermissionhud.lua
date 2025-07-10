@@ -202,7 +202,7 @@ local function draw_hud(v)
 				"thin-fixed-center")
 			v.drawString(x+(iconWidth/2),
 				y-((mapIcon.height-64)*scale),
-				map.gamemode,
+				MM.Gametypes[map.gametype].name,
 				V_ALLOWLOWERCASE|V_BLUEMAP|trans,
 				"thin-fixed-center")
 			
