@@ -79,6 +79,7 @@ local function freezePlayer(player, attacker)
 	if not player.freezetagged and not player.powers[pw_invulnerability] then
 		S_StartSound(player.mo, sfx_iceb)
 		player.freezetagged = true
+		player.unfreezecooldown = 12*TICRATE
 		
 		local alivecount = 0
 		for p in players.iterate
@@ -226,6 +227,7 @@ end)
 MM.addHook("PostMapLoad", function()
 	for player in players.iterate do
 		unfreezePlayer(player)
+		player.unfreezecooldown = 0
 	end
 end)
 
@@ -240,7 +242,8 @@ addHook("MobjMoveCollide", function(tmthing, thing)
 		and tm_player.mm and player.mm 
 		and tm_player.mm.role == MMROLE_INNOCENT and player.mm.role == MMROLE_INNOCENT 
 		and not tm_player.powers[pw_invulnerability] and player.freezetagged 
-		and not tm_player.freezetagged and not tm_player.unfreezecooldown then
+		and not tm_player.freezetagged and not tm_player.unfreezecooldown 
+		and not player.unfreezecooldown then
 			unfreezePlayer(player)
 			tm_player.unfreezecooldown = 5*TICRATE
 			player.powers[pw_invulnerability] = 85
