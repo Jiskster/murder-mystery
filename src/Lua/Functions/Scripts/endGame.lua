@@ -18,7 +18,7 @@ MM.endTypes = {
 	}
 }
 
-return function(self, endType)
+return function(self, endType, nofreeze)
 	if MM_N.gameover then return end
 
 	-- select theme
@@ -45,22 +45,24 @@ return function(self, endType)
 		S_StopMusic(consoleplayer)
 	end
 	
-	for mo in mobjs.iterate()
-		if not (mo and mo.valid) then continue end
-		if (mo == MM_N.end_camera) then continue end
-		
-		if mo.flags & MF_NOTHINK
-			mo.notthinking = true
-			continue
-		end
-		
-		mo.flags = $|MF_NOTHINK
-		if not (mo.flags & MF_MISSILE)
-		or (mo.origin and mo.origin.id)
-			S_StopSound(mo)
-		end
-		if (mo.player and mo.player.valid)
-			mo.fake_drawangle = mo.player.drawangle
+	if (MM_N.killing_end and not (MM_N.disconnect_end or nofreeze))
+		for mo in mobjs.iterate()
+			if not (mo and mo.valid) then continue end
+			if (mo == MM_N.end_camera) then continue end
+			
+			if mo.flags & MF_NOTHINK
+				mo.notthinking = true
+				continue
+			end
+			
+			mo.flags = $|MF_NOTHINK
+			if not (mo.flags & MF_MISSILE)
+			or (mo.origin and mo.origin.id)
+				S_StopSound(mo)
+			end
+			if (mo.player and mo.player.valid)
+				mo.fake_drawangle = mo.player.drawangle
+			end
 		end
 	end
 	
