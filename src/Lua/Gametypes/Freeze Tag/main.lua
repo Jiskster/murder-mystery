@@ -119,6 +119,9 @@ end
 local function unfreezePlayer(player)
 	if player.freezetagged then
 		player.powers[pw_nocontrol] = 0
+		if player.mo and player.mo.valid then
+			player.mo.alpha = FRACUNIT
+		end
 	end
 	
 	player.freezetagged = false
