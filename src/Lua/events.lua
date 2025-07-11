@@ -157,20 +157,21 @@ MM.tryRunHook = function(hooktype, v, ...)
 	local status = results[1] or nil
 	table.remove(results,1)
 	
-	if status ~= false then
+	if status then
 		override = {handler.func(
 			override,
 			unpack(results)
 		)}
-	elseif (status == false) and (not v.errored) then
+	elseif (not v.errored) then
 		v.errored = true
 		S_StartSound(nil,sfx_lose)
 		print("\x83MM: \x82WARNING:\x80 Hook " .. hooktype .. " handler #" .. i .. " error:")
-		print(result)
+		print(unpack(results))
 	end
 	
 	if override == nil then return nil; end
-	return unpack(override)
+	if type(override) == "table" then return unpack(override)
+	else return override; end
 end
 
 MM.hooksPassed = function(eventname, ...)
