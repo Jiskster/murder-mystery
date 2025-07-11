@@ -303,7 +303,7 @@ addHook("HUD", function(v,p,c)
 	v.slideDrawString = function(x,y,str,flags,align,fixed)
 		v.slideDrawString2(x,y,str,flags,align,fixed,false)
 	end
-	v.WslideDrawSring = function(x,y,str,flags,align,fixed)
+	v.WslideDrawString = function(x,y,str,flags,align,fixed)
 		v.slideDrawString2(x,y,str,flags,align,fixed,true)
 	end
 	
