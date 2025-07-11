@@ -245,6 +245,11 @@ local function HUD_TimeForWeapon(v,p)
 	
 	if (leveltime >= TR)
 		HUD_TFW_DrawTeammates(v,p)
+		v.WslideDrawString(320,0,
+			MM.Gametypes[MM_N.gametype].name,
+			V_ALLOWLOWERCASE|V_SNAPTORIGHT|V_SNAPTOTOP|V_YELLOWMAP,
+			"thin-right",false
+		)
 	end
 end
 

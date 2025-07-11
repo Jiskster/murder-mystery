@@ -29,6 +29,32 @@ local freezetag_mode = MM.RegisterGametype("Freeze Tag", {
 	unlock_spectating = true;
 })
 
+local function removeFreezeTimerMobj(player)
+	local timer = player.mo.frozeobjtimer
+	if timer and timer.valid then
+		player.mo.frozeobjtimer = nil
+		P_RemoveMobj(timer)
+	end
+end
+
+local function removeFreezeMobjs(player)
+	-- Remove Remaining Freeze Objects
+	local ghostobj = player.mo.frozeobjghost
+	local textobj = player.mo.frozeobjtext
+	
+	if ghostobj and ghostobj.valid then
+		player.mo.frozeobjghost = nil
+		P_RemoveMobj(ghostobj)
+	end
+	
+	if textobj and textobj.valid then
+		player.mo.frozeobjtext = nil
+		P_RemoveMobj(textobj)
+	end
+	
+	removeFreezeTimerMobj(player)
+end
+
 local function frozenTextThink(player)
 	if not (player.mo.frozeobjtext and player.mo.frozeobjtext.valid) then
 		player.mo.frozeobjtext = P_SpawnMobj(player.mo.x, player.mo.y, player.mo.z + (3*player.mo.height)/2, MT_FROZENTEXTANIM)
@@ -40,6 +66,25 @@ local function frozenTextThink(player)
 		textobj.momx = player.mo.momx
 		textobj.momy = player.mo.momy
 		textobj.momz = player.mo.momz
+	end
+	
+	--numbers
+	if player.unfreezecooldown
+		local timer = player.mo.frozeobjtimer
+		if not (timer and timer.valid)
+			timer = P_SpawnMobjFromMobj(player.mo,0,0,0,MT_THOK)
+			timer.fuse = -1
+			timer.tics = player.unfreezecooldown
+			timer.sprite = SPR_MMCD
+			timer.spritexoffset = -(player.mo.radius + (10 * FU))
+			timer.renderflags = $|RF_FULLBRIGHT
+			timer.dispoffset = 100
+			player.mo.frozeobjtimer = timer
+		end
+		timer.color = (leveltime/2) & 1 and SKINCOLOR_SKY or SKINCOLOR_AQUAMARINE
+		timer.frame = min((player.unfreezecooldown/TICRATE)+1, 12)
+	else
+		removeFreezeTimerMobj(player)
 	end
 end
 
@@ -57,21 +102,14 @@ local function frozenGhostThink(player)
 		ghostobj.momz = player.mo.momz
 		player.mo.alpha = 0
 	end
-end
-
-local function removeFreezeMobjs(player)
-	-- Remove Remaining Freeze Objects
-	local ghostobj = player.mo.frozeobjghost
-	local textobj = player.mo.frozeobjtext
-	
-	if ghostobj and ghostobj.valid then
-		player.mo.frozeobjghost = nil
-		P_RemoveMobj(ghostobj)
-	end
-	
-	if textobj and textobj.valid then
-		player.mo.frozeobjtext = nil
-		P_RemoveMobj(textobj)
+	--ok lol
+	if not player.unfreezecooldown
+		local help = P_SpawnMobjFromMobj(player.mo,0,0,0,MT_THOK)
+		help.tics = 2
+		help.fuse = -1
+		help.sprite = SPR_BGLS
+		help.frame = P|FF_FULLBRIGHT
+		help.dispoffset = 5
 	end
 end
 
@@ -136,7 +174,7 @@ MM:addPlayerScript(function(player)
 	
 	if player.mo and player.mo.valid and player.mm then
 		if player.freezetagged then
-			player.mm.afktimer = 0
+			player.mm.afkhelpers.keepalive = true
 			frozenTextThink(player)
 			frozenGhostThink(player)
 			player.powers[pw_nocontrol] = 2
@@ -151,7 +189,7 @@ end)
 -- So many damn hooks OMFG
 
 -- Tell me a better way to make both of these hooks
-local deathfunc = function(target, inflictor, source, damage)
+local overridefreeze = function(target, inflictor, source, damage, deathhook)
 	if not MM.Gametypes[MM_N.gametype].freezetag_core then return end
 	
 	if target and target.valid and target.player and target.player.valid then
@@ -168,31 +206,17 @@ local deathfunc = function(target, inflictor, source, damage)
 		and attacker.player.mm.role == MMROLE_MURDERER and attacker.player.mm.role ~= tplayer.mm.role then
 			freezePlayer(tplayer, attacker.player)
 			
-			return true
+			return (deathhook) and true or false
 		end
 	end
 end
 
+local deathfunc = function(target, inflictor, source, damage)
+	return overridefreeze(target, inflictor, source, damage, true)
+end
+
 local damagefunc = function(target, inflictor, source, damage)
-	if not MM.Gametypes[MM_N.gametype].freezetag_core then return end
-	
-	if target and target.valid and target.player and target.player.valid then
-		local tplayer = target.player
-		local attacker
-		
-		if source and source.valid and source.player and source.player.valid then
-			attacker = source
-		elseif inflictor and inflictor.valid and inflictor.player and inflictor.player.valid then
-			attacker = inflictor
-		end
-		
-		if attacker and attacker.player and (attacker.player.mm and tplayer.mm) 
-		and attacker.player.mm.role == MMROLE_MURDERER and attacker.player.mm.role ~= tplayer.mm.role then
-			freezePlayer(tplayer, attacker.player)
-			
-			return false
-		end
-	end
+	return overridefreeze(target, inflictor, source, damage, false)
 end
 
 local function zCollide(mo1, mo2)
@@ -253,3 +277,32 @@ addHook("MobjMoveCollide", function(tmthing, thing)
 		end
 	end
 end, MT_PLAYER)
+
+--ugh, we need a hook for this
+addHook("ThinkFrame", function()
+	if not MM:isMM() then return end
+	if not MM_N then return end
+	if MM_N.gameover then return end
+	if MM_N.waiting_for_players then return end
+	if MM:pregame() then return end
+	if not MM.Gametypes[MM_N.gametype].freezetag_core then return end
+	
+	--this is here in case someone dies to afk kicker
+	local needed_to_end = MM.countPlayers().innocents
+	local frozen = 0
+	for p in players.iterate
+		if not (p.mm) then continue end
+		if not (p.mm_save) then continue end
+		if (p.mm.lastafkmode and p.spectator) then continue end
+		if (p.mm.role ~= MMROLE_INNOCENT) then continue end
+		if not (p.freezetagged) then continue end
+		
+		frozen = $ + 1
+	end
+	
+	if frozen == needed_to_end
+		-- S_StartSound(nil,sfx_s253)
+		MM:endGame(2, true)
+		MM:discordMessage("***The round has ended!***\n")
+	end
+end)

@@ -20,6 +20,15 @@ MMHUD.info_xpos = 0
 local function HUD_InfoDrawer(v, stplyr)
 	local p = displayplayer
 	
+	--Gamemode
+	if not (stplyr)
+		v.slideDrawString(160,0,
+			MM.Gametypes[MM_N.gametype].name,
+			V_ALLOWLOWERCASE|V_SNAPTOTOP|V_YELLOWMAP,
+			"thin-center",false
+		)
+	end
+	
 	--Timer
 	do
 		local x = 5*FU
