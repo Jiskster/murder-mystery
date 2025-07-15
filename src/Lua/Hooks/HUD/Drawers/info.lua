@@ -116,7 +116,7 @@ local function HUD_InfoDrawer(v, stplyr)
 			rings = ($ - p.mm.ringspaid) + MMHUD.info_count
 			
 			Sfunc(
-				x + 15*FU + (v.stringWidth(tostring(rings),0,"normal")*FU) - slidein,
+				x + 15*FU + (v.stringWidth(format_int(tostring(rings)),0,"normal")*FU) - slidein,
 				y + 11*FU + yoff,
 				"+"..(p.mm.ringspaid - MMHUD.info_count),
 				V_SNAPTOLEFT|V_SNAPTOTOP|V_GREENMAP,
