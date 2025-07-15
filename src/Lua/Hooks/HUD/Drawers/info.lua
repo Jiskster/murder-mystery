@@ -22,9 +22,9 @@ local function HUD_InfoDrawer(v, stplyr)
 	
 	--Timer
 	do
-		local x = 5*FU
-		local y = 10*FU
-		local flags = V_SNAPTOLEFT|V_SNAPTOTOP
+		local x = 160*FU
+		local y = 4*FU
+		local flags = V_SNAPTOTOP
 		
 		local flash = false
 		local timetic = MM_N.time
@@ -49,11 +49,11 @@ local function HUD_InfoDrawer(v, stplyr)
 		
 		local finalstring = minutes..":"..seconds .. (CV_MM.debug.value and ("."..centi) or "")
 		if (MM_N.showdown)
-			finalstring = "SHOWDOWN !!" -- ("..$..")"
+			finalstring = "SHOWDOWN !!"
 		end
+		x = $ - ((v.stringWidth(finalstring,0,"normal") + 15)/2)*FU
 		
 		if splitscreen and (stplyr and stplyr.valid)
-			x = 160*FU - ((v.stringWidth(finalstring,0,"normal") + 15)/2)*FU
 			y = 100*FU
 			flags = 0
 		end
@@ -76,13 +76,13 @@ local function HUD_InfoDrawer(v, stplyr)
 			"fixed", true
 		)
 		
-		MMHUD.info_xpos = (x/FU) + 15 + v.stringWidth(finalstring,0,"normal")
+		MMHUD.info_xpos = 0
 	end
 	
 	--rings
 	do
-		local x = 5*FU
-		local y = (splitscreen and 5 or 23)*FU
+		local x = 2*FU
+		local y = 4*FU
 		if (splitscreen and stplyr == secondarydisplayplayer)
 			y = $ + (v.height()/v.dupy() << (FRACBITS-1))
 		end
@@ -116,7 +116,7 @@ local function HUD_InfoDrawer(v, stplyr)
 			rings = ($ - p.mm.ringspaid) + MMHUD.info_count
 			
 			Sfunc(
-				x + 15*FU + (v.stringWidth(tostring(rings),0,"normal")*FU) - slidein,
+				x + 15*FU + (v.stringWidth(format_int(tostring(rings)),0,"normal")*FU) - slidein,
 				y + 11*FU + yoff,
 				"+"..(p.mm.ringspaid - MMHUD.info_count),
 				V_SNAPTOLEFT|V_SNAPTOTOP|V_GREENMAP,
