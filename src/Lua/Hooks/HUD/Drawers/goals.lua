@@ -2,8 +2,8 @@
 local function HUD_GoalDrawer(v,p)
 	if splitscreen then return end
 	
-	local x = 6*FU
-	local y = 40*FU
+	local x = 2*FU
+	local y = 19*FU
 	local flags = V_SNAPTOTOP|V_SNAPTOLEFT|V_ALLOWLOWERCASE|V_PERPLAYER
 	
 	local goals = {}
@@ -43,25 +43,25 @@ local function HUD_GoalDrawer(v,p)
 		end
 		local height = (goal_len * 8)
 		
-		height = $ + 29
-		y = 9*FU
-
+		height = $ + 12
+		y = 4*FU
+		
 		local x = x - MMHUD.xoffset
 		
-		v.drawFill((x/FU) - 1, (y/FU) - 3,
+		v.drawFill((x/FU), (y/FU) - 3,
 			longest_str + 2, 1,
 			31|V_50TRANS|(flags &~V_ALLOWLOWERCASE)
 		)
-		v.drawFill((x/FU) - 2, (y/FU) - 2,
+		v.drawFill((x/FU) - 1, (y/FU) - 2,
 			longest_str + 4, height + 4,
 			31|V_50TRANS|(flags &~V_ALLOWLOWERCASE)
 		)
-		v.drawFill((x/FU) - 1, (y/FU) + height + 2,
+		v.drawFill((x/FU), (y/FU) + height + 2,
 			longest_str + 2, 1,
 			31|V_50TRANS|(flags &~V_ALLOWLOWERCASE)
 		)
 		
-		y = 40*FU
+		y = 19*FU
 	end
 	
 	for k,val in ipairs(goals)
