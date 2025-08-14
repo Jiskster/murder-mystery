@@ -101,6 +101,19 @@ NoVisitNeeded = true
 Selectheading = Murder Mystery
 Lua.MM_ClueAmount = 6
 
+Level AR
+LevelName = Space Colony ARK
+SelectHeading = Murder Mystery
+Act = 0
+Music = TRSPSR
+NoZone = True
+TypeOfLevel = SaxaMM
+NextLevel = FI
+SkyNum = 250
+SkyboxScale = 0
+Lua.MM_ClueAmount = 6
+Lua.MM_SingleClues = true
+
 #@j1sk
 Level V0
 Levelname = Frozen Creek
