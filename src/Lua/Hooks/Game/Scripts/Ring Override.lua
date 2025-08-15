@@ -14,7 +14,7 @@ local function special_override(special, toucher)
 	if special and special.valid and toucher and toucher.valid then
 		local player = toucher.player
 		
-		if player and player.valid then
+		if player and player.valid and (play.mm_save and player.mm) then
 			player.rings = 0
 			player.mm_save.rings = wrapadd($, 1)
 			player.mm.rings = wrapadd($, 1)
