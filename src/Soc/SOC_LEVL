@@ -112,7 +112,6 @@ NextLevel = FI
 SkyNum = 250
 SkyboxScale = 0
 Lua.MM_ClueAmount = 6
-Lua.MM_SingleClues = true
 
 #@j1sk
 Level V0
