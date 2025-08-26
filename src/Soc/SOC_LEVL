@@ -31,6 +31,8 @@ NoVisitNeeded = true
 Selectheading = Murder Mystery
 Lua.MM_ClueAmount = 6
 Lua.MM_SingleClues = true
+Lua.MM_StormTimer = 25
+Lua.MM_StormTimer_Overtime = 20
 
 # @lemerksiscool
 Level H2
@@ -100,6 +102,8 @@ NoZone = true
 NoVisitNeeded = true
 Selectheading = Murder Mystery
 Lua.MM_ClueAmount = 6
+Lua.MM_StormTimer = 25
+Lua.MM_StormTimer_Overtime = 20
 
 Level AR
 LevelName = Space Colony ARK
@@ -112,6 +116,9 @@ NextLevel = FI
 SkyNum = 250
 SkyboxScale = 0
 Lua.MM_ClueAmount = 6
+Lua.MM_StormTimer = 30
+Lua.MM_StormTimer_Overtime = 25
+Lua.MM_StormTimer_Grace = 10
 
 #@j1sk
 Level V0
@@ -123,3 +130,5 @@ Skynum = 30
 Weather = PRECIP_SNOW
 Selectheading = Murder Mystery
 Lua.MM_ClueAmount = 7
+Lua.MM_StormTimer = 30
+Lua.MM_StormTimer_Overtime = 25
