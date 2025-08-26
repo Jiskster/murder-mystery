@@ -108,7 +108,7 @@ local function Init(point)
 	point.init = true
 end
 
-local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
+local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist, lasersize)
 	local mastertable = debug and point.debuglasers or point.lasers
 	
 	if (mastertable[i] == nil)
@@ -155,9 +155,25 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 	
 	P_MoveOrigin(laser, x,y, fz)
 	
+	local fade = FU
 	do
 		local starting = MM_N.storm_ticker < point.storm_graceperiod and FixedDiv(MM_N.storm_ticker*FU, point.storm_graceperiod*FU) or FU
-		laser.alpha = starting
+		local dist = R_PointToDist(x,y)
+		local nofade = false
+		if (displayplayer and displayplayer.valid and displayplayer.realmo and displayplayer.realmo.valid)
+			if (displayplayer.mm and displayplayer.mm.outofbounds)
+				nofade = true
+			else
+				local m = displayplayer.realmo
+				dist = min($, R_PointToDist2(m.x,m.y, x,y))
+			end
+		end
+		if dist <= lasersize*4*scale
+		and not nofade
+			local fudge = FU/10
+			fade = fudge + FixedMul(FixedDiv(dist, lasersize*4*scale), FU - fudge)
+		end
+		laser.alpha = FixedMul(starting,fade)
 		
 		laser.spriteyscale = FixedMul(
 			FixedDiv(cz - fz, 10*laser.scale),
@@ -166,7 +182,7 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 		laser.height = FixedMul(cz - fz, starting)
 		
 		--handle colormap here too
-		--CANT cause every sector needs a colormap....
+		--CANT cause every sector needs a unique colormap for this to work....
 		/*
 		local galclr = skincolors[SKINCOLOR_GALAXY].ramp[4]
 		local r,g,b = color.paletteToRgb(galclr)
@@ -225,6 +241,7 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist)
 					FixedDiv(point.storm_radius, STORM_CLOSERADIUS)
 				)
 			end
+			dust.alpha = FixedMul($, fade)
 			
 			dust.momz = (P_RandomRange(1,4)*scale) * (j == 1 and -1 or 1)
 		end
@@ -311,7 +328,7 @@ local function SpawnDebugLasers(point,dist)
 		local x = point.x + P_ReturnThrustX(nil,ang, dist)
 		local y = point.y + P_ReturnThrustY(nil,ang, dist)
 		
-		SpawnLaser(point,i, true, x,y, ang, scale, SKINCOLOR_GREEN, FixedAngle((i-1)*angoff), dist)
+		SpawnLaser(point,i, true, x,y, ang, scale, SKINCOLOR_GREEN, FixedAngle((i-1)*angoff), dist, laserspace)
 	end
 end
 
@@ -356,7 +373,7 @@ local function SpawnAllLasers(point,dist)
 		local x = point.x + P_ReturnThrustX(nil,ang, dist)
 		local y = point.y + P_ReturnThrustY(nil,ang, dist)
 		
-		SpawnLaser(point,i, false, x,y, ang, scale, color, FixedAngle((i-1)*angoff), dist)
+		SpawnLaser(point,i, false, x,y, ang, scale, color, FixedAngle((i-1)*angoff), dist, laserspace)
 	end
 end
 
