@@ -367,7 +367,7 @@ local function SpawnAllLasers(point,dist)
 	local scale = circ / laserspace / numlasers
 	scale = max(abs($),FU/50)
 	
-	local color = laser_colors[P_RandomRange(1, #laser_colors)]
+	local color = SKINCOLOR_SUPERPURPLE1 + abs(((MM_N.storm_ticker>>1)%9)-4) --laser_colors[P_RandomRange(1, #laser_colors)]
 	for i = 1,numlasers
 		local ang = FixedAngle((i-1)*angoff) + ticker_offset
 		local x = point.x + P_ReturnThrustX(nil,ang, dist)
