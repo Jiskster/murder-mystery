@@ -29,11 +29,10 @@ local function HUD_InfoDrawer(v, stplyr)
 		local flash = false
 		local timetic = MM_N.time
 		
-		if not MM_N.uncap_timer then -- default
-			timetic = not (MM_N.overtime and not MM_N.showdown) and min(max($,0), MM_N.maxtime)+TICRATE or 0
-			timetic = min($,MM_N.maxtime)
-		else -- if uncapped timer
-			timetic = not (MM_N.overtime and not MM_N.showdown) and max($,0)+TICRATE or 0
+		if (MM_N.overtime and not MM_N.showdown)
+			timetic = 0
+		else
+			timetic = $ + TICRATE
 		end
 		
 		local minutes = G_TicsToMinutes(timetic, true)
