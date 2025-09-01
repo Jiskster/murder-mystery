@@ -483,7 +483,6 @@ addHook("ThinkFrame", function()
 				
 				if CV_MM.wip_dynamic_time.value and MM_N.time > 30*TICRATE then
 					MM_N.time = $ + 15*TICRATE
-					MM_N.uncap_timer = true
 				end
 				
 				local marker = P_SpawnMobjFromMobj(corpse, 0,0,

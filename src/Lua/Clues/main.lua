@@ -287,8 +287,9 @@ MM:addPlayerScript(function(p)
 				end
 				
 				if CV_MM.wip_dynamic_time.value then
-					MM_N.time = max(30*TICRATE, $ - 30*TICRATE)
-					MM_N.uncap_timer = true
+					if (MM_N.time > 30*TICRATE)
+						MM_N.time = max(30*TICRATE, $ - 5*TICRATE)
+					end
 				end
 				
 				break

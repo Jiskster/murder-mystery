@@ -152,7 +152,6 @@ return function(self, maploaded)
 	MM_N.map_weather = PRECIP_BLANK
 	MM_N.rounds = oldrounds or 0
 	MM_N.player_colors = {}
-	MM_N.uncap_timer = false
 	
 	local count = 0
 	for p in players.iterate do
