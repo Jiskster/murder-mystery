@@ -25,6 +25,7 @@ return function(p)
 			p.mo.color = p.skincolor
 		end
 		p.mm.usingsetcolor = true
+	--should there be a return here if the colors nil?
 	end
 
 	if ((leveltime) % (5*TICRATE)) == 1

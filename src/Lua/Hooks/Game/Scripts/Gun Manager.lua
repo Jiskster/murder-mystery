@@ -43,6 +43,11 @@ local function refillSlots()
 	
 	local count = MM.countPlayers()
 	local maxrole = MM_N.special_count
+
+	if count <= 1
+		MM_N.waiting_for_players = true
+		return
+	end
 	
 	if count.murderers < maxrole
 	or count.sheriffs < maxrole

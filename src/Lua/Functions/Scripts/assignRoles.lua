@@ -78,6 +78,7 @@ return function(self, count, alreadychosen, murdorsherf)
 		return murderers, sheriffs
 	end
 
+	local tries = 0
 	while i < count do
 		local mp = select_player_from_table(p, murderer_chance_table)
 		local sp = select_player_from_table(p, sheriff_chance_table)
@@ -113,6 +114,14 @@ return function(self, count, alreadychosen, murdorsherf)
 				sheriffs[sp] = true
 			end
 			i = $+1
+		end
+
+		tries = $ + 1
+		if (tries > 64) then
+			MM_N.waiting_for_players = true
+			if CV_MM.debug.value
+				print("\x83MM:\x80\Caught infinite loop in assignRoles!")
+			end
 		end
 	end
 
