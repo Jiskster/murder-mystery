@@ -35,7 +35,7 @@ mobjinfo[freeslot("MT_MM_KNIFE_PROJECT")] = {
 	spawnstate = S_MM_KNIFE_SPIN,
 	flags = MF_NOGRAVITY,
 	--move in quarter steps
-	speed = 80*FU / 4,
+	speed = 100*FU / 4,
 	deathstate = S_SPRK1
 }
 --local tics_til_grav = 12
