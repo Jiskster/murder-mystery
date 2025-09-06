@@ -10,7 +10,9 @@ weapon.id = "toyknife"
 weapon.category = "Weapon"
 weapon.display_name = "Toy Knife"
 weapon.display_icon = "MM_TOYKNIFE"
-weapon.state = dofile "Items/Weapons/Knife/freeslot"
+--TODO: Maybe make a separate sprite for this? Right now, the knife uses
+--		translations to recolor it, but models cant support translations soo...
+weapon.state = S_MM_KNIFE
 weapon.timeleft = -1
 weapon.hit_time = 2
 weapon.animation_time = TICRATE

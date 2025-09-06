@@ -5,8 +5,6 @@ local roles = MM.require "Variables/Data/Roles"
 local MAX_COOLDOWN = 3*TICRATE
 local MAX_ANIM = TICRATE
 
-dofile("Items/Weapons/Shotgun/bullet")
-
 weapon.id = "devshotgun"
 weapon.category = "Weapon"
 weapon.display_name = "\x85Out of This World Shotgun"
