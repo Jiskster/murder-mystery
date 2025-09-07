@@ -79,18 +79,18 @@ local function HUD_DrawCamera(v,p)
 		end
 	else
 		v.drawFill()
-		v.drawString(160,100,
+		v.drawString(160,80,
 			"CAMERA OFFLINE",
 			0,
 			"center"
 		)
 		
-		v.drawString(160,130,
+		v.drawString(160,110,
 			"Repair this camera",
 			V_YELLOWMAP|V_ALLOWLOWERCASE,
 			"thin-center"
 		)
-		v.drawString(160,138,
+		v.drawString(160,118,
 			"to view it.",
 			V_YELLOWMAP|V_ALLOWLOWERCASE,
 			"thin-center"
