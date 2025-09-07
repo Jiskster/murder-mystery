@@ -98,6 +98,7 @@ addHook("MapThingSpawn",function(cam,mt)
 		end
 		MMCAM.CAMS[cam.args.sequence][cam.args.order] = cam
 		
+		--hitbox is for the bullet hitbox...
 		cam.args.hitbox = P_SpawnMobjFromMobj(cam,0,0,-15*FU,MT_THOK)
 		cam.args.hitbox.radius = 13*cam.scale
 		cam.args.hitbox.height = 30*cam.scale
@@ -109,6 +110,7 @@ addHook("MapThingSpawn",function(cam,mt)
 		cam.args.hitbox.tics = -1
 		cam.args.hitbox.fuse = -1
 		
+		--...and melee is for the knives
 		cam.args.melee = P_SpawnMobjFromMobj(cam,0,0,-32*FU,MT_THOK)
 		cam.args.melee.radius = 32*cam.scale
 		cam.args.melee.height = 64*cam.scale
@@ -157,15 +159,18 @@ addHook("MapLoad",do
 		
 	end
 	
+	local failed = false
 	for k,seq in pairs(totals.seq)
 		for i = 0, seq.order
 			local cam = seq.cams[i]
 			if not (cam and cam.valid)
 				print("\x82WARNING\x80: Camera sequence "..k.." is missing camera "..i)
-				S_StartSound(nil,sfx_skid)
+				failed = true
 			end
-			
 		end
+	end
+	if failed
+		S_StartSound(nil,sfx_skid)
 	end
 end)
 
@@ -352,6 +357,17 @@ local function Update3D(cam,args)
 			
 			if (args.wiretop and args.wiretop.valid)
 				P_SetOrigin(args.wiretop,cam.x,cam.y, cam.ceilingz - FU/2)
+			end
+			local cz = P_MobjFlip(cam) == 1 and cam.ceilingz or cam.floorz
+			local fz = P_MobjFlip(cam) == 1 and cam.z+cam.height or cam.z
+			
+			if (args.wireL and args.wireL.valid)
+				P_SetOrigin(args.wireL, cam.x,cam.y, cam.z + cam.height)
+				args.wireL.spriteyscale = FixedDiv(cz - fz, 12*cam.scale)
+			end
+			if (args.wireR and args.wireR.valid)
+				P_SetOrigin(args.wireR, cam.x,cam.y, cam.z + cam.height)
+				args.wireR.spriteyscale = args.wireL.spriteyscale
 			end
 			
 			P_MoveOrigin(args.body.top,
@@ -626,6 +642,7 @@ addHook("MobjThinker",function(cam)
 		thok.dontdrawinteract = true
 		args.viewport = thok
 	else
+		P_MoveOrigin(args.viewport, cam.x,cam.y,cam.z)
 		args.viewport.z = (cam.z + cam.height/2) - 20*FU
 		args.viewport.angle = cam.angle
 	end
@@ -646,6 +663,7 @@ addHook("MobjThinker",function(cam)
 					funcid = MMCAM.interaction
 				})			
 			end
+			P_MoveOrigin(args.repair, cam.x,cam.y,cam.z)
 		else
 			args.repair.cooldown = 10
 		end
@@ -662,7 +680,7 @@ addHook("MobjDeath",function(cam)
 	sfx.fuse = 2*TICRATE
 	S_StartSound(sfx,sfx_pop)
 	
-	P_SpawnGhostMobj(cam).state = S_XPLD1
+	P_SpawnMobjFromMobj(cam,0,0,0,MT_PARTICLE).state = S_XPLD1
 	
 	--already did it for us?
 	if not args.body then return end
@@ -678,7 +696,7 @@ for p in players.iterate
 	
 	if not (p.mmcam)
 		MMCAM.Init(p)
-		return
+		continue
 	end
 	
 	local mmc = p.mmcam
@@ -765,7 +783,7 @@ for p in players.iterate
 			thok.frame = J|FF_SEMIBRIGHT
 		end
 	else
-		if (mmc.sequence)
+		if (mmc.sequence ~= -1)
 			p.pflags = $ &~PF_FORCESTRAFE
 		end
 		

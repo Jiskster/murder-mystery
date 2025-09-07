@@ -1,6 +1,7 @@
 local skullcounter = 8
 local otherskullcounter = 16
 local debug = false
+local cv_paletterendering
 
 --takis
 local function getabsolute(v, x,y, flags)
@@ -31,6 +32,9 @@ end
 local function HUD_DrawCamera(v,p)
 	if not (MM) then return end
 	if not (MM:isMM()) then return end
+	if not (cv_paletterendering)
+		cv_paletterendering = CV_FindVar("gr_paletterendering")
+	end
 	
 	--DEBUG
 	if debug
@@ -82,12 +86,12 @@ local function HUD_DrawCamera(v,p)
 		)
 		
 		v.drawString(160,130,
-			"You might need to",
+			"Repair this camera",
 			V_YELLOWMAP|V_ALLOWLOWERCASE,
 			"thin-center"
 		)
 		v.drawString(160,138,
-			"repair this camera.",
+			"to view it.",
 			V_YELLOWMAP|V_ALLOWLOWERCASE,
 			"thin-center"
 		)
@@ -95,7 +99,7 @@ local function HUD_DrawCamera(v,p)
 	
 	local flicker = ((leveltime&1) and v.RandomChance(FU/6)) and -1 or 0
 	if mmc.cam.health
-		local soft = v.renderer() == "software"
+		local soft = v.renderer() == "software" or (cv_paletterendering.value)
 		local off = 16
 		local bright = R_PointInSubsector(mmc.cam.x,mmc.cam.y).sector.lightlevel
 		if bright < (soft and 127 or 97)
@@ -133,15 +137,6 @@ local function HUD_DrawCamera(v,p)
 			back+4, 30,
 			31|V_50TRANS
 		)
-		/*
-		v.drawStretched(160*FU - (back/2 + 2)*FU,
-			158*FU,
-			(back+4)*FU,
-			30*FU,
-			v.cachePatch("1PIXEL"),
-			V_50TRANS
-		)
-		*/
 		
 		v.drawString(160,160,
 			camname,
