@@ -9,6 +9,7 @@ end
 */
 
 local function select_player_from_table(p, tbl)
+	local tries = 0
 	local returnthis
 	while not returnthis do
 		local i = P_RandomRange(1, #tbl)
@@ -16,6 +17,10 @@ local function select_player_from_table(p, tbl)
 		if p ~= tbl[i] then
 			returnthis = tbl[i]
 			break
+		end
+		tries = $ + 1
+		if tries >= 64
+			error("Caught infinite loop in select_player_from_table!",2)
 		end
 	end
 
@@ -64,7 +69,7 @@ return function(self, count, alreadychosen, murdorsherf)
 			sheriff = total_table[P_RandomRange(1,#total_table)]
 			tries = $ + 1
 			
-			if tries == max_tries then
+			if tries >= max_tries then
 				error("Caught infinite loop.")
 			end
 		end

@@ -44,7 +44,7 @@ local ITEM_DEF = {
 	cantouch = false,
 	animation = true,			-- enable if you want the weapon to be tweened between it's hit pos and default pos
 	damage = true,				-- enable if this can damage people
-	weaponize = true,			-- make item identify as a weapon (#woke /j)
+	weaponize = true,			-- make item classified as a weapon
 									-- weapons are usually on the players right hand, while items are on the players left
 	latencyadjust = false,		-- melee items will adjust to have a longer
 									-- hit window according to latency

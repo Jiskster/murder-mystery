@@ -45,7 +45,7 @@ local function HUD_EndGameDrawer(v,p,c)
 		end
 		
 		v.drawString(160,150,
-			string.format("%.2f meter snipe!", snipe_count),
+			string.format("%.2f frac snipe!", snipe_count),
 			V_ALLOWLOWERCASE|V_SNAPTOBOTTOM,
 			"thin-center"
 		)
