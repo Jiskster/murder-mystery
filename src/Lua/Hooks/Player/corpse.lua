@@ -315,6 +315,11 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 			corpse.playername = target.player.mm.alias.name
 		end
 		
+		-- Immediately add since the body should be removed soon
+		if dmgt == DMG_DEATHPIT
+			MM_N.knownDeadPlayers[#target.player] = true
+		end
+		
 		local hook_event = MM.events["CorpseSpawn"]
 		for i,v in ipairs(hook_event)
 			MM.tryRunHook("CorpseSpawn", v,
