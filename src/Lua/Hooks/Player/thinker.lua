@@ -80,14 +80,12 @@ addHook("PlayerThink", function(p)
         p.mo.angle = p.drawangle
     end
 	
-	if p.mm.outofbounds
-		if not MM_N.gameover
-			if (not p.mm.oob_lenient)
-			--or (leveltime % 2 == 0)
-				p.mm.oob_ticker = min($+1,MM_PLAYER_STORMMAX)
-			else
-				p.mm.oob_ticker = -1
-			end
+	if p.mm.outofbounds and not MM_N.gameover
+		if (not p.mm.oob_lenient)
+		--or (leveltime % 2 == 0)
+			p.mm.oob_ticker = min($+1,MM_PLAYER_STORMMAX)
+		else
+			p.mm.oob_ticker = -1
 		end
 		
 		local sec = (p.mo.subsector.sector)
