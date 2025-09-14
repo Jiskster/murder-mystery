@@ -134,7 +134,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		end
 		
 		-- hmmm what if we made this an item variable, like item.ammokillincrease = 2
-		if attacker then
+		if (attacker and attacker.valid) then
 			--there is no reason to use MM.hooksPassed since we never do anything with the result
 			--it would also prevent any other hooks from running which is not how these
 			--"one shot" hooks work.
@@ -149,21 +149,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	and MM_N.special_count >= 2 then
 		if target.player.mm.role ~= MMROLE_INNOCENT
 			if target.player.mm.role == MMROLE_MURDERER
-				local text = "\x82*"..target.player.name.." was a murderer!"
-				
-				/*
-				if source
-				and source.player then
-					text = $.." // Died to "..source.player.name
-				elseif source
-					--died to an mobj
-					text = $.." // Died to an mobj."
-				else
-					text = $.." // Died to a hazard."
-				end
-				*/
-				
-				chatprint(text)
+				chatprint("\x82*"..target.player.name.." was a murderer!")
 				
 				--add immediately so we KNOW.
 				MM_N.knownDeadPlayers[#target.player] = true

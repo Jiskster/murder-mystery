@@ -716,6 +716,7 @@ addHook("MobjDeath",function(mine,_,src,dmgt)
 		--credit the sheriff if they killed the murderer
 		local killer = mine.tracer
 		if (p.mm.role == MMROLE_MURDERER)
+		and (killing_player and killing_player.valid)
 			--Bro
 			if killing_player.player.mm.role == MMROLE_MURDERER
 				continue
