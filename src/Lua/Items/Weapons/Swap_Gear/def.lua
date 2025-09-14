@@ -168,8 +168,10 @@ function weapon:onhit(player, player2)
 		S_StartSound(nil, sfx_bdyswp, player)
 		S_StartSound(nil, sfx_bdyswp, player2)
 		
+		/*
 		P_SpawnGhostMobj(player.mo).fuse = 5
 		P_SpawnGhostMobj(player2.mo).fuse = 5
+		*/
 	end
 end
 
