@@ -20,12 +20,16 @@ return function(p)
 	end
 	
 	if p.mm.savedcolor ~= nil
+	and p.mm.savedcolor ~= SKINCOLOR_NONE
+	and p.skincolor ~= SKINCOLOR_NONE
 		if p.skincolor ~= p.mm.savedcolor
 			p.skincolor = p.mm.savedcolor
 			p.mo.color = p.skincolor
 		end
 		p.mm.usingsetcolor = true
-	--should there be a return here if the colors nil?
+	--should this return be here if the color isnt valid?
+	else
+		return
 	end
 
 	if ((leveltime) % (5*TICRATE)) == 1

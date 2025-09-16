@@ -127,7 +127,7 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist, 
 		laser.tics = -1
 		laser.fuse = -1
 		laser.renderflags = $|RF_PAPERSPRITE|RF_NOCOLORMAPS
-		laser.blendmode = AST_ADD
+		laser.blendmode = AST_SUBTRACT
 		laser.sprite = SPR_BGLS
 		laser.frame = A|FF_FULLBRIGHT
 		laser.scale = scale
