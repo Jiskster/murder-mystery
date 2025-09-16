@@ -40,7 +40,7 @@ return function(p)
 			if v.color ~= p.skincolor then continue end
 			if v.skin ~= skins[p.skin].name then continue end
 			--We had this color first, skip.
-			if #p < #v.player then continue end
+			if p.jointime > v.player.jointime then continue end
 			
 			repeat
 				p.skincolor = P_RandomRange(SKINCOLOR_WHITE,SKINCOLOR_VOLCANIC)
