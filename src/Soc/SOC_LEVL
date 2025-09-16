@@ -122,9 +122,9 @@ Lua.MM_StormTimer_Grace = 10
 
 #@j1sk
 Level V0
-Levelname = Frozen Creek
+Levelname = Arctic
 NoZone = true
-Music = MP_WT3
+Music = MRTARC
 Typeoflevel = SaxaMM
 Skynum = 30
 Weather = PRECIP_SNOW
