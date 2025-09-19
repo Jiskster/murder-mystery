@@ -144,9 +144,14 @@ local function countdown(p, item)
 				local me = p.mo
 				if not (me.health) then continue end
 				
+				/*
 				if abs(mo.x - me.x) > radius
 				or abs(mo.y - me.y) > radius
 				or abs(mo.z - me.z) > radius
+					continue
+				end
+				*/
+				if (FixedHypot(FixedHypot(me.x - mo.x, me.y - mo.y), me.z - mo.z) > radius)
 					continue
 				end
 				
@@ -217,6 +222,7 @@ weapon.thinker = function(item, p)
 		if not distchecks(item,p,p2.mo) then continue end
 		
 		P_SpawnLockOn(p, p2.mo, S_LOCKON1)
+		break
 	end
 	
 	countdown(p, item)
