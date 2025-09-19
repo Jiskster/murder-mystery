@@ -54,14 +54,19 @@ local function DropBearTrap(p)
 	mine.tracer = me
 end
 
--- Copied lugger code. This should really be implemented in a cleaner way.
-weapon.hiddenthinker = function(item,p)
+MM.addHook("KeepingItem", function(p, def, item)
+	if item.id ~= "beartrap" then
+		return
+	end
+	
 	if item.ammoleft == nil then
 		item.ammoleft = weapon.maxshots
 	elseif item.ammoleft < 0 then
 		item.ammoleft = 0
 	end
+end)
 
+weapon.hiddenthinker = function(item,p)
 	if (p.mm.inventory.hidden)
 	or (item.cooldown)
 		if (item.ghost and item.ghost.valid)
