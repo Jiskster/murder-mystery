@@ -77,6 +77,9 @@
 			Executes when a player uses a weapon that fires bullets.
 			- Return value: Boolean (override default behavior?)
 			
+		* "KeepingItem", function(player_t player, itemdef_t def, item_t item)
+			Executes whenever an item is in a player's inventory, selected or not, equipped or not.
+		
 		* "DropItemThinker", function(itemdef_t, mobj_t item)
 			Executes after dropped item thinker.
 
