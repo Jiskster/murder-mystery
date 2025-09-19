@@ -127,6 +127,7 @@ events["CorpseSpawn"] = {}
 events["CorpseThink"] = {}
 events["CorpseFound"] = {}
 events["GiveStartWeapon"] = {handler = handler_snapany}
+events["KeepingItem"] = {handler = handler_snapany}
 events["InventorySwitch"] = {}
 events["DropItemThinker"] = {}
 events["ItemDrop"] = {}

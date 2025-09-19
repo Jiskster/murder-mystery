@@ -252,6 +252,10 @@ MM:addPlayerScript(function(p)
 					local reward = ''
 					if p.mm.role == MMROLE_MURDERER
 						reward = "luger"
+						
+						if P_RandomChance(FixedDiv(3*FU, 10*FU)) then
+							reward = "hotpotato"
+						end
 					else
 						if MM_N.clues_weaponsleft
 							if P_RandomChance(FU/8) then

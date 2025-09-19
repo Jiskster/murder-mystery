@@ -179,12 +179,14 @@ end,MT_MM_BEARTRAP)
 MM.addHook("KilledPlayer", function(attacker, target)
 	local found, found_slot = MM:GetInventoryItemFromId(attacker, "beartrap") -- this only finds the first item, not multiple items btw lol
 	
-	if found.ammoleft == nil
-		print("\x83MM:\x82 WARNING\x80: KilledPlayer::BearTrap - ammoleft is nil")
-	end
-	
-	if found and found_slot and found.ammoleft ~= nil then
-		found.ammoleft = $ + 2
+	if found then
+		if found.ammoleft == nil
+			print("\x83MM:\x82 WARNING\x80: KilledPlayer::BearTrap - ammoleft is nil")
+		end
+		
+		if found and found_slot and found.ammoleft ~= nil then
+			found.ammoleft = $ + 2
+		end
 	end
 end)
 

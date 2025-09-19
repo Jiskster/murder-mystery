@@ -319,6 +319,12 @@ MM:addPlayerScript(function(p)
 	end
 
 	for i,item in pairs(p.mm.inventory.items) do
+		local def = MM.Items[item.id]
+		
+		if def then
+			hooksPassed("KeepingItem", p, def, item)
+		end
+		
 		if item.timeleft >= 0 then
 			item.timeleft = max(0, $-1)
 		end
@@ -481,7 +487,7 @@ MM:addPlayerScript(function(p)
 			def.hiddenthinker(item,p)
 		end
 	end
-
+	
 	// drop le weapon
 
 	if p.cmd.buttons & BT_CUSTOM2
