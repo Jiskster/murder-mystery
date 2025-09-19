@@ -233,17 +233,17 @@ function weapon:onhit(player, player2)
 	if (player.mm and player2.mm) and
 	(mo1 and mo1.valid) and
 	(mo2 and mo2.valid) then
-		mo2.hotpotato_timer = mo1.hotpotato_timer or 0
+		mo2.hotpotato_timer = mo1.hotpotato_timer or weapon.potato_start_time
 		mo1.hotpotato_timer = 0
-
+		
 		local senditem = MM:GiveItem(player2, "hotpotato")
 		
 		if not senditem then
 			return end;	
-
+		
 		senditem.timeleft = mo2.hotpotato_timer + 1
 		senditem.owner = self.owner
-
+		
 		MM:ClearInventorySlot(player)
 		
 		local redghost = mo1.hotpotato_redghost
