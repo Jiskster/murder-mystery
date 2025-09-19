@@ -137,7 +137,7 @@ local function countdown(p, item)
 		if (mo.hotpotato_timer <= 0) then
 			boom(p)
 			
-			local radius = 550*mo.scale
+			local radius = 340*mo.scale
 			for p in players.iterate
 				if (p.spectator) then continue end
 				if not (p.mo and p.mo.valid) then continue end
