@@ -17,7 +17,7 @@ weapon.timeleft = -1
 weapon.hit_time = 2
 weapon.animation_time = TICRATE
 weapon.cooldown_time = TICRATE*3
-weapon.range = FU*5
+weapon.range = FU*7
 --you should be able to jump over and juke the murderer
 weapon.zrange = FU
 weapon.position = {
@@ -145,7 +145,7 @@ function weapon:onhit(player, player2)
 	if (player.mm and player2.mm) and
 	(mo1 and mo1.valid) and
 	(mo2 and mo2.valid) then
-		local power = 70*FU
+		local power = 100*FU
 		self.hit = 0
 		
 		S_StartSound(mo2, sfx_s3k7b)
