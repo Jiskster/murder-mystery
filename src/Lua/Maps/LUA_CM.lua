@@ -30,12 +30,7 @@ flags = MF_NOBLOCKMAP|MF_NOGRAVITY|MF_SCENERY|MF_NOCLIPHEIGHT
 
 states[S_CORONA] = {
 sprite = SPR_CORO,
-frame = A|FF_FULLBRIGHT,
+frame = A|FF_FULLBRIGHT|FF_ADD,
 tics = -1,
 nextstate = S_CORONA
 }
-
-
-addHook("MobjSpawn", function(actor)
-	actor.blendmode = AST_ADD
-end, MT_CORONA)
