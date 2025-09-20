@@ -271,6 +271,12 @@ MM:addPlayerScript(function(p)
 							subtext = "Your clues gave you an item!"
 							sub2 = "Try being faster next time!"
 						end
+						
+						if CV_MM.wip_dynamic_time.value then
+							if (MM_N.time > 30*TICRATE)
+								MM_N.time = max(30*TICRATE, $ - 25*TICRATE)
+							end
+						end
 					end
 					
 					if isdedicatedserver then
@@ -288,12 +294,6 @@ MM:addPlayerScript(function(p)
 				
 				if p == displayplayer then
 					MMHUD:PushToTop(3*TICRATE, text, subtext, sub2)
-				end
-				
-				if CV_MM.wip_dynamic_time.value then
-					if (MM_N.time > 30*TICRATE)
-						MM_N.time = max(30*TICRATE, $ - 5*TICRATE)
-					end
 				end
 				
 				break
