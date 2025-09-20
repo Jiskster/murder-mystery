@@ -1,3 +1,20 @@
+local function sphereToCartesian(alpha,beta)
+    local t = {}
+
+    t.x = FixedMul(cos(alpha), cos(beta))
+    t.y = FixedMul(sin(alpha), cos(beta))
+    t.z = sin(beta)
+    --t.z = FixedMul(sin(alpha), sin(beta)) -- for elliptical orbit
+
+    return t
+end
+local function P_3DThrust(mo, h_ang, v_ang, speed)
+	local t = sphereToCartesian(h_ang,v_ang)
+	mo.momx = $ + FixedMul(speed, t.x)
+	mo.momy = $ + FixedMul(speed, t.y)
+	mo.momz = $ + FixedMul(speed, t.z)
+end
+
 local weapon = {}
 
 local MAX_COOLDOWN = TICRATE
@@ -158,50 +175,57 @@ local function countdown(p, item)
 				P_KillMobj(me, owner_mo, owner_mo, DMG_INSTAKILL)
 			end
 			
-			local redghost = mo.hotpotato_redghost
-			
-			if redghost and redghost.valid then
-				P_RemoveMobj(redghost)
-			end
-	
+			mo.colorized = false
+			mo.color = p.mm.savedcolor or p.skincolor
+			mo.hotpotato_colored = nil
+			mo.renderflags = $ &~RF_FULLBRIGHT
+			mo.hotpotato_timer = nil
 			return
 		end
 		
-		if (mo.hotpotato_timer > 5*TICRATE + TICRATE/2) then
-			if (mo.hotpotato_timer % TICRATE) == 0 then
-				mo.hotpotato_redghost = P_SpawnGhostMobj(mo)
-				local redghost = mo.hotpotato_redghost
-				
-				if redghost and redghost.valid then
-					redghost.fuse = 10
-					redghost.colorized = true
-					redghost.color = SKINCOLOR_RED
+		if mo.hotpotato_timer then
+			local timer = mo.hotpotato_timer
+			local flashtime = 6 << (timer/TICRATE)
+			flashtime = min($, 2 * TICRATE)
+			if (timer % (flashtime/2) ~= 0) then
+				if mo.hotpotato_colored
+					mo.hotpotato_colored = $ - 1
+				elseif mo.hotpotato_colored == 0
+					mo.colorized = false
+					mo.color = p.mm.savedcolor or p.skincolor
+					mo.hotpotato_colored = nil
+					mo.renderflags = $ &~RF_FULLBRIGHT
 				end
-				
-				S_StartSound(mo, sfx_gbeep)			
-			end
-		else
-			if (mo.hotpotato_timer % 12) == 0 then
-				mo.hotpotato_redghost = P_SpawnGhostMobj(mo)
-				local redghost = mo.hotpotato_redghost
-				
-				if redghost and redghost.valid then
-					redghost.fuse = 5
-					redghost.colorized = true
-					redghost.color = SKINCOLOR_RED
-				end
-				
-				S_StartSound(mo, sfx_gbeep)			
+			elseif timer % flashtime == 0 then
+				mo.colorized = true
+				mo.renderflags = $|RF_FULLBRIGHT
+				mo.color = SKINCOLOR_BLACK
+				mo.hotpotato_colored = max(flashtime/4, 1)
+				S_StartSound(mo, sfx_gbeep)
+			else
+				mo.colorized = true
+				mo.renderflags = $|RF_FULLBRIGHT
+				mo.color = SKINCOLOR_RED
+				mo.hotpotato_colored = max(flashtime/4, 1)
+				S_StartSound(mo, sfx_gbeep)
 			end
 		end
 		
-		local redghost = mo.hotpotato_redghost
-		
-		if redghost and redghost.valid then
-			P_MoveOrigin(redghost, mo.x + mo.momx, mo.y + mo.momy, mo.z + mo.momz)
-			redghost.state = mo.state
-			redghost.frame = mo.frame
-		end
+		-- steam effects
+		local radius = 20
+		local height = 40
+		local steam = P_SpawnMobjFromMobj(mo,
+			P_RandomRange(-radius, radius)*FU,
+			P_RandomRange(-radius, radius)*FU,
+			P_RandomRange(0,height)*FU,
+			MT_SPINDUST
+		)
+		steam.alpha = FU/2
+		local ha,va = R_PointToAngle2(steam.x,steam.y,mo.x,mo.y), R_PointToAngle2(
+			0,steam.z,
+			R_PointToDist2(steam.x,steam.y,mo.x,mo.y), mo.z
+		)
+		P_3DThrust(steam, ha,va, -(P_RandomRange(4,10)*steam.scale))
 	end
 	
 	mo.hotpotato_lastframe = leveltime -- so it doesn't repeat function in same frame.
@@ -273,6 +297,24 @@ function weapon.equip(item, p)
 	if mo.hotpotato_timer == nil then
 		mo.hotpotato_timer = weapon.potato_start_time
 		item.owner = p
+	end
+end
+
+weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
+	if not p.realmo.hotpotato_timer then return end
+	
+	local bob = sin(FixedAngle(leveltime*FU*20))
+	v.slideDrawString(x + 16*scale, y - 20*FU + bob,
+		"Toss me!",
+		(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE|V_YELLOWMAP,
+		"thin-fixed-center", true
+	)
+	if not selected
+		v.slideDrawString(x + 16*scale, y - 10*FU + bob,
+			"\x1B",
+			(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE|V_YELLOWMAP,
+			"thin-fixed-center", true
+		)
 	end
 end
 
