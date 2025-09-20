@@ -136,16 +136,16 @@ weapon.drop = function(item,p)
 end
 
 weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
-	if item.ammoleft == nil then return end
 	if not selected
 		v.slideDrawString(x, (y + 32*scale) - 8*FU,
-			item.ammoleft,
+			"x"..(item.ammoleft or "0"),
 			(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,
 			"thin-fixed", true
 		)
 		return
 	end
 	
+	if item.ammoleft == nil then return end
 	v.slideDrawString(160*FU,y - 20*FU,
 		"Traps: "..item.ammoleft,
 		(flags &~V_ALPHAMASK)|V_ALLOWLOWERCASE,

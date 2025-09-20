@@ -284,7 +284,8 @@ addHook("HUD", function(v,p,c)
 	--wrapper
 	v.slideDrawString2 = function(x,y,str,flags,align,fixed, weapons)
 		if fixed == nil then fixed = true end
-		str = $ or (fixed and "fixed" or "left")
+		str = $ or ""
+		-- align = $ or (fixed and "fixed" or "left")
 		if not fixed
 			x = $*FU
 			y = $*FU
