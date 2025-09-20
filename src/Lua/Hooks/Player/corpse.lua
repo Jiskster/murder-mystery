@@ -189,7 +189,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		if (target.player.mm.role == MMROLE_MURDERER)
 		and source and source.valid then
 			local dist = FixedHypot(FixedHypot(source.x - target.x, source.y - target.y), source.z - target.z)
-			local required_dist = 790 * target.scale
+			local required_dist = 1024 * target.scale
 			
 			if dist > required_dist
 				MM_N.sniped_end = true
