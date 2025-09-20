@@ -293,7 +293,10 @@ function weapon.equip(item, p)
 	
 	if mo.hotpotato_timer == nil then
 		mo.hotpotato_timer = weapon.potato_start_time
-		item.owner = p
+		
+		if not item.owner then
+			item.owner = p
+		end
 	end
 end
 
