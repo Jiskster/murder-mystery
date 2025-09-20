@@ -276,11 +276,8 @@ function weapon:onhit(player, player2)
 		
 		MM:ClearInventorySlot(player)
 		
-		local redghost = mo1.hotpotato_redghost
-		
-		if redghost and redghost.valid then
-			P_RemoveMobj(redghost)
-		end
+		mo2.momx = $/2
+		mo2.momy = $/2
 		
 		if mo2.hotpotato_timer <= 0 then
 			boom(player2)
