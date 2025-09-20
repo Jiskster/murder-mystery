@@ -187,7 +187,11 @@ weapon.thinker = function(item, p)
 				item.ghost.angle = item.mobj.angle
 			end
 			--item.mobj.spriteyoffset = (item.altfiretime * FU*3/4)
-			item.mobj.frame = ($ &~FF_FRAMEMASK)|B
+			if item.mobj.sprite == states[weapon.state].sprite
+				item.mobj.frame = ($ &~FF_FRAMEMASK)|B
+			else
+				item.mobj.frame = ($ &~FF_FRAMEMASK)
+			end
 			item.mobj.dontdrawforviewmobj = nil
 			
 			item.showinfirstperson = true
