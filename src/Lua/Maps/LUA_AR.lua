@@ -36,7 +36,7 @@ local doors={
         16
     }
 }
-local doordelay=35
+local doordelay=2*TICRATE
 
 local rayTimer
 local rayControlLine
