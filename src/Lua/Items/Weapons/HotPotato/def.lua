@@ -57,6 +57,18 @@ weapon.potato_start_time = 20*TICRATE
 weapon.onlyhitone = true
 weapon.cantouch = true
 
+local function unpotato(p)
+	local me = p.mo
+	
+	if me.hotpotato_colored
+		me.colorized = false
+		me.color = p.mm.savedcolor or p.skincolor
+		me.hotpotato_colored = nil
+		me.renderflags = $ &~RF_FULLBRIGHT
+	end
+	me.hotpotato_timer = nil
+end
+
 local function boom(p)
 	MM.Tripmine_SpawnExplosions(p.mo, false, 10)
 	P_StartQuake(60*FU, TICRATE * 3/4, {p.realmo.x, p.realmo.y, p.realmo.z}, 512*FU)
@@ -175,11 +187,7 @@ local function countdown(p, item)
 				P_KillMobj(me, owner_mo, owner_mo, DMG_INSTAKILL)
 			end
 			
-			mo.colorized = false
-			mo.color = p.mm.savedcolor or p.skincolor
-			mo.hotpotato_colored = nil
-			mo.renderflags = $ &~RF_FULLBRIGHT
-			mo.hotpotato_timer = nil
+			unpotato(p)
 			return
 		end
 		
@@ -265,6 +273,7 @@ function weapon:onhit(player, player2)
 	(mo2 and mo2.valid) then
 		mo2.hotpotato_timer = mo1.hotpotato_timer or weapon.potato_start_time
 		mo1.hotpotato_timer = 0
+		unpotato(player)
 		
 		local senditem = MM:GiveItem(player2, "hotpotato")
 		
