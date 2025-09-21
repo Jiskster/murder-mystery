@@ -16,6 +16,8 @@ local ImportantStuff = {
 	"laser_splat",
 	"laser_eye",
 }
+rawset(_G, "RF_ALWAYSONTOP", RF_ALWAYSONTOP or 0x00010000)
+rawset(_G, "RF_HIDEINSKYBOX", RF_HIDEINSKYBOX or 0x00020000)
 
 --when the starting radius is bigger than this, the storm will take
 --longer to shrink to minimum radius
@@ -126,8 +128,8 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist, 
 		laser.myindex = i
 		laser.tics = -1
 		laser.fuse = -1
-		laser.renderflags = $|RF_PAPERSPRITE|RF_NOCOLORMAPS
-		laser.blendmode = AST_SUBTRACT
+		laser.renderflags = $|RF_PAPERSPRITE|RF_NOCOLORMAPS|RF_HIDEINSKYBOX
+		laser.blendmode = AST_ADD
 		laser.sprite = SPR_BGLS
 		laser.frame = A|FF_FULLBRIGHT
 		laser.scale = scale
@@ -391,6 +393,7 @@ local function FXHandle(point,dist)
 		laser.sprite = SPR_BGLS
 		laser.frame = A|FF_FULLBRIGHT
 		laser.scale = $
+		laser.blendmode = AST_ADD
 	end
 	
 	if not (point.laser_splat and point.laser_splat.valid)
@@ -403,6 +406,7 @@ local function FXHandle(point,dist)
 		laser.frame = B|FF_FULLBRIGHT
 		laser.scale = $
 		laser.dispoffset = -25
+		laser.blendmode = AST_ADD
 	end
 	
 	--people like to hide behind these so dont let em do that
