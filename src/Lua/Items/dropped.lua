@@ -183,7 +183,13 @@ function MM:GetCertainDroppedItems(id)
 	return wpns
 end
 
-local function manage_unpicked_weapon(mobj)
+local function manage_unpicked_weapon(mobj, releaseTic)
+	if (mobj.flags & MF_NOTHINK)
+	or ((MM_N.gameover and MM_N.end_ticker < releaseTic) or MM_N.voting)
+		mobj.flags = $|MF_NOTHINK
+		return
+	end
+	
 	local angle = FixedAngle(FixedDiv(leveltime % 80, 80)*360)
 	local z = (12*FU)+12*cos(angle)
 
@@ -266,9 +272,15 @@ local function manage_unpicked_weapon(mobj)
 end
 
 addHook("PostThinkFrame", do
+	local releaseTic = 3*TICRATE
+	if MM_N.sniped_end then
+		-- for music timing
+		releaseTic = 3*TICRATE + MM.sniper_theme_offset
+	end
+	
 	local lastitem
 	for i,mobj in ipairs(MM.DroppedMobjs) do
-		if not (mobj and mobj.valid and not manage_unpicked_weapon(mobj)) then
+		if not (mobj and mobj.valid and not manage_unpicked_weapon(mobj, releaseTic)) then
 			table.remove(MM.DroppedMobjs, i)
 			continue
 		end
