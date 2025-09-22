@@ -124,7 +124,7 @@ return function(self, origin, focusang, finalradius, panduration, panspeed)
 		if not (sheriff and sheriff.valid and sheriff.health)
 			sheriff = nil
 		end
-
+		
 		if time <= MM_N.end_camera.swirldur
 			if (MM_N.end_camera.swirl_stage == STAGE_SWIRL)
 				local swirl = intervalhelper(time, MM_N.end_camera.swirldur)

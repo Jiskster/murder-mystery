@@ -177,17 +177,23 @@ return function()
 
 	-- an extra half second for the new killcam sequence
 	if MM_N.end_ticker >= 5*TICRATE + (TICRATE) then
-		-- freeze all player's angles
-		for player in players.iterate do
-			if player and player.valid 
-			and player.mo and player.mo.valid 
-			and player.mo.health and not player.spectator 
-			and player.mm then
-				player.mm.freeze_angle = player.mo.angle 
-			end
-		end
-		
 		MM_N.end_ticker = 1
 		MM:startTransition()
+
+		for mo in mobjs.iterate()
+			if not (mo and mo.valid) then continue end
+			if (mo == MM_N.end_camera) then continue end
+			
+			if mo.flags & MF_NOTHINK
+				mo.notthinking = true
+				continue
+			end
+			
+			mo.flags = $|MF_NOTHINK
+			if (mo.player and mo.player.valid)
+				mo.fake_drawangle = mo.player.drawangle
+			end
+		end
+
 	end
 end, "gameover"
