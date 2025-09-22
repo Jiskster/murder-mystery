@@ -76,21 +76,7 @@ Lua.MM_StormTimer_Overtime = 23
 Lua.MM_StormTimer_Grace = 10
 
 #@glideks
-Level FI
-LevelName = Flood Industries
-Music = FLDIND
-NextLevel = FI
-SkyNum = 20
-TypeOfLevel = SaxaMM
-RecordAttack = false
-Keywords = industries
-Weather =  	PRECIP_STORM
-NoZone = true
-NoVisitNeeded = true
-Selectheading = Murder Mystery
-Lua.MM_StormTimer_Overtime = 30
-
-Level CM
+Level C0
 LevelName = Commerce Plaza
 Music = CITY
 NextLevel = CM
@@ -105,7 +91,21 @@ Lua.MM_ClueAmount = 6
 Lua.MM_StormTimer = 25
 Lua.MM_StormTimer_Overtime = 20
 
-Level AR
+Level C1
+LevelName = Flood Industries
+Music = FLDIND
+NextLevel = FI
+SkyNum = 20
+TypeOfLevel = SaxaMM
+RecordAttack = false
+Keywords = industries
+Weather =  	PRECIP_STORM
+NoZone = true
+NoVisitNeeded = true
+Selectheading = Murder Mystery
+Lua.MM_StormTimer_Overtime = 30
+
+Level C2
 LevelName = Space Colony ARK
 SelectHeading = Murder Mystery
 Act = 0
