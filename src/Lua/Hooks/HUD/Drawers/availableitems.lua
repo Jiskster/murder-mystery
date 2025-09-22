@@ -28,6 +28,7 @@ local function V_DrawBox(props)
 	local timeleft = props.timeleft or -1
 	local item = props.item
 	local inv = props.inv
+	local camera = props.camera
 
 	local trans = V_40TRANS
 	--Presumably no item in this slot
@@ -94,11 +95,12 @@ local function V_DrawBox(props)
 	
 	--def drawer draws over everything?
 	if (def.drawer)
-		def.drawer(v, props.p, item, x,y, scale, flags, selected, not inv.hidden)
+		--whatever, just add camera to the end
+		def.drawer(v, props.p, item, x,y, scale, flags, selected, not inv.hidden, camera)
 	end
 end
 
-return function(v, p)
+return function(v, p, c)
 	if not (p.mm and not p.mm.spectator) then return end
 	if (p.spectator) then return end
 
@@ -143,6 +145,7 @@ return function(v, p)
 			inv = inv,
 			item = items[i],
 			p = p,
+			camera = c,
 		}
 		
 		x = $+(36*scale)
