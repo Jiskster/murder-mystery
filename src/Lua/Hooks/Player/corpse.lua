@@ -1,12 +1,15 @@
 local wrapadd = MM.require("Libs/wrappedadd")
 
 freeslot("SPR2_OOF_")
+freeslot("SPR2_SHIT")
+
 states[freeslot "S_PLAY_BODY"] = {
 	sprite = SPR_PLAY,
 	frame = SPR2_OOF_|A,
 	tics = -1
 }
-spr2defaults[SPR2_OOF_] = SPR2_DEAD
+spr2defaults[SPR2_SHIT] = SPR2_DEAD
+spr2defaults[SPR2_OOF_] = SPR2_SHIT
 
 sfxinfo[freeslot("sfx_dedbdy")] = {
 	flags = SF_TOTALLYSINGLE,
