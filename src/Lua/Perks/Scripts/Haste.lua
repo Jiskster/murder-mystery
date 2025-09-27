@@ -3,13 +3,13 @@ local perk_price = 325 --750
 
 MM:RegisterEffect("perk.primary.haste", {
 	modifiers = {
-		normalspeed_multi = tofixed("1.11") -- no luigi, i hate srb2 division
+		normalspeed_multi = tofixed("1.10") -- no luigi, i hate srb2 division
 	},
 })
 
 MM:RegisterEffect("perk.secondary.haste", {
 	modifiers = {
-		normalspeed_multi = tofixed("1.08")
+		normalspeed_multi = tofixed("1.07")
 	},
 })
 
