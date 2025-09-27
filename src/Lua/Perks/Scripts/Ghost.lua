@@ -21,8 +21,8 @@ local icon_name = "MM_PI_GHOST"
 local icon_scale = FU/2
 
 local perk_maxtime = 8*TR
-local perk_cooldown = 30*TR
-local perk_volume = (255*3)/4
+local perk_cooldown = 20*TR
+local perk_volume = (255)/4
 local perk_translation = "Grayscale"
 local perk_translucent = tofixed("0.6")
 
@@ -70,6 +70,7 @@ MM_PERKS[MMPERK_GHOST] = {
 			P_Thrust(dust,dust.angle, -P_RandomRange(0,2)*dust.scale)
 			P_SetObjectMomZ(dust,P_RandomRange(-2,2)*FU)
 			dust.flags = $|MF_NOCLIP|MF_NOCLIPHEIGHT
+			dust.alpha = FRACUNIT/2
 		end
 		
 		if p.mm.perk_ghost_cooldown
