@@ -79,7 +79,7 @@ Lua.MM_StormTimer_Grace = 10
 Level C0
 LevelName = Commerce Plaza
 Music = CITY
-NextLevel = CM
+NextLevel = C3
 SkyNum = 4
 TypeOfLevel = SaxaMM
 RecordAttack = false
@@ -94,7 +94,7 @@ Lua.MM_StormTimer_Overtime = 20
 Level C1
 LevelName = Flood Industries
 Music = FLDIND
-NextLevel = FI
+NextLevel = C0
 SkyNum = 20
 TypeOfLevel = SaxaMM
 RecordAttack = false
@@ -112,13 +112,26 @@ Act = 0
 Music = TRSPSR
 NoZone = True
 TypeOfLevel = SaxaMM
-NextLevel = FI
+NextLevel = C1
 SkyNum = 250
 SkyboxScale = 0
 Lua.MM_ClueAmount = 6
 Lua.MM_StormTimer = 30
 Lua.MM_StormTimer_Overtime = 25
 Lua.MM_StormTimer_Grace = 10
+
+Level C3
+LevelName = Haunted Mansion
+SelectHeading = Murder Mystery
+Subtitle = Beta
+Act = 0
+Music = HMAN
+NoZone = True
+TypeOfLevel = SaxaMM
+NextLevel = C2
+Weather = PRECIP_STORM_NORAIN
+SkyNum = 20
+Lua.MM_ClueAmount = 5
 
 #@j1sk
 Level V0
