@@ -474,7 +474,7 @@ MM:addPlayerScript(function(p)
 
 	local def = MM.Items[item.id]
 
-	// timers
+	-- timers
 	if not inv.hidden then
 		item.hit = max(0, $-1)
 		item.anim = max(0, $-1)
@@ -488,8 +488,10 @@ MM:addPlayerScript(function(p)
 		end
 	end
 	
-	// drop le weapon
+	-- thinkers mightve removed our item
+	if not item then return end
 
+	-- drop le weapon
 	if p.cmd.buttons & BT_CUSTOM2
 	and not (p.lastbuttons & BT_CUSTOM2)
 	--wtf are you doing???
@@ -499,7 +501,7 @@ MM:addPlayerScript(function(p)
 		return
 	end
 
-	// attacking/use
+	-- attacking/use
 	local canfire = false
 	if p.cmd.buttons & BT_ATTACK
 		canfire = true
