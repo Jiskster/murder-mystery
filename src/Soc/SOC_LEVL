@@ -129,7 +129,7 @@ Music = HMAN
 NoZone = True
 TypeOfLevel = SaxaMM
 NextLevel = C2
-Weather = PRECIP_STORM_NORAIN
+Weather = PRECIP_RAIN
 SkyNum = 20
 Lua.MM_ClueAmount = 5
 
