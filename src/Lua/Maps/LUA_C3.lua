@@ -1,3 +1,5 @@
+--TD Script and behavior used with permission of DylanSahr from TD Forest
+
 freeslot("SPR_TDOL", "SFX_TDSEE", "SFX_SCRETD", "S_TD_FLOAT1", "S_TD_CHASE1", "S_TD_CHASE2", "MT_TAILSDOLL")
 		
 states[S_TD_FLOAT1] = {SPR_TDOL, A, 1, A_Look, 0, 0, S_TD_FLOAT1}
@@ -19,7 +21,7 @@ mobjinfo[MT_TAILSDOLL] = {
         radius = 10*FRACUNIT,
         height = 40*FRACUNIT,
 		damage = 1,
-		flags = MF_RUNSPAWNFUNC|MF_ENEMY|MF_FLOAT|MF_NOGRAVITY|MF_PAIN
+		flags = MF_RUNSPAWNFUNC|MF_ENEMY|MF_FLOAT|MF_NOGRAVITY|MF_SPECIAL
 }
 
 --Script by: SpectrumUK
@@ -29,3 +31,44 @@ addHook("MobjThinker", function(mo)
         S_StartSound(mo, sfx_tdsee)
     end
 end, MT_TAILSDOLL)
+
+local td_kill = function(mo, mo2)
+	P_KillMobj(mo2, mo, mo)
+	P_KillMobj(mo)
+	return true
+end
+addHook("TouchSpecial", td_kill, MT_TAILSDOLL)
+
+--Other Interactions
+
+freeslot("sfx_loff")
+
+--Lord X painting
+freeslot("sfx_haha")
+
+local statictimer = 0
+local hauntedmansion_screen = function(v)
+	if not statictimer then return end
+	if statictimer then
+		local frame = (leveltime % 4)
+		local patch = v.cachePatch("STATIC"..frame)
+		local wid = (v.width() / v.dupx()) + 1
+		local hei = (v.height() / v.dupy()) + 1
+		local p_w = patch.width
+		local p_h = patch.height
+		v.drawStretched(0,0,
+			FixedDiv(wid * FU, p_w * FU),
+			FixedDiv(hei * FU, p_h * FU),
+			patch,
+			V_SNAPTOTOP|V_SNAPTOLEFT|V_50TRANS
+		)
+		statictimer = $-1
+	end
+end
+
+local trigger_lordxstatic = function()
+	if not statictimer then statictimer = 2*TICRATE end
+end
+addHook("LinedefExecute", trigger_lordxstatic, "LORDX")
+
+customhud.SetupItem("hauntedmansion_events", "HauntedMansion", hauntedmansion_screen, "game", -1)
