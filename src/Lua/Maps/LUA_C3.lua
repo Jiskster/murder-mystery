@@ -46,10 +46,9 @@ freeslot("sfx_loff")
 --Lord X painting
 freeslot("sfx_haha")
 
-local statictimer = 0
-local hauntedmansion_screen = function(v)
-	if not statictimer then return end
-	if statictimer then
+local hauntedmansion_screen = function(v,p)
+	if not p.statictimer then return end
+	if p.statictimer then
 		local frame = (leveltime % 4)
 		local patch = v.cachePatch("STATIC"..frame)
 		local wid = (v.width() / v.dupx()) + 1
@@ -62,13 +61,18 @@ local hauntedmansion_screen = function(v)
 			patch,
 			V_SNAPTOTOP|V_SNAPTOLEFT|V_50TRANS
 		)
-		statictimer = $-1
 	end
 end
 
-local trigger_lordxstatic = function()
-	if not statictimer then statictimer = 2*TICRATE end
+local trigger_lordxstatic = function(line, mo)
+	if mo.player
+		if not mo.player.statictimer then mo.player.statictimer = 2*TICRATE end
+	end
 end
+local staticperplayer = function(p)
+	if p.statictimer then p.statictimer = $-1 end
+end
+addHook("PlayerThink", staticperplayer)
 addHook("LinedefExecute", trigger_lordxstatic, "LORDX")
 
 customhud.SetupItem("hauntedmansion_events", "HauntedMansion", hauntedmansion_screen, "game", -1)
