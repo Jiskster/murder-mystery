@@ -70,7 +70,8 @@ local trigger_lordxstatic = function(line, mo)
 	end
 end
 local staticperplayer = function(p)
-	if p.statictimer then p.statictimer = $-1 end
+	if not p.statictimer then return end
+	p.statictimer = $-1
 end
 addHook("PlayerThink", staticperplayer)
 addHook("LinedefExecute", trigger_lordxstatic, "LORDX")
