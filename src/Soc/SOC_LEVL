@@ -123,7 +123,6 @@ Lua.MM_StormTimer_Grace = 10
 Level C3
 LevelName = Haunted Mansion
 SelectHeading = Murder Mystery
-Subtitle = Beta
 Act = 0
 Music = HMAN
 NoZone = True
