@@ -1,5 +1,6 @@
 --shitty ass libary already exist, but i already wrote this so you bet your ass im using it
-return function()
+-- boolean countdead: count dead roles
+return function(countdead)
     local result = {
         innocents = 0,
         sheriffs = 0,
@@ -19,7 +20,7 @@ return function()
             result.inactive = $+1
             continue
         end
-        if (p.specator or p.mm.spectator or not (p.mo and p.mo.valid and p.mo.health)
+        if (p.specator or p.mm.spectator or (not (p.mo and p.mo.valid and p.mo.health) and not countdead)
         or p.mm.joinedmidgame)
             result.inactive = $+1
             continue
