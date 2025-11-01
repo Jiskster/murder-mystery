@@ -21,7 +21,7 @@ mobjinfo[MT_TAILSDOLL] = {
 	radius = 10*FRACUNIT,
 	height = 40*FRACUNIT,
 	damage = 1,
-	flags = MF_RUNSPAWNFUNC|MF_ENEMY|MF_FLOAT|MF_NOGRAVITY|MF_SPECIAL
+	flags = MF_RUNSPAWNFUNC|MF_ENEMY|MF_FLOAT|MF_NOGRAVITY|MF_PAIN
 }
 
 --Script by: SpectrumUK
@@ -31,13 +31,6 @@ addHook("MobjThinker", function(mo)
 		S_StartSound(mo, sfx_tdsee)
 	end
 end, MT_TAILSDOLL)
-
-local td_kill = function(mo, mo2)
-	P_KillMobj(mo2, mo, mo)
-	P_KillMobj(mo)
-	return true
-end
-addHook("TouchSpecial", td_kill, MT_TAILSDOLL)
 
 --Other Interactions
 
