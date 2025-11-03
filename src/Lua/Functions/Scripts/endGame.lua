@@ -135,7 +135,7 @@ return function(self, endType, nofreeze)
 		
 		if payout ~= 0
 			p.mm_save.rings = wrapadd($, payout)
-			CONS_Printf(p,"\x82Got "..payout.." ring"..(payout ~= 1 and "s" or "")..
+			CONS_Printf(p,"\x82Got "..payout.." coin"..(payout ~= 1 and "s" or "")..
 			" that round for "..reason.."!")
 		end
 		p.mm.ringspaid = payout

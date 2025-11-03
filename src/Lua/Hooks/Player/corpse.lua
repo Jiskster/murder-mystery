@@ -484,7 +484,7 @@ addHook("ThinkFrame", function()
 				
 				local bonus = 25
 				chatprintf(p, "\x83*Found a body! (+ $"..bonus..")\x80")
-				CONS_Printf(p, "\x83You got "..bonus.." coins for finding a body!\x80")
+				--CONS_Printf(p, "\x83You got "..bonus.." coins for finding a body!\x80")
 				p.mm_save.ringstopay = wrapadd($, bonus)
 				
 				local hook_event = MM.events["CorpseFound"]
