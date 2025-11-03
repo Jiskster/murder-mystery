@@ -37,6 +37,7 @@ local function drawIt(v, ML)
 			continue
 		end
 		
+		--interpolate the background and stuff
 		if not (popupitem_t.goingdown)
 			popupitem_t.lifespan = $ + 1
 		else
@@ -105,9 +106,8 @@ local function drawIt(v, ML)
 				corner_y = corner_y,
 			})
 		end
-		
-		ML.interpolate(v, false)
 	end
+	ML.interpolate(v, false)
 end
 
 return function(v, ML)

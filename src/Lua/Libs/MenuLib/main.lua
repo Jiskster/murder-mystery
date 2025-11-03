@@ -1,4 +1,5 @@
 local ML = MenuLib
+local waittoupdate = false --for mouse
 
 addHook("PreThinkFrame", do
 	if ML.client.doMousePress
@@ -9,6 +10,14 @@ addHook("PreThinkFrame", do
 			ML.client.mouseTime = -1
 		end
 	end
+	if not waittoupdate
+		if ML.client.mouseHeld == 1
+			ML.client.mouseHeld = 2
+		elseif ML.client.mouseHeld == -1
+			ML.client.mouseHeld = 0
+		end
+	end
+	waittoupdate = false
 	
 	ML.client.menuactive = false
 	if ML.client.currentMenu.id == -1
@@ -21,14 +30,7 @@ addHook("PreThinkFrame", do
 	
 	ML.client.mouse_x = $ + mouse.dx * 3700
 	ML.client.mouse_y = $ + mouse.dy * 3700
-
-	-- controller/mobileAdd commentMore actions
-	local angle = R_PointToAngle2(0, 0, ML.client.sidemove*FU, -ML.client.forwardmove*FU)
-	local analog = max(abs(ML.client.forwardmove), abs(ML.client.sidemove))*FU/50
-
-	ML.client.mouse_x = $ + FixedMul(cos(angle), analog*4)
-	ML.client.mouse_y = $ + FixedMul(sin(angle), analog*4)
-
+	
 	ML.client.mouse_x = ML.clamp(0, $, BASEVIDWIDTH*FU)
 	ML.client.mouse_y = ML.clamp(0, $, BASEVIDHEIGHT*FU)
 	
@@ -38,6 +40,7 @@ addHook("PreThinkFrame", do
 	end
 end)
 
+--keyhandler object stuff
 addHook("KeyDown", function(key)
 	if isdedicatedserver then return end
 	
@@ -49,6 +52,11 @@ addHook("KeyDown", function(key)
 	if key.name == "lshift"
 	or key.name == "rshift"
 		ML.client.text_shiftdown = true
+	end
+	
+	if key.name == "caps lock"
+	and not key.repeated
+		ML.client.text_capslock = not $
 	end
 	
 	if ML.client.textbuffer ~= nil
@@ -69,6 +77,12 @@ addHook("KeyUp", function(key)
 	or key.name == "rshift"
 		ML.client.text_shiftdown = false
 	end
+	
+	--lul
+	if key.name == "mouse1"
+		ML.client.mouseHeld = -1
+		waittoupdate = true
+	end
 end)
 
 addHook("KeyDown", function(key)
@@ -84,6 +98,8 @@ addHook("KeyDown", function(key)
 	if key.name == "mouse1"
 	and (ML.client.textbuffer_id == nil)
 		ML.client.doMousePress = true
+		ML.client.mouseHeld = 1
+		waittoupdate = true
 	elseif key.name == "escape"
 	and not chatactive
 		if (ML.client.textbuffer_id == nil)
@@ -114,25 +130,4 @@ addHook("KeyDown", function(key)
 		S_StartSound(nil,sfx_menu1,consoleplayer)
 		ML.stopTextInput()
 	end
-end)
-
-addHook("PlayerCmd", function(p, cmd)
-	if not ML.client.overrideinputs then return end
-
-	ML.client.lastbuttons = ML.client.buttons
-	ML.client.buttons = cmd.buttons
-	ML.client.forwardmove = cmd.forwardmove
-	ML.client.sidemove = cmd.sidemove
-
-	if ML.client.buttons & BT_JUMP
-	and ML.client.lastbuttons & BT_JUMP == 0 then
-		ML.client.doMousePress = true
-	end
-
-	cmd.buttons = 0
-	cmd.sidemove = 0
-	cmd.forwardmove = 0
-
-	cmd.angleturn = p.cmd.angleturn
-	cmd.aiming = p.cmd.aiming
 end)

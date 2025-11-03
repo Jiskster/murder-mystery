@@ -27,6 +27,7 @@ return function(v,ML)
 	local corner_y = (BASEVIDHEIGHT/2) - (fake_height/2)
 	
 	if (menu.outline ~= nil)
+	and (menu.outline ~= -1)
 		v.drawFill(
 			corner_x - 1, corner_y - 1,
 			fake_width + 2, fake_height + 2,
@@ -50,6 +51,7 @@ return function(v,ML)
 	)
 	
 	do --if (ML.client.currentMenu.prevId ~= -1)
+		ML.interpolate(v, -1)
 		ML.addButton(v, {
 			x = (BASEVIDWIDTH/2) + (fake_width/2) - 25,
 			y = corner_y,
@@ -63,6 +65,7 @@ return function(v,ML)
 				ML.initMenu(-1)
 			end
 		})
+		ML.interpolate(v, true)
 	end
 	
 	if not (menu.ms_flags & MS_NOLINE)
@@ -73,6 +76,7 @@ return function(v,ML)
 	end
 	
 	if (menu.drawer ~= nil)
+		ML.interpolate(v, false)
 		menu.drawer(v, ML, menu, {
 			corner_x = corner_x,
 			corner_y = corner_y,
@@ -80,7 +84,7 @@ return function(v,ML)
 			fakeheight = fake_height
 		})
 	end
-	--re-interp incase the drawer disabled it
+	--re-interp
 	ML.interpolate(v, true)
 	
 	ML.HUD.stage_id = $ + 1

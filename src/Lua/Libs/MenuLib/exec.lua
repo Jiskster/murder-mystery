@@ -1,7 +1,8 @@
 --MenuLib v0.6 written by luigi budd
 
+--TODO: check for versions and replace functions?
 if rawget(_G,"MenuLib")
-	print("\x85MenuLib already loaded, aborting...")
+	print("\x82MenuLib already loaded, aborting...")
 	return
 end
 
@@ -18,7 +19,7 @@ local function enumflags(prefix, work, flagstyle)
         elseif flagstyle == "enum"
             val = k
         end
-
+		
 		assert(val ~= -1,"\x85Ran out of bits for "..prefix.."! (k="..k..")\x80")
 		assert(val ~= nil,"\x85".."Didn\'t give flagstyle in enumflags\x80")
 		
@@ -81,7 +82,9 @@ enumflags("IR_", {
 MenuLib.VERSION = 006
 MenuLib.SUBVERSION = 0
 --dont forget the ending "/" (and "debug" from the file tree below!)
-MenuLib.root = "Libs/MenuLib/"
+MenuLib.root = MENULIB_ROOT or ""
+
+MenuLib.templates = {}
 
 MenuLib.client = {
 	
@@ -91,6 +94,7 @@ MenuLib.client = {
 	
 	mouse_x = (BASEVIDWIDTH*FU) / 2,
 	mouse_y = (BASEVIDHEIGHT*FU) / 2,
+	mouse_graphic = nil,
 	
 	--the button ID that we're hovering over
 	hovering = -1,
@@ -107,6 +111,7 @@ MenuLib.client = {
 	--use this when detecting mouse presses
 	doMousePress = false,
 	mouseTime = -1,
+	mouseHeld = 0, -- 1 = JUST pressed down, 2 = held, -1 = let go, 0 = none
 	
 	--text input stuff (messy)
 	textbuffer = nil,
@@ -114,15 +119,10 @@ MenuLib.client = {
 	textbuffer_funcs = {},
 	text_shiftdown = false,
 	text_ctrldown = false,
+	text_capslock = false,
 	textbuffer_sfx = nil,
 	textbuffer_tooltip = nil,
-
-	overrideinputs = false,
-	forwardmove = 0,
-	sidemove = 0,
-	buttons = 0,
-	lastbuttons = 0,
-
+	
 	commandbuffer = nil,
 }
 

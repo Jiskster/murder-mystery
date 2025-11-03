@@ -8,6 +8,7 @@ do
 	local path = ML.root .. "HUD/Libs/"
 	local tree = {
 		"addButton",
+		"mouseInZone",
 		"buttonHovering",
 	}
 
@@ -71,5 +72,6 @@ addHook("HUD",function(v)
 		ML.interpolate(v, false)
 	end
 	ML.interpolate(v, false)
+	ML.client.mouse_graphic = nil
 end)
 
