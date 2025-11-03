@@ -190,7 +190,8 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	and not (CV_MM.debug.value) then
 		-- funny sniper sound
 		if (target.player.mm.role == MMROLE_MURDERER)
-		and source and source.valid then
+		and (source and source.valid)
+		and P_RandomChance(FU/2) then
 			local dist = FixedHypot(FixedHypot(source.x - target.x, source.y - target.y), source.z - target.z)
 			local required_dist = 2000 * target.scale
 			
