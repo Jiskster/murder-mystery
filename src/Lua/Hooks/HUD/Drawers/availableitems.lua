@@ -15,6 +15,36 @@ local itemname = {
 	}
 }
 
+local Perk = {
+	getPatch = function(perk)
+		if perk == 0
+		or perk == nil
+		or (MM_PERKS[perk] == nil)
+			return "MM_NOITEM"
+		end
+		
+		return MM_PERKS[perk].icon or "MISSING"
+	end,
+	getScale = function(perk)
+		if perk == 0
+		or perk == nil
+		or (MM_PERKS[perk] == nil)
+			return FU
+		end
+		
+		return MM_PERKS[perk].icon_scale or FU
+	end,
+	getName = function(perk)
+		if perk == 0
+		or perk == nil
+		or (MM_PERKS[perk] == nil)
+			return "\x86No perk"
+		end
+		
+		return MM_PERKS[perk].name or "Perk"
+	end
+}
+
 local function V_DrawBox(props)
 	if not (props.v) then return end
 
@@ -152,6 +182,25 @@ return function(v, p, c)
 	end
 	myitemname.oldid = curitem
 	
+	-- perk icons
+	if (p.mm.role == MMROLE_MURDERER)
+		y = $ + (10*scale)
+		local flags = V_SNAPTOBOTTOM|V_PERPLAYER
+		v.slideDrawString(x,y-8*FU, "Perks", flags|V_ALLOWLOWERCASE|V_YELLOWMAP, "thin-fixed")
+		for i = 0,1
+			local perkid
+			if (i == 0)
+				perkid = p.mm_save.pri_perk
+			else
+				perkid = p.mm_save.sec_perk
+			end
+			local scale = FU/2
+			v.slideDrawScaled(x,y, FixedMul(scale, Perk.getScale(perkid)), v.cachePatch(Perk.getPatch(perkid)), flags)
+
+			x = $ + (35 * scale)
+		end
+	end
+
 	--controls
 	x = 5*FU
 	y = 170*FU
