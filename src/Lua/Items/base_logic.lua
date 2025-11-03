@@ -274,8 +274,19 @@ addHook("PostThinkFrame", do
 			
 			manage_position(p, item)
 			
-			if item.hiddenforothers then
-				item.mobj.drawonlyforplayer = p
+			if (item.hiddenforothers) and (displayplayer and displayplayer.valid) then
+				local hide = false
+				if (displayplayer.mm)
+					if (displayplayer.spectator or displayplayer.mm.spectator)
+						hide = false
+					elseif (displayplayer.mm.role ~= p.mm.role)
+						hide = true
+					end
+				else
+					hide = true
+				end
+
+				item.mobj.flag2 = ($ &~MF2_DONTDRAW)|(hide and MF2_DONTDRAW or 0)
 			end
 		end
 	end
