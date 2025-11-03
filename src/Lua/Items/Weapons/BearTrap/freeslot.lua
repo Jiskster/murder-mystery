@@ -70,7 +70,22 @@ addHook("MobjThinker",function(trap)
 	if trap.tracer and trap.tracer.valid
 	and trap.tracer.player and trap.tracer.player.valid then
 		if not trap.target then
-			trap.drawonlyforplayer = trap.tracer.player
+			if (displayplayer and displayplayer.valid)
+				local hide = false
+				if (displayplayer.mm)
+					if (displayplayer.spectator or displayplayer.mm.spectator)
+						hide = false
+					elseif (displayplayer.mm.role ~= p.mm.role)
+						hide = true
+					end
+				else
+					hide = true
+				end
+
+				trap.flags2 = ($ &~MF2_DONTDRAW)|(hide and MF2_DONTDRAW or 0)
+			end
+		else
+			trap.flags2 = $ &~MF2_DONTDRAW
 		end
 	end
 	

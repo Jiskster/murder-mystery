@@ -286,7 +286,7 @@ addHook("PostThinkFrame", do
 					hide = true
 				end
 
-				item.mobj.flag2 = ($ &~MF2_DONTDRAW)|(hide and MF2_DONTDRAW or 0)
+				item.mobj.flags2 = ($ &~MF2_DONTDRAW)|(hide and MF2_DONTDRAW or 0)
 			end
 		end
 	end
