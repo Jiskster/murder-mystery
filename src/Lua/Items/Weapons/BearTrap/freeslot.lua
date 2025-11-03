@@ -75,7 +75,7 @@ addHook("MobjThinker",function(trap)
 				if (displayplayer.mm)
 					if (displayplayer.spectator or displayplayer.mm.spectator)
 						hide = false
-					elseif (displayplayer.mm.role ~= p.mm.role)
+					elseif (displayplayer.mm.role ~= trap.tracer.player.mm.role)
 						hide = true
 					end
 				else
