@@ -152,6 +152,7 @@ LevelName = Acid Plant
 SkyNum = 4
 TypeOfLevel = SaxaMM
 NoVisitNeeded = true
+Lua.MM_SingleClues = true
 Lua.MM_StormTimer = 25
 Lua.MM_StormTimer_Overtime = 30
 SelectHeading = Murder Mystery
