@@ -8,8 +8,8 @@ local hud_tween = hud_tween_start
 local icon_name = "MM_PI_FAKEGUN"
 local icon_scale = FU/2
 
-local perk_maxtime = 10*TR
-local perk_cooldown = 30*TR
+local perk_maxtime = 15*TR
+local perk_cooldown = 18*TR
 
 local clueItems = {
 	"shotgun",
