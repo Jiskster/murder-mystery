@@ -163,14 +163,10 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist, 
 		local dist = R_PointToDist(x,y)
 		local nofade = false
 		if (displayplayer and displayplayer.valid and displayplayer.realmo and displayplayer.realmo.valid)
-			if (displayplayer.mm and displayplayer.mm.outofbounds)
-				nofade = true
-			else
-				local m = displayplayer.realmo
-				dist = min($, R_PointToDist2(m.x,m.y, x,y))
-			end
+			local m = displayplayer.realmo
+			dist = min($, R_PointToDist2(m.x,m.y, x,y))
 		end
-		if dist <= lasersize*4*scale
+		if dist <= max(lasersize*4*scale, 128*FU)
 		and not nofade
 			local fudge = FU/10
 			fade = fudge + FixedMul(FixedDiv(dist, lasersize*4*scale), FU - fudge)

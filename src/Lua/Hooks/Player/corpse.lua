@@ -27,7 +27,7 @@ end
 
 addHook("ShouldDamage", function(me, inf, sor, d, dmgt)
 	if not MM:isMM() then return end
-	if MM:pregame() then return false; end
+	if (MM:pregame()) then return false; end
 	if (dmgt & DMG_DEATHMASK) then return end
 	
 	local p = me.player
