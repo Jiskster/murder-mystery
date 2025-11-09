@@ -144,16 +144,3 @@ Selectheading = Murder Mystery
 Lua.MM_ClueAmount = 7
 Lua.MM_StormTimer = 30
 Lua.MM_StormTimer_Overtime = 25
-
-#@thosewhosnow111
-# aka Markius
-Level AP
-LevelName = Acid Plant
-SkyNum = 4
-TypeOfLevel = SaxaMM
-NoVisitNeeded = true
-Lua.MM_SingleClues = true
-Lua.MM_StormTimer = 25
-Lua.MM_StormTimer_Overtime = 30
-SelectHeading = Murder Mystery
-Music = THZALT
