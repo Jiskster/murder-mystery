@@ -42,6 +42,28 @@ local Perk = {
 		end
 		
 		return MM_PERKS[perk].name or "Perk"
+	end,
+	flagBehavior = function(perk, v,p,c, order, props)
+		if perk == 0
+		or perk == nil
+		or (MM_PERKS[perk] == nil)
+			return 0
+		end
+		if MM_PERKS[perk].patchbehavior ~= nil
+			return MM_PERKS[perk].patchbehavior(v,p,c, order, props) or 0
+		else
+			return 0
+		end
+	end,
+	drawFunc = function(perk, v,p,c, order, props)
+		if perk == 0
+		or perk == nil
+		or (MM_PERKS[perk] == nil)
+			return
+		end
+		if MM_PERKS[perk].drawer ~= nil
+			MM_PERKS[perk].drawer(v,p,c, order, props)
+		end
 	end
 }
 
@@ -189,14 +211,24 @@ return function(v, p, c)
 		v.slideDrawString(x,y-8*FU, "Perks", flags|V_ALLOWLOWERCASE|V_YELLOWMAP, "thin-fixed")
 		for i = 0,1
 			local perkid
+			local order = "pri"
 			if (i == 0)
 				perkid = p.mm_save.pri_perk
 			else
 				perkid = p.mm_save.sec_perk
+				order = "sec"
 			end
+			local props = {
+				x = x,
+				y = y,
+				scale = scale,
+				flags = flags
+			}
 			local scale = FU/2
-			v.slideDrawScaled(x,y, FixedMul(scale, Perk.getScale(perkid)), v.cachePatch(Perk.getPatch(perkid)), flags)
-
+			local pflags = Perk.flagBehavior(perkid, v,p,c, order, props)
+			v.slideDrawScaled(x,y, FixedMul(scale, Perk.getScale(perkid)), v.cachePatch(Perk.getPatch(perkid)), flags|pflags)
+			
+			Perk.drawFunc(perkid, v,p,c, order, props)
 			x = $ + (35 * scale)
 		end
 	end
