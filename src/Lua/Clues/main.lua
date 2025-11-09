@@ -16,6 +16,7 @@ local clueitemtiers = {
 		"loudspeaker",
 		"snowball",
 		"toyknife",
+		"balloon",
 	},
 	[3] = {
 		"bloxycola",
