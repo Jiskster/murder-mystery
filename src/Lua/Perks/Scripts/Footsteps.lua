@@ -149,6 +149,9 @@ addHook("ThinkFrame",do
 	
 	if (MM_N.dueling) then return end
 	
+	local gt = MM.returnGametype()
+	if (gt.disable_perks) then return end
+	
 	for p in players.iterate
 		if p.spectator then continue end
 		if not (p.mo and p.mo.valid) then continue end
