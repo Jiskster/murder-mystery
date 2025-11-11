@@ -18,5 +18,3 @@ end
 -- MM_N.maxtime has a different variable name than Gametype[id].max_time
 
 MM.RegisterGametype("Classic")
-
-dofile("Gametypes/Freeze Tag/main")
