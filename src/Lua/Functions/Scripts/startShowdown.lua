@@ -1,7 +1,12 @@
 return function()
 	MM_N.showdown = true
 	MM_N.showdown_song = "SHWDW"..tostring(P_RandomRange(1,3))
-	chatprint("\x82*Proximity chat has been turned OFF!")
+
+	local gt = MM.returnGametype()
+
+	if not gt.disable_proximity_chat then
+		chatprint("\x82*Proximity chat has been turned OFF!")
+	end
 
 	for p in players.iterate do
 		if not (p and p.mo and p.mo.health and p.mm and not p.mm.spectator) then continue end
