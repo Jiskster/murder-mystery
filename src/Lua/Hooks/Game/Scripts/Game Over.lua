@@ -103,6 +103,7 @@ return function()
 		-- for music timing
 		releaseTic = 3*TICRATE + MM.sniper_theme_offset
 	end
+	-- lets also spawn the confetti here
 	if MM_N.end_ticker == releaseTic
 		for mo in mobjs.iterate()
 			if not (mo and mo.valid) then continue end
@@ -110,9 +111,38 @@ return function()
 			if mo.notthinking
 				continue
 			end
-			
+
 			mo.flags = $ &~MF_NOTHINK
 			mo.fake_drawangle = nil
+		end
+	-- magic number, but this is when the camera starts
+	-- panning onto the sheriff
+	elseif MM_N.end_ticker == 156
+		local sheriff = 
+			((MM_N.end_killed and MM_N.end_killed.valid and MM_N.end_killed.player and MM_N.end_killed.player.mm.role == MMROLE_MURDERER)
+				and not (MM_N.end_killer and MM_N.end_killer.valid and MM_N.end_killer.health)
+			)
+			and MM_N.end_killed
+			or MM_N.end_killer
+		if (sheriff and sheriff.valid)
+			local hei = FixedDiv(sheriff.height, sheriff.scale)/2
+			for i = 0, 45
+				local thok = P_SpawnMobjFromMobj(sheriff, 0,0, hei, MT_THOK)
+				thok.flags = $ &~(MF_SCENERY|MF_NOGRAVITY)
+				thok.color = SKINCOLOR_LAVENDER + P_RandomRange(0, (SKINCOLOR_SUPERSILVER1-SKINCOLOR_LAVENDER) - 1)
+				thok.fuse = 3*TICRATE
+				thok.spritexscale = (FU + (P_RandomFixed()*3/4 - FU/4))/2
+				thok.spriteyscale = thok.spritexscale
+				
+				thok.sign = P_RandomChance(FU/2) and 1 or -1
+				thok.offsetangle = FixedAngle(P_RandomRange(1,30)*FU)
+				thok.offsetroll = FixedAngle(P_RandomRange(-25,25)*FU + P_RandomFixed())
+				thok.offsetframe = P_RandomKey(7)
+				thok.angle = FixedAngle(P_RandomRange(0,360)*FU + P_RandomFixed())
+				P_Thrust(thok, thok.angle, P_RandomRange(1,5)*thok.scale + P_RandomFixed())
+				P_SetObjectMomZ(thok,P_RandomRange(3,10)*FU+P_RandomFixed())
+				thok.state = S_MM_CONFETTI
+			end
 		end
 	end
 	if MM_N.sniped_end and MM_N.end_ticker == releaseTic+8 then

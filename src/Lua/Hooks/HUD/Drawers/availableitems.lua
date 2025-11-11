@@ -206,6 +206,7 @@ return function(v, p, c)
 	
 	-- perk icons
 	if (p.mm.role == MMROLE_MURDERER)
+	and not (MM_N.dueling)
 		y = $ + (10*scale)
 		local flags = V_SNAPTOBOTTOM|V_PERPLAYER
 		v.slideDrawString(x,y-8*FU, "Perks", flags|V_ALLOWLOWERCASE|V_YELLOWMAP, "thin-fixed")

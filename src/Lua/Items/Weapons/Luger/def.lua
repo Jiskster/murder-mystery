@@ -35,6 +35,7 @@ weapon.shootmobj = MT_MM_REVOLV_BULLET
 weapon.pickupsfx = sfx_gnpick
 weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_lugrsh
+weapon.finalkillsfx = sfx_revcrt
 weapon.allowdropmobj = false
 weapon.max_ammo = 4
 weapon.noammoinduels = true

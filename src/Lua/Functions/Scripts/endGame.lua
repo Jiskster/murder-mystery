@@ -58,6 +58,7 @@ return function(self, endType, nofreeze)
 			mo.flags = $|MF_NOTHINK
 			if not (mo.flags & MF_MISSILE)
 			or (mo.origin and mo.origin.id)
+			or (mo ~= MM_N.end_killed or mo ~= MM_N.end_killer)
 				S_StopSound(mo)
 			end
 			if (mo.player and mo.player.valid)

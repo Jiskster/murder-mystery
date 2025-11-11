@@ -37,6 +37,7 @@ weapon.shootmobj = MT_RAY
 weapon.pickupsfx = sfx_gnpick
 weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_gnfire
+weapon.finalkillsfx = sfx_revcrt
 weapon.dropsfx = sfx_gndrop
 weapon.allowdropmobj = true
 weapon.aimtrail = true
