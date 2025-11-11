@@ -204,9 +204,11 @@ return function(v, p, c)
 	end
 	myitemname.oldid = curitem
 	
+	local gt = MM.returnGametype()
+
 	-- perk icons
 	if (p.mm.role == MMROLE_MURDERER)
-	and not (MM_N.dueling)
+	and not (MM_N.dueling) and not (gt.disable_perks) then
 		y = $ + (10*scale)
 		local flags = V_SNAPTOBOTTOM|V_PERPLAYER
 		v.slideDrawString(x,y-8*FU, "Perks", flags|V_ALLOWLOWERCASE|V_YELLOWMAP, "thin-fixed")
