@@ -64,6 +64,9 @@ MM.addHook("ItemUse", function(p)
 	local inv = p.mm.inventory
 	local item = inv.items[inv.cur_sel]
 	
+	local gt = MM.returnGametype()
+	if (gt.disable_gun_countdown) then return end
+	
 	if p.mm.role ~= MMROLE_MURDERER then return end
 	if (MM_N.dueling) then return end
 	if item.id ~= "revolver" then return end
@@ -74,6 +77,9 @@ MM.addHook("ItemUse", function(p)
 end)
 
 weapon.thinker = function(item, p)
+	local gt = MM.returnGametype()
+	if (gt.disable_gun_countdown) then return end
+	
 	if (p.mm.role ~= MMROLE_MURDERER) then return end
 	if (MM_N.dueling) then return end
 	if (item.shots == nil) then item.shots = 0; end
@@ -84,6 +90,9 @@ weapon.thinker = function(item, p)
 end
 
 weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active)
+	local gt = MM.returnGametype()
+	if (gt.disable_gun_countdown) then return end
+	
 	if (p.mm.role ~= MMROLE_MURDERER) then return end
 	if (MM_N.dueling) then return end
 	if not selected then return end
