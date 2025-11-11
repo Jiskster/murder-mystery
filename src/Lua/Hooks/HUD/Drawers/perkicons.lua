@@ -43,6 +43,9 @@ return function(v)
 		p = displayplayer
 	end
 	
+	local gt = MM.returnGametype()
+	if (gt.disable_perks) then return end
+	
 	v.drawFill(x - 2,
 		y - 2,
 		100,
