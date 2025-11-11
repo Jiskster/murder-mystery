@@ -11,6 +11,8 @@ local previousRoundTic = 0
 
 return function()
 	if not (MM_N) then return end
+	local gt = MM.returnGametype()
+	
 	--Bruh stop bro
 	--STOP BEING SHITTYY
 	if MM_N.pregame_time == nil then return end
@@ -83,6 +85,7 @@ return function()
 			if (MM_N.peoplekilled >= MM_N.minimum_killed
 				or MM_N.showdown
 				or (CV_MM.debug.value)
+				or gt.force_overtime
 			) and not MM.Gametypes[MM_N.gametype].disable_overtime
 				MM:startOvertime()
 			else

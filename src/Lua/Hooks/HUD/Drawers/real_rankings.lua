@@ -85,6 +85,8 @@ local ROLESTYLES = {
 }
 
 local function getViewedPlayerRole(player, viewer)
+	local gt = MM.returnGametype()
+
 	local role = "Unknown"
 
 	if not player.mm then return "Unknown" end
@@ -144,7 +146,7 @@ local function getViewedPlayerRole(player, viewer)
 	end
 	]]--
 	
-	if MM_N.gameover or MM_N.showdown
+	if MM_N.gameover or MM_N.showdown or gt.reveal_roles then
 		return role
 	end
 	

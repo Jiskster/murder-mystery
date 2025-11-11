@@ -170,6 +170,7 @@ end
 
 addHook("PlayerMsg", function(src, t, trgt, msg)
 	if not MM:isMM() then return end
+	local gt = MM.returnGametype()
 	
 	--allow dedicated server chats
 	if (src == server and not players[0]) then return end
@@ -184,6 +185,7 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 	or (MM:pregame())
 	or (MM_N.waiting_for_players)
 	or (paused)
+	or (gt.disable_proximity_chat) then
 		no_prox_chat = true
 		npc_nospectators = MM:pregame()
 	end

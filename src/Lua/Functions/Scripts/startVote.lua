@@ -18,6 +18,19 @@ return function(self)
 	end
 	P_SwitchWeather(PRECIP_NONE)
 	
+	local player_count = 0
+	
+	-- count deh players
+	for p in players.iterate do
+		if (not p.mm_save) then -- sanity check
+			continue end;
+			
+		if (p.mm_save.afkmode) then -- play the game you lazy bum
+			continue end;
+		
+		player_count = $ + 1
+	end
+	
 	local addedMaps = 0
 	local timesrejected = 0
 	while addedMaps < 4 do
@@ -48,7 +61,13 @@ return function(self)
 		local chosen_gametype = 1
 		
 		if P_RandomChance(FU/8) and #MM.Gametypes > 1 then
-			chosen_gametype = P_RandomRange(2, #MM.Gametypes)
+			chosen_gametype = P_RandomRange(2, #MM.Gametypes) -- set type to random mode
+			
+			local gmt = MM.Gametypes[chosen_gametype]
+
+			if gmt.required_players and player_count < gmt.required_players then
+				chosen_gametype = 1 -- revert back to gametype 1 if not enough players.
+			end
 		end
 		
 		table.insert(MM_N.mapVote.maps, {

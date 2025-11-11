@@ -53,9 +53,53 @@ return function(self, count, alreadychosen, murdorsherf)
 		table.insert(total_table,p)
 	end
 
+	local gt = MM.returnGametype()
+	
 	-- Select players.
 	local murderers = {}
 	local sheriffs = {}
+	
+	if gt.fill_teams then
+		local c = 0
+		local temp_players = {}
+		
+		-- put all active players in a temporary table to sort in a bit.
+		for p in players.iterate do
+			if not (p and p.valid and p.mm) then continue end
+			
+			if p.mm_save.afkmode then continue end
+			
+			table.insert(temp_players, p)
+		end
+		
+		-- random starting role
+		local role = "m"
+		if P_RandomChance(FU/2) then
+			role = "s"
+		end
+		
+		while #temp_players > 0 do
+			local r = P_RandomRange(1,#temp_players)
+			local player = temp_players[r]
+			
+			-- swap to other role for next player
+			if role == "m" then
+				murderers[player] = true
+				player.mm.role = MMROLE_MURDERER
+				role = "s"
+			else
+				sheriffs[player] = true
+				player.mm.role = MMROLE_SHERIFF
+				role = "m"
+			end
+			
+			table.remove(temp_players, r) -- remove r from temp_players
+		end
+		
+		
+		return murderers, sheriffs
+	end
+	
 	local i = 0
 
 	if MM_N.dueling or CV_MM.force_duel.value then		

@@ -75,8 +75,10 @@ local fallbackNums = {
 }
 
 function MM:giveOutClues(amount)
-	--Bruh
+	local gt = MM.returnGametype()
+	
 	if (MM_N.dueling) then return end
+	if (gt.disable_clues) then return end
 	
 	MM_N.clues_positions = {}
 	local fallbackThings = {}

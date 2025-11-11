@@ -43,6 +43,9 @@ weapon.allowdropmobj = true
 weapon.aimtrail = true
 
 function weapon:postpickup(p)
+	local gt = MM.returnGametype()
+	if (gt.disable_gun_countdown) then return end
+	
 	if (MM_N.dueling) then return end
 	if roles[p.mm.role].team == true then
 		self.restrict[p.mm.role] = true

@@ -38,8 +38,12 @@ end
 --refill any empty murd/sheriff slots left by players who left
 --this is a bad place to put this function
 local function refillSlots()
+	local gt = MM.returnGametype()
+	
 	if MM_N.dueling then return end
 	if not MM:pregame() then return end
+	if gt.fill_teams then return end
+	if gt.item then return end
 	
 	local count = MM.countPlayers(true)
 	local maxrole = MM_N.special_count
@@ -64,8 +68,13 @@ local function refillSlots()
 end
 
 return function()
+	local gt = MM.returnGametype()
+	
 	if (MM.Gametypes[MM_N.gametype].disable_sheriff) then return end
 	if (MM_N.dueling) then return end
+	if gt.fill_teams then return end
+	if gt.item then return end
+	
 	refillSlots()
 	if (CV_MM.debug.value) then return end
 	

@@ -15,6 +15,13 @@ function MM.RegisterGametype(name, _data)
 	return MM.Gametypes[gametype_id]
 end
 
+-- TODO: arg1 is the gametype_id, which returns that gametype's table.
+function MM.returnGametype(arg1)
+	return MM.Gametypes[MM_N.gametype]
+end
+
 -- MM_N.maxtime has a different variable name than Gametype[id].max_time
 
 MM.RegisterGametype("Classic")
+
+dofile("Gametypes/Team Versus/main")
