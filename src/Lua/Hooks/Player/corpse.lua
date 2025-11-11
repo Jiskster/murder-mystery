@@ -224,7 +224,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	end
 
 	local angle = (inflictor and inflictor.valid) and R_PointToAngle2(target.x, target.y, inflictor.x, inflictor.y) or target.angle
-	target.deathangle = angle
+	target.deathangle = angle - ANGLE_45
 	
 	-- game end
 	if MM:canGameEnd() and not MM_N.gameover 
@@ -242,9 +242,13 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 				S_ChangeMusic("mmtf2o", false, nil)
 			end
 		end
-
+		
 		S_StartSound(nil,sfx_buzz3)
 		S_StartSound(nil,sfx_s253)
+		if (inflictor and inflictor.valid and inflictor.finalkillsfx)
+			S_StartSound(nil, inflictor.finalkillsfx)
+		end
+		
 		local facingangle = target.player.drawangle + ANGLE_180
 		if (source and source.valid)
 			facingangle = R_PointToAngle2(target.x,target.y, source.x,source.y)

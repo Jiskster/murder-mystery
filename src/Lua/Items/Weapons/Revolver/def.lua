@@ -35,6 +35,7 @@ weapon.shootmobj = dofile("Items/Weapons/Revolver/bullet")
 weapon.pickupsfx = sfx_gnpick
 weapon.equipsfx = sfx_gequip
 weapon.attacksfx = sfx_revlsh
+weapon.finalkillsfx = sfx_revcrt
 weapon.dropsfx = sfx_gndrop
 weapon.allowdropmobj = true
 weapon.aimtrail = true

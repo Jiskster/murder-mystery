@@ -54,6 +54,30 @@ states[S_MM_SWAPIND] = {
 	tics = 2
 }
 
+local fetti_dragxy = FU*61/63
+local fetti_dragz = FU*98/100
+freeslot("S_MM_CONFETTI")
+states[S_MM_CONFETTI] = {
+	sprite = SPR_BGLS,
+	frame = P|FF_PAPERSPRITE,
+	tics = 1,
+	action = function(f)
+		f.momx = FixedMul($, fetti_dragxy)
+		f.momy = FixedMul($, fetti_dragxy)
+		f.frame = $ + (f.offsetframe or 0)
+		
+		local terminal = -2*f.scale
+		if f.momz*P_MobjFlip(f) <= terminal
+			f.momz = $ + FixedMul(terminal - $, fetti_dragz)
+			f.flags = $|MF_NOGRAVITY
+		end
+		
+		f.angle = $ + (f.offsetangle or 0)*f.sign
+		f.rollangle = $ + (f.offsetroll or 0)
+	end,
+	nextstate = S_MM_CONFETTI
+}
+
 MM.require = dofile "Libs/require"
 dofile "Libs/CustomHud.lua"
 rawset(_G,"MENULIB_ROOT","Libs/MenuLib/")

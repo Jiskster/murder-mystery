@@ -13,6 +13,10 @@ sfxinfo[freeslot "sfx_revlsh"] = {
 	caption = "Revolver fire",
 	flags = SF_X2AWAYSOUND
 }
+sfxinfo[freeslot "sfx_revcrt"] = {
+	caption = "/",
+	flags = SF_X2AWAYSOUND
+}
 sfxinfo[freeslot "sfx_gnpick"].caption = "Item pick up"
 sfxinfo[freeslot "sfx_gndrop"].caption = "Item drop"
 

@@ -74,7 +74,7 @@ addHook("PlayerThink", function(p)
 	if not (p.mo and p.mo.valid) then
 		return
 	end
-	
+
     if (p.mo.fake_drawangle ~= nil) then
         p.drawangle = p.mo.fake_drawangle
         p.mo.angle = p.drawangle
