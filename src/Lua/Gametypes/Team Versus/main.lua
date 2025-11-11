@@ -10,5 +10,7 @@ local teamversus_mode = MM.RegisterGametype("Team Versus", {
 	disable_gun_countdown = true;
 	force_overtime = true;
 	reveal_roles = true;
+	all_droppable_items = true;
+	inventory_count = 2;
 	items = {"revolver", "shotgun", "sword", "knife"};
 })

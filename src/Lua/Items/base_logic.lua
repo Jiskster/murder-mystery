@@ -294,6 +294,8 @@ addHook("PostThinkFrame", do
 end)
 
 MM:addPlayerScript(function(p)
+	local gt = MM.returnGametype()
+
 	local inv = p.mm.inventory
 	local sel = 0
 	
@@ -330,16 +332,26 @@ MM:addPlayerScript(function(p)
 		end
 	end
 
+	if gt.inventory_count ~= nil then
+		p.mm.inventory.count = gt.inventory_count
+	end
+
 	for i,item in pairs(p.mm.inventory.items) do
 		local def = MM.Items[item.id]
 		
 		if def then
 			hooksPassed("KeepingItem", p, def, item)
 		end
+
+		if gt.all_droppable_items then
+			item.droppable = true
+			item.allowdropmobj = true
+		end
 		
 		if item.timeleft >= 0 then
 			item.timeleft = max(0, $-1)
 		end
+
 		if item.timeleft == 0 then
 			if item.droppable then
 				MM:DropItem(p, i, nil, true, true)
