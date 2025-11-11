@@ -4,6 +4,9 @@ return function(v,p,c)
 	if (p.mm.role ~= MMROLE_MURDERER) then return end
 	if (p.spectator) then return end
 	
+	local gt = MM.returnGametype()
+	if (gt.disable_perks) then return end
+	
 	if (p.mm_save.pri_perk ~= 0)
 		if MM_PERKS[p.mm_save.pri_perk] ~= nil
 		and MM_PERKS[p.mm_save.pri_perk].drawer ~= nil
