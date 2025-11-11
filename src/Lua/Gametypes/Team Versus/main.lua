@@ -1,6 +1,7 @@
 local teamversus_mode = MM.RegisterGametype("Team Versus", {
 	max_time = 2*60*TICRATE;
 	required_players = 8;
+	inventory_count = 2;
 	fill_teams = true;
 	disable_item_mapthing = true; -- includes interactions that drop items.
 	disable_perks = true;
@@ -11,6 +12,6 @@ local teamversus_mode = MM.RegisterGametype("Team Versus", {
 	force_overtime = true;
 	reveal_roles = true;
 	all_droppable_items = true;
-	inventory_count = 2;
+	instant_body_discover = true;
 	items = {"revolver", "shotgun", "sword", "knife"};
 })

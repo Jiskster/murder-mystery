@@ -67,6 +67,8 @@ end,MT_PLAYER)
 addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if not MM:isMM() then return end
 	if MM:pregame() then return end
+
+	local gt = MM.returnGametype()
 	
 	--most likely map damage
 	/*
@@ -196,8 +198,9 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	
 	if not MM:canGameEnd()
 	and MM_N.special_count >= 2 then
-		if target.player.mm.role ~= MMROLE_INNOCENT
-			if target.player.mm.role == MMROLE_MURDERER
+		if target.player.mm.role ~= MMROLE_INNOCENT then
+			if target.player.mm.role == MMROLE_MURDERER 
+			and not gt.instant_body_discover then
 				chatprint("\x82*"..target.player.name.." was a murderer!")
 				
 				--add immediately so we KNOW.
@@ -323,6 +326,12 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		local corpse = P_SpawnMobjFromMobj(target, 0,0,0, MT_THOK)
 		
 		target.flags2 = $|MF2_DONTDRAW
+
+		if gt.instant_body_discover and target.player and target.player.valid then
+			chatprint("\x82*"..target.player.name.." has died!")
+
+			MM_N.knownDeadPlayers[#target.player] = true
+		end
 		
 		corpse.skin = target.skin
 		corpse.color = target.color
