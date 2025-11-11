@@ -146,13 +146,13 @@ end)
 
 addHook("ThinkFrame",do
 	MM_N.spawnfootsteps = false
-	
+
 	if (MM_N.dueling) then return end
 	
 	local gt = MM.returnGametype()
-	if (gt.disable_perks) then return end
+	if (gt and gt.disable_perks) then return end
 	
-	for p in players.iterate
+	for p in players.iterate do
 		if p.spectator then continue end
 		if not (p.mo and p.mo.valid) then continue end
 		if not (p.mo.health) then continue end
