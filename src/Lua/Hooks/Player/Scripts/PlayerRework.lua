@@ -1,5 +1,5 @@
 local speedCap = MM.require "Libs/speedCap"
-local stopfriction = tofixed("0.750")
+local stopfriction = tofixed("0.75")
 local jumpfactormulti = tofixed("1.10")
 
 local function ApplyMovementBalance(player)
@@ -17,7 +17,7 @@ local function ApplyMovementBalance(player)
             
             if abs(AngleFixed(adiff)) > 10*FU and player.speed > 18*FU 
             and P_IsObjectOnGround(pmo) then
-                pmo.skidscore = 3
+                pmo.skidscore = 5
             	MM.hooksPassed("SkidStart", player)
             end
 			
