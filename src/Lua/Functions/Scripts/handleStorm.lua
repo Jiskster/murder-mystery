@@ -16,6 +16,8 @@ local ImportantStuff = {
 	"laser_splat",
 	"laser_eye",
 }
+rawset(_G, "RF_ALWAYSONTOP", RF_ALWAYSONTOP or 0x00010000)
+rawset(_G, "RF_HIDEINSKYBOX", RF_HIDEINSKYBOX or 0x00020000)
 
 --when the starting radius is bigger than this, the storm will take
 --longer to shrink to minimum radius
@@ -126,8 +128,8 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist, 
 		laser.myindex = i
 		laser.tics = -1
 		laser.fuse = -1
-		laser.renderflags = $|RF_PAPERSPRITE|RF_NOCOLORMAPS
-		laser.blendmode = AST_SUBTRACT
+		laser.renderflags = $|RF_PAPERSPRITE|RF_NOCOLORMAPS|RF_HIDEINSKYBOX
+		laser.blendmode = AST_ADD
 		laser.sprite = SPR_BGLS
 		laser.frame = A|FF_FULLBRIGHT
 		laser.scale = scale
@@ -161,14 +163,10 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist, 
 		local dist = R_PointToDist(x,y)
 		local nofade = false
 		if (displayplayer and displayplayer.valid and displayplayer.realmo and displayplayer.realmo.valid)
-			if (displayplayer.mm and displayplayer.mm.outofbounds)
-				nofade = true
-			else
-				local m = displayplayer.realmo
-				dist = min($, R_PointToDist2(m.x,m.y, x,y))
-			end
+			local m = displayplayer.realmo
+			dist = min($, R_PointToDist2(m.x,m.y, x,y))
 		end
-		if dist <= lasersize*4*scale
+		if dist <= max(lasersize*4*scale, 128*FU)
 		and not nofade
 			local fudge = FU/10
 			fade = fudge + FixedMul(FixedDiv(dist, lasersize*4*scale), FU - fudge)
@@ -391,6 +389,7 @@ local function FXHandle(point,dist)
 		laser.sprite = SPR_BGLS
 		laser.frame = A|FF_FULLBRIGHT
 		laser.scale = $
+		laser.blendmode = AST_ADD
 	end
 	
 	if not (point.laser_splat and point.laser_splat.valid)
@@ -403,6 +402,7 @@ local function FXHandle(point,dist)
 		laser.frame = B|FF_FULLBRIGHT
 		laser.scale = $
 		laser.dispoffset = -25
+		laser.blendmode = AST_ADD
 	end
 	
 	--people like to hide behind these so dont let em do that

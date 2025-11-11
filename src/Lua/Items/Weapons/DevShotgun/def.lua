@@ -63,6 +63,56 @@ function weapon:attack(p)
 	self.shootmobj = MT_RAY
 end
 
+local scaling_factor = (FU/2)
+local spread = 4*FU
+local cross_scale = FU/4
+local cv_fov
+weapon.drawer = function(v, p,item, x,y,scale,flags, selected, active, cam)
+	if not cv_fov
+		cv_fov = CV_FindVar("fov")
+	end
+	if cam.chase then return end
+	if not selected then return end
+	
+	local cx = 160*FU
+	local cy = 100*FU
+	local flags = V_PERPLAYER
+	local fov_fact = FixedDiv(240*FU - cv_fov.value, 27*FU)
+	
+	local top_p = v.cachePatch("MMSHOT_TOP")
+	local bot_p = v.cachePatch("MMSHOT_BOT")
+	
+	local spr = FixedMul(spread, scaling_factor)
+	spr = FixedMul($, fov_fact)
+	
+	local left_hdist = -spr
+	local right_hdist = spr
+	local bot_vdist = spr
+	local top_vdist = spr
+	
+	v.drawScaled(
+		cx + left_hdist,
+		cy - top_vdist,
+		cross_scale, top_p, flags
+	)
+	v.drawScaled(
+		cx + left_hdist,
+		cy + bot_vdist,
+		cross_scale, bot_p, flags
+	)
+	
+	v.drawScaled(
+		cx + right_hdist,
+		cy - top_vdist,
+		cross_scale, top_p, flags|V_FLIP
+	)
+	v.drawScaled(
+		cx + right_hdist,
+		cy + bot_vdist,
+		cross_scale, bot_p, flags|V_FLIP
+	)
+end
+
 /*
 weapon.bulletthinker = function(mo, i)
 	if (i >= 170)

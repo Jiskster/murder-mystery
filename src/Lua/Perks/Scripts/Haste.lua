@@ -3,13 +3,13 @@ local perk_price = 325 --750
 
 MM:RegisterEffect("perk.primary.haste", {
 	modifiers = {
-		normalspeed_multi = tofixed("1.11") -- no luigi, i hate srb2 division
+		normalspeed_multi = tofixed("1.10") -- no luigi, i hate srb2 division
 	},
 })
 
 MM:RegisterEffect("perk.secondary.haste", {
 	modifiers = {
-		normalspeed_multi = tofixed("1.08")
+		normalspeed_multi = tofixed("1.07")
 	},
 })
 
@@ -98,31 +98,14 @@ MM_PERKS[MMPERK_HASTE] = {
 		end
 	end,
 	
-	drawer = function(v,p,c, order)
-		local x = 5*FU
-		local y = 100*FU
-		local scale = FU/2
-		local flags = V_SNAPTOLEFT|V_SNAPTOBOTTOM
-		if order == "sec" then y = $ + 18*FU end
-		
+	patchbehavior = function(v,p,c, order, props)
 		local knifeequiped = true
 		local item = p.mm.inventory.items[p.mm.inventory.cur_sel]
 		if not (item and item.id == "knife") then knifeequiped = false; end
 		if p.mm.inventory.hidden then knifeequiped = false; end
-		
-		if knifeequiped
-			hud_tween = ease.inquad(FU/2, $, 0)
-		else
-			hud_tween = ease.inquad(FU/4, $, hud_tween_start)
+		if not knifeequiped
+			return V_50TRANS
 		end
-		x = $ + hud_tween
-
-		v.drawScaled(x,
-			y,
-			FixedMul(scale, icon_scale),
-			v.cachePatch(icon_name),
-			flags
-		)
 	end,
 	
 	--this icon is so fucking goofy

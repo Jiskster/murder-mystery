@@ -36,7 +36,7 @@ local doors={
         16
     }
 }
-local doordelay=35
+local doordelay=2*TICRATE
 
 local rayTimer
 local rayControlLine
@@ -77,7 +77,7 @@ addHook("LinedefExecute", do --open door 7 trigger
 end,"ARD7OPN")
 
 addHook("ThinkFrame", do
-    if (gamemap != 127) return end
+    if (gamemap != 174) return end
 
 	--doors close timer
     for doornum, _ in pairs(doors)

@@ -18,6 +18,8 @@
 - Flooded Industries	- GLide KS
 - Commerce Plaza    	- GLide KS
 	(Arts from various Epic! Murder Mystery collaborators included)
+- Space Colony ARK		- GLide KS
+- Haunted Mansion		- GLide KS
 - House					- Lemerksiscool
 	(Background house by @kochaarcu)
 - Seaegg				- Pyrodiac
@@ -48,6 +50,10 @@
 - Flooded Industries BGM: "Tempest Valley Zone" by Malcolm Brown - Remastered by A.J. Freda
 
 - Commerce Plaza BGM: "Ikebukuro Underground District" - Shin Megami Tensei IV OST
+
+- Space Colony ARK BGM: "Trespasser" - Sonic Adventure 2 OST
+
+- Haunted Mansion BGM: "Rib City" - Vexx OST
 
 - Swamili Swamp BGM: ???
 

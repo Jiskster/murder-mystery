@@ -5,16 +5,20 @@ mobjinfo[MT_MM_ITEMSPAWN] = {
 	--$Sprite RVOLA2A8
 	--$Category EPIC!MM
 	--$NotAngled
+	
 	--$StringArg0 Item ID
 	--$StringArg0ToolTip The item's ID to spawn.
+	
 	--$Arg0 Price
 	--$Arg0Default 0
 	--$Arg0Type 0
 	--$Arg0Tooltip How many coins does this item cost to pick up?\nIf the player doesn't have enough coins, the item stays in place. 
+	
 	--$Arg1 Interact Duration
 	--$Arg1Default 5
 	--$Arg1Type 0
 	--$Arg1Tooltip How long a player needs to interact (in tics) in order to activate.
+	
 	--$Arg2 Restrict
 	--$Arg2Default 0
 	--$Arg2Type 12

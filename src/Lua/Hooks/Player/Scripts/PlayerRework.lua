@@ -113,10 +113,11 @@ return function(p)
 		end
 	end
 
-	if not P_IsObjectOnGround(p.mo) then
+	if not P_IsObjectOnGround(p.mo)
+	and p.powers[pw_carry] == CR_NONE then
 		local me = p.mo
 		local airspeedcap = max(speedcap - 3*me.scale, 20 * me.scale)
-
+		
 		if p.speed > airspeedcap then
 			local div = 16 * FU
 			local newspeed = p.speed - FixedDiv(p.speed - airspeedcap,div)
@@ -124,10 +125,11 @@ return function(p)
 			me.momx = FixedMul(FixedDiv(me.momx, p.speed), newspeed)
 			me.momy = FixedMul(FixedDiv(me.momy, p.speed), newspeed)
 		end
-
+		
 		speedcap = $ - 3*FU
 	end
-
+	
+	/*
 	if p.powers[pw_carry] ~= CR_ZOOMTUBE
 		if p.mo.playergroundcap ~= nil then
 			if not P_IsObjectOnGround(p.mo) then
@@ -136,6 +138,7 @@ return function(p)
 			end
 		end
 	end
+	*/
 	
 	ApplyMovementBalance(p)
 

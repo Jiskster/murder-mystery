@@ -15,6 +15,58 @@ local itemname = {
 	}
 }
 
+local Perk = {
+	getPatch = function(perk)
+		if perk == 0
+		or perk == nil
+		or (MM_PERKS[perk] == nil)
+			return "MM_NOITEM"
+		end
+		
+		return MM_PERKS[perk].icon or "MISSING"
+	end,
+	getScale = function(perk)
+		if perk == 0
+		or perk == nil
+		or (MM_PERKS[perk] == nil)
+			return FU
+		end
+		
+		return MM_PERKS[perk].icon_scale or FU
+	end,
+	getName = function(perk)
+		if perk == 0
+		or perk == nil
+		or (MM_PERKS[perk] == nil)
+			return "\x86No perk"
+		end
+		
+		return MM_PERKS[perk].name or "Perk"
+	end,
+	flagBehavior = function(perk, v,p,c, order, props)
+		if perk == 0
+		or perk == nil
+		or (MM_PERKS[perk] == nil)
+			return 0
+		end
+		if MM_PERKS[perk].patchbehavior ~= nil
+			return MM_PERKS[perk].patchbehavior(v,p,c, order, props) or 0
+		else
+			return 0
+		end
+	end,
+	drawFunc = function(perk, v,p,c, order, props)
+		if perk == 0
+		or perk == nil
+		or (MM_PERKS[perk] == nil)
+			return
+		end
+		if MM_PERKS[perk].drawer ~= nil
+			MM_PERKS[perk].drawer(v,p,c, order, props)
+		end
+	end
+}
+
 local function V_DrawBox(props)
 	if not (props.v) then return end
 
@@ -28,6 +80,7 @@ local function V_DrawBox(props)
 	local timeleft = props.timeleft or -1
 	local item = props.item
 	local inv = props.inv
+	local camera = props.camera
 
 	local trans = V_40TRANS
 	--Presumably no item in this slot
@@ -94,11 +147,12 @@ local function V_DrawBox(props)
 	
 	--def drawer draws over everything?
 	if (def.drawer)
-		def.drawer(v, props.p, item, x,y, scale, flags, selected, not inv.hidden)
+		--whatever, just add camera to the end
+		def.drawer(v, props.p, item, x,y, scale, flags, selected, not inv.hidden, camera)
 	end
 end
 
-return function(v, p)
+return function(v, p, c)
 	if not (p.mm and not p.mm.spectator) then return end
 	if (p.spectator) then return end
 
@@ -143,12 +197,42 @@ return function(v, p)
 			inv = inv,
 			item = items[i],
 			p = p,
+			camera = c,
 		}
 		
 		x = $+(36*scale)
 	end
 	myitemname.oldid = curitem
 	
+	-- perk icons
+	if (p.mm.role == MMROLE_MURDERER)
+		y = $ + (10*scale)
+		local flags = V_SNAPTOBOTTOM|V_PERPLAYER
+		v.slideDrawString(x,y-8*FU, "Perks", flags|V_ALLOWLOWERCASE|V_YELLOWMAP, "thin-fixed")
+		for i = 0,1
+			local perkid
+			local order = "pri"
+			if (i == 0)
+				perkid = p.mm_save.pri_perk
+			else
+				perkid = p.mm_save.sec_perk
+				order = "sec"
+			end
+			local props = {
+				x = x,
+				y = y,
+				scale = scale,
+				flags = flags
+			}
+			local scale = FU/2
+			local pflags = Perk.flagBehavior(perkid, v,p,c, order, props)
+			v.slideDrawScaled(x,y, FixedMul(scale, Perk.getScale(perkid)), v.cachePatch(Perk.getPatch(perkid)), flags|pflags)
+			
+			Perk.drawFunc(perkid, v,p,c, order, props)
+			x = $ + (35 * scale)
+		end
+	end
+
 	--controls
 	x = 5*FU
 	y = 170*FU

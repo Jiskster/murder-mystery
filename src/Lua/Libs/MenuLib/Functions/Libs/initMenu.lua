@@ -26,7 +26,7 @@ return function(id)
 		ML.client.menuLayer = 1
 	end
 	
-	ML.client.overrideinputs = true
+	input.ignoregameinputs = true
 	local layers = ML.client.currentMenu.layers
 	
 	--immediately close ALL menus
@@ -39,13 +39,8 @@ return function(id)
 			end
 		end
 		
-		ML.client.overrideinputs = false
-
-		ML.client.buttons = 0
-		ML.client.lastbuttons = 0
-		ML.client.sidemove = 0
-		ML.client.forwardmove = 0
-
+		input.ignoregameinputs = false
+		
 		ML.client.mouse_x = (BASEVIDWIDTH*FU) / 2
 		ML.client.mouse_y = (BASEVIDHEIGHT*FU) / 2
 		ML.client.currentMenu.layers = {}
@@ -79,13 +74,8 @@ return function(id)
 				this_menu.exit(CR_MENUEXITED)
 			end
 			
-			ML.client.overrideinputs = false
-
-			ML.client.buttons = 0
-			ML.client.lastbuttons = 0
-			ML.client.sidemove = 0
-			ML.client.forwardmove = 0
-
+			input.ignoregameinputs = false
+			
 			ML.client.mouse_x = (BASEVIDWIDTH*FU) / 2
 			ML.client.mouse_y = (BASEVIDHEIGHT*FU) / 2
 			ML.client.currentMenu.layers = {}

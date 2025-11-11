@@ -3,13 +3,11 @@ local TR = TICRATE
 local perk_name = "Fake Gun"
 local perk_price = 325 --750
 
-local hud_tween_start = -55*FU
-local hud_tween = hud_tween_start
 local icon_name = "MM_PI_FAKEGUN"
 local icon_scale = FU/2
 
-local perk_maxtime = 10*TR
-local perk_cooldown = 30*TR
+local perk_maxtime = 15*TR
+local perk_cooldown = 18*TR
 
 local clueItems = {
 	"shotgun",
@@ -97,23 +95,30 @@ MM_PERKS[MMPERK_FAKEGUN] = {
 	primary = perk_thinker,
 	secondary = perk_thinker,
 	
-	drawer = function(v,p,c, order)
-		local x = 5*FU
-		local y = 100*FU
-		local scale = FU/2
-		local flags = V_SNAPTOLEFT|V_SNAPTOBOTTOM
-		local timer = 0
-		if order == "sec" then y = $ + 18*FU end
+	patchbehavior = function(v,p,c, order, props)
+		if p.mm.perk_fake_time == nil then return end
+		if (p.mm.perk_fake_time > 0)
+			-- perk is active
+		else
+			return V_50TRANS
+		end
+	end,
+	drawer = function(v,p,c, order, props)
+		local x = props.x
+		local y = props.y
+		local flags = props.flags
+		if p.mm.perk_fake_time == nil then return end
+		local timer
 		
-		if p.mm.perk_fake_time == nilthen return end
-
 		if (order == "pri")
-			local x = 5*FU
-			local y = 162*FU
-			
 			if (p.mm.perk_fake_cooldown == 0)
-				local action = "Fake gun"
-				v.slideDrawString(x,y,
+				local action = ""
+				if (p.mm.perk_fake_time == 0)
+					action = "Fake Gun"
+				elseif p.mm.perk_fake_time >= 0
+					action = "Un-Fake"
+				end
+				v.slideDrawString(5*FU,162*FU,
 					"[TOSSFLAG] - "..action,
 					V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 					"thin-fixed"
@@ -121,36 +126,17 @@ MM_PERKS[MMPERK_FAKEGUN] = {
 			end
 		end
 		
-		if (p.mm.perk_fake_time == 0
-		and p.mm.perk_fake_cooldown == 0)
-		and FixedFloor(hud_tween) == hud_tween_start
-			return
-		end
-		
 		if (p.mm.perk_fake_time > 0)
-			hud_tween = ease.inquad(FU/2, $, 0)
-			timer = p.mm.perk_fake_time/TR
-		else
-			if p.mm.perk_fake_cooldown == 0
-				hud_tween = ease.inquad(FU/4, $, hud_tween_start)
-			end
-			timer = p.mm.perk_fake_cooldown/TR
-			flags = $|V_50TRANS
+			timer = "\x82" .. tostring((p.mm.perk_fake_time/TR)+1)
+		elseif p.mm.perk_fake_cooldown
+			timer = (p.mm.perk_fake_cooldown/TR)+1
 		end
-		x = $ + hud_tween
-		
-		v.drawScaled(x,
-			y,
-			FixedMul(scale, icon_scale),
-			v.cachePatch(icon_name),
-			flags
-		)
-		v.drawString(x,
-			y + (31*scale) - 8*FU,
-			timer,
-			flags &~V_ALPHAMASK,
-			"thin-fixed"
-		)
+		if timer
+			v.slideDrawString(x,y + 9*FU,
+				timer .. "s", flags|V_ALLOWLOWERCASE,
+				"thin-fixed"
+			)
+		end
 	end,
 	
 	icon = icon_name,
@@ -166,7 +152,7 @@ MM_PERKS[MMPERK_FAKEGUN] = {
 		
 		"",
 		
-		"Lasts 10 seconds with a 30 second cooldown."
+		"Lasts 15 seconds with a 18 second cooldown."
 	},
 	cost = perk_price
 }

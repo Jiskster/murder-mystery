@@ -56,7 +56,9 @@ states[S_MM_SWAPIND] = {
 
 MM.require = dofile "Libs/require"
 dofile "Libs/CustomHud.lua"
-dofile "Libs/MenuLib/init.lua"
+rawset(_G,"MENULIB_ROOT","Libs/MenuLib/")
+dofile(MENULIB_ROOT .. "exec.lua")
+
 
 dofile "events"
 

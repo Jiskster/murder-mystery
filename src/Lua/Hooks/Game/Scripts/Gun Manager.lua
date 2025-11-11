@@ -41,7 +41,7 @@ local function refillSlots()
 	if MM_N.dueling then return end
 	if not MM:pregame() then return end
 	
-	local count = MM.countPlayers()
+	local count = MM.countPlayers(true)
 	local maxrole = MM_N.special_count
 
 	if count.total - count.inactive <= 1

@@ -15,14 +15,12 @@ sfxinfo[sfx_cloak2] = {
 
 local TR = TICRATE
 
-local hud_tween_start = -55*FU
-local hud_tween = hud_tween_start
 local icon_name = "MM_PI_GHOST"
 local icon_scale = FU/2
 
 local perk_maxtime = 8*TR
-local perk_cooldown = 30*TR
-local perk_volume = (255*3)/4
+local perk_cooldown = 20*TR
+local perk_volume = (255)/4
 local perk_translation = "Grayscale"
 local perk_translucent = tofixed("0.6")
 
@@ -70,6 +68,7 @@ MM_PERKS[MMPERK_GHOST] = {
 			P_Thrust(dust,dust.angle, -P_RandomRange(0,2)*dust.scale)
 			P_SetObjectMomZ(dust,P_RandomRange(-2,2)*FU)
 			dust.flags = $|MF_NOCLIP|MF_NOCLIPHEIGHT
+			dust.alpha = FRACUNIT/2
 		end
 		
 		if p.mm.perk_ghost_cooldown
@@ -162,21 +161,32 @@ MM_PERKS[MMPERK_GHOST] = {
 			me.translation = perk_translation
 		end
 	end,
-
-	drawer = function(v,p,c, order)
-		local x = 5*FU
-		local y = 100*FU
-		local scale = FU/2
-		local flags = V_SNAPTOLEFT|V_SNAPTOBOTTOM
-		local timer = 0
-		if order == "sec" then y = $ + 18*FU end
+	
+	patchbehavior = function(v,p,c, order, props)
+		if p.mm.perk_ghost_time == nil then return end
+		if order == "pri"
+			if p.mm.perk_ghost_time ~= nil
+				if (p.mm.perk_ghost_time > 0)
+					-- perk is active
+				else
+					return V_50TRANS
+				end
+			end
+		elseif order == "sec"
+			if FixedFloor(p.realmo.alpha) == FU
+				return V_50TRANS
+			end
+		end
+	end,
+	drawer = function(v,p,c, order, props)
+		local x = props.x
+		local y = props.y
+		local flags = props.flags
+		local timer
 		
 		if p.mm.perk_ghost_time == nil and order == "pri" then return end
-
+		
 		if (order == "pri")
-			local x = 5*FU
-			local y = 162*FU
-			
 			if (p.mm.perk_ghost_cooldown == 0
 			or p.mm.perk_ghost_time > 0)
 				local action = ""
@@ -185,56 +195,25 @@ MM_PERKS[MMPERK_GHOST] = {
 				elseif p.mm.perk_ghost_time >= 0
 					action = "Uncloak"
 				end
-				v.slideDrawString(x,y,
+				v.slideDrawString(5*FU, 162*FU,
 					"[TOSSFLAG] - "..action,
 					V_SNAPTOLEFT|V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 					"thin-fixed"
 				)
 			end
-		end
-		
-		if (p.mm.perk_ghost_time == 0
-		and p.mm.perk_ghost_cooldown == 0
-		and order == "pri")
-		and FixedFloor(hud_tween) == hud_tween_start
-			return
-		end
-		
-		if order == "pri"
+			
 			if (p.mm.perk_ghost_time > 0)
-				hud_tween = ease.inquad(FU/2, $, 0)
-				timer = p.mm.perk_ghost_time/TR
-			else
-				if p.mm.perk_ghost_cooldown == 0
-					hud_tween = ease.inquad(FU/4, $, hud_tween_start)
-				else
-					hud_tween = ease.inquad(FU/2, $, 0)
-				end
-				timer = p.mm.perk_ghost_cooldown/TR
-				flags = $|V_50TRANS
+				timer = "\x82" .. tostring((p.mm.perk_ghost_time/TR) + 1)
+			elseif p.mm.perk_ghost_cooldown
+				timer = (p.mm.perk_ghost_cooldown/TR) + 1
 			end
-		else
-			timer = ""
-			if FixedFloor(p.realmo.alpha) ~= FU
-				hud_tween = ease.inquad(FU/2, $, 0)
-			else
-				hud_tween = ease.inquad(FU/4, $, hud_tween_start)
+			if timer
+				v.slideDrawString(x,y + 9*FU,
+					timer .. "s", flags|V_ALLOWLOWERCASE,
+					"thin-fixed"
+				)
 			end
 		end
-		x = $ + hud_tween
-		
-		v.drawScaled(x,
-			y,
-			FixedMul(scale, icon_scale),
-			v.cachePatch(icon_name),
-			flags
-		)
-		v.drawString(x,
-			y + (31*scale) - 8*FU,
-			timer,
-			flags &~V_ALPHAMASK,
-			"thin-fixed"
-		)
 	end,
 	
 	icon = icon_name,
@@ -244,7 +223,7 @@ MM_PERKS[MMPERK_GHOST] = {
 	description = {
 		"\x82Primary:\x80 Become fully invisible to",
 		"non-murderers for 8 seconds! Cooldowns for",
-		"30 seconds. \x82([TOSSFLAG] to activate)",
+		"20 seconds. \x82([TOSSFLAG] to activate)",
 		
 		"",
 		

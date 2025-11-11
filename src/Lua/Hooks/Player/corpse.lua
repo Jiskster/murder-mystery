@@ -1,12 +1,15 @@
 local wrapadd = MM.require("Libs/wrappedadd")
 
 freeslot("SPR2_OOF_")
+freeslot("SPR2_SHIT")
+
 states[freeslot "S_PLAY_BODY"] = {
 	sprite = SPR_PLAY,
 	frame = SPR2_OOF_|A,
 	tics = -1
 }
-spr2defaults[SPR2_OOF_] = SPR2_DEAD
+spr2defaults[SPR2_SHIT] = SPR2_DEAD
+spr2defaults[SPR2_OOF_] = SPR2_SHIT
 
 sfxinfo[freeslot("sfx_dedbdy")] = {
 	flags = SF_TOTALLYSINGLE,
@@ -33,7 +36,7 @@ addHook("ShouldDamage", function(me, inf, sor, d, dmgt)
 			return hook
 		end
 	end
-	
+
 	if (dmgt & DMG_DEATHMASK) then return end
 	
 	local p = me.player
@@ -228,9 +231,10 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	and not (CV_MM.debug.value) then
 		-- funny sniper sound
 		if (target.player.mm.role == MMROLE_MURDERER)
-		and source and source.valid then
+		and (source and source.valid)
+		and P_RandomChance(FU/2) then
 			local dist = FixedHypot(FixedHypot(source.x - target.x, source.y - target.y), source.z - target.z)
-			local required_dist = 1500 * target.scale
+			local required_dist = 2000 * target.scale
 			
 			if dist > required_dist
 				MM_N.sniped_end = true
@@ -522,7 +526,7 @@ addHook("ThinkFrame", function()
 				
 				local bonus = 25
 				chatprintf(p, "\x83*Found a body! (+ $"..bonus..")\x80")
-				CONS_Printf(p, "\x83You got "..bonus.." coins for finding a body!\x80")
+				--CONS_Printf(p, "\x83You got "..bonus.." coins for finding a body!\x80")
 				p.mm_save.ringstopay = wrapadd($, bonus)
 				
 				local hook_event = MM.events["CorpseFound"]

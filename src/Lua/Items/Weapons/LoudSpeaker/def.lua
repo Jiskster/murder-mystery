@@ -42,8 +42,15 @@ MM.addHook("OnRawChat", function(p, chat_type, target, msg)
 	if not (item and item.id == "loudspeaker") then return end
 	if p.mm.inventory.hidden then return end
 	
+	local loudspeaker_text = "\x80<\x87LoudSpeaker\x80> "..msg
+	
 	MM:ClearInventorySlot(p)
-	chatprint("\x80<\x87LoudSpeaker\x80> "..msg)
+	
+	if isdedicatedserver then
+		loudspeaker_text = "["..p.name.."] "..$
+	end
+	
+	chatprint(loudspeaker_text)
 	S_StartSound(nil, sfx_nxitem)
 	return true
 end)

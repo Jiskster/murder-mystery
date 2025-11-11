@@ -8,6 +8,12 @@ local function getSelectedAttrib(over, prop, attrib, index)
 	else
 		new_attrib = prop[attrib]
 	end
+	/*
+	if new_attrib == nil
+	and prop.template ~= nil
+		new_attrib = prop.template[attrib]
+	end
+	*/
 	
 	if type(new_attrib) == "table"
 		return new_attrib[index]
@@ -15,9 +21,36 @@ local function getSelectedAttrib(over, prop, attrib, index)
 	return new_attrib
 end
 
+/*
+from menulib v2 prototype:
+function MenuLib:addMenu(props)
+  assert(props ~= nil and type(props) == "table", "MenuLib:addMenu() <- requires input of type \"table\"")
+  assert(props.name ~= nil, "MenuLib:addMenu(table) <- table must have \"name\" field")
+  assert(self:findMenu(props.name) == nil, "MenuLib:addMenu(table) <- \"name\" field must be unique (dupe of \""..props.name.."\")")
+  
+  setmetatable(props, {__index = self.protos.menu})
+  self.menus[self.menu_incre] = props
+  self.menu_incre = self.menu_incre + 1
+  return props
+end
+
+maybe `selected` could use a metatable instead?
+the one reason why butons dont use metatables right now is that since these are all added
+in the menu's drawer, theyre constantly executed every tic, setting a metatable could
+possibly add even more overhead than necessary
+*/
+
 return function(v, props)
 	--highlight
 	local over = false
+	
+	if props.interptag ~= nil
+		ML.interpolate(v, props.interptag)
+	end
+	setmetatable(props, {__index = props.template})
+	if props.seletected ~= nil
+		setmetatable(props.seletected, {__index = props})
+	end
 	
 	if ML.buttonHovering(v,props)
 	and (props.pressFunc ~= nil)
@@ -64,7 +97,8 @@ return function(v, props)
 		end
 	end
 	
-	if (props.outline)
+	if (getSelectedAttrib(over, props, "outline") ~= nil)
+	and (getSelectedAttrib(over, props, "outline") ~= -1)
 		v.drawFill(props.x - 1, props.y - 1,
 			props.width + 2, props.height + 2,
 			getSelectedAttrib(over, props, "outline")
@@ -78,14 +112,24 @@ return function(v, props)
 		)
 	end
 	
-	if (props.name)
-		v.drawString(
-			props.x + (props.width/2),
-			props.y + (props.height/2) - 4,
-			props.name,
-			getSelectedAttrib(over, props, "nameStyles", "flags") or V_ALLOWLOWERCASE,
-			getSelectedAttrib(over, props, "nameStyles", "align") or "thin-center"
-		)
+	if (props.name ~= nil)
+		if type(props.name) == "string"
+			v.drawString(
+				props.x + (props.width/2),
+				props.y + (props.height/2) - 4,
+				props.name,
+				getSelectedAttrib(over, props, "nameStyles", "flags") or V_ALLOWLOWERCASE,
+				getSelectedAttrib(over, props, "nameStyles", "align") or "thin-center"
+			)
+		elseif type(props.name) == "function"
+			props.name(v,
+				props, props.x, props.y
+			)
+			ML.interpolate(v,false)
+		--elseif type(props.name) == "table"
+		end
 	end
+	props.highlighted = over
 	
+	return props
 end

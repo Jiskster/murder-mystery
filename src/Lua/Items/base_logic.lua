@@ -274,8 +274,19 @@ addHook("PostThinkFrame", do
 			
 			manage_position(p, item)
 			
-			if item.hiddenforothers then
-				item.mobj.drawonlyforplayer = p
+			if (item.hiddenforothers) and (displayplayer and displayplayer.valid) then
+				local hide = false
+				if (displayplayer.mm)
+					if (displayplayer.spectator or displayplayer.mm.spectator)
+						hide = false
+					elseif (displayplayer.mm.role ~= p.mm.role)
+						hide = true
+					end
+				else
+					hide = true
+				end
+
+				item.mobj.flags2 = ($ &~MF2_DONTDRAW)|(hide and MF2_DONTDRAW or 0)
 			end
 		end
 	end
@@ -474,7 +485,7 @@ MM:addPlayerScript(function(p)
 
 	local def = MM.Items[item.id]
 
-	// timers
+	-- timers
 	if not inv.hidden then
 		item.hit = max(0, $-1)
 		item.anim = max(0, $-1)
@@ -488,8 +499,10 @@ MM:addPlayerScript(function(p)
 		end
 	end
 	
-	// drop le weapon
+	-- thinkers mightve removed our item
+	if not item then return end
 
+	-- drop le weapon
 	if p.cmd.buttons & BT_CUSTOM2
 	and not (p.lastbuttons & BT_CUSTOM2)
 	--wtf are you doing???
@@ -499,7 +512,7 @@ MM:addPlayerScript(function(p)
 		return
 	end
 
-	// attacking/use
+	-- attacking/use
 	local canfire = false
 	if p.cmd.buttons & BT_ATTACK
 		canfire = true
@@ -555,11 +568,11 @@ MM:addPlayerScript(function(p)
 	end
 
 	-- hit detection
-
 	if (item.damage or item.cantouch)
 	and item.hit
 	and not inv.hidden then
 		local hitsomething = false
+		local myheight = P_GetPlayerHeight(p)
 		
 		for p2 in players.iterate do
 			if not (p2 ~= p
@@ -571,9 +584,10 @@ MM:addPlayerScript(function(p)
 			
 			local dist = R_PointToDist2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)
 			local maxdist = FixedMul(p.mo.radius+p2.mo.radius, item.range)
+			local theirheight = P_GetPlayerHeight(p2)
 			
 			if dist > maxdist
-			or abs((p.mo.z + p.mo.height/2) - (p2.mo.z + p2.mo.height/2)) > FixedMul(max(p.mo.height, p2.mo.height), item.zrange or item.range)
+			or abs((p.mo.z + myheight/2) - (p2.mo.z + theirheight/2)) > FixedMul(max(myheight, theirheight), item.zrange or item.range)
 			or not P_CheckSight(p.mo, p2.mo) then
 				continue
 			end
@@ -583,7 +597,7 @@ MM:addPlayerScript(function(p)
 				continue
 			end
 			
-			--sight check passed, but did it logically pass?
+			--sight check passed, but did it physically pass?
 			if not checkRayCast(
 				{mo = p.mo,		x = p.mo.x,		y = p.mo.y,		z = p.mo.z},
 				{mo = p2.mo,	x = p2.mo.x,	y = p2.mo.y,	z = p2.mo.z},
@@ -595,7 +609,7 @@ MM:addPlayerScript(function(p)
 			) then
 				continue
 			end
-
+			
 			--no need to check for angles if we're touchin the guy
 			if dist > p.mo.radius + p2.mo.radius
 				local adiff = FixedAngle(
