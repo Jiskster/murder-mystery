@@ -10,6 +10,11 @@ states[freeslot "S_PLAY_BODY"] = {
 }
 spr2defaults[SPR2_SHIT] = SPR2_DEAD
 spr2defaults[SPR2_OOF_] = SPR2_SHIT
+-- Some other mod is probably overriding this?
+addHook("AddonLoaded",do
+	spr2defaults[SPR2_SHIT] = SPR2_DEAD
+	spr2defaults[SPR2_OOF_] = SPR2_SHIT
+end)
 
 sfxinfo[freeslot("sfx_dedbdy")] = {
 	flags = SF_TOTALLYSINGLE,
@@ -22,7 +27,8 @@ local function nodamage(me, i,s)
 	local p = me.player
 	
 	P_DoPlayerPain(p,s,i)
-    P_PlayRinglossSound(me,p)
+	S_StartSound(me, sfx_shldls)
+	--P_PlayRinglossSound(me,p)
 end
 
 addHook("ShouldDamage", function(me, inf, sor, d, dmgt)
