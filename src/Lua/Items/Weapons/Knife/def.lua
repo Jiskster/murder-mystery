@@ -117,7 +117,7 @@ weapon.thinker = function(item, p)
 		local dist = R_PointToDist2(p.mo.x, p.mo.y, p2.mo.x, p2.mo.y)
 		local maxdist = FixedMul(p.mo.radius+p2.mo.radius, item.range)
 		
-		if (p2.mm.role == p1.mm.role) then
+		if (p2.mm.role == p.mm.role) then
 			continue
 		end
 		
