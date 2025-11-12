@@ -27,18 +27,25 @@ addHook("MobjThinker", function(mo)
 	else
 		mo.timealive = $+1
 	end
+	if (mo.drag == nil)
+		mo.drag = FU
+	end
 	
 	local flip = P_MobjFlip(mo)
-	local speed = 84
+	local speed = 100
 	mo.momx = FixedMul(speed*cos(mo.angle), cos(mo.aiming))
 	mo.momy = FixedMul(speed*sin(mo.angle), cos(mo.aiming))
 	mo.momz = speed*sin(mo.aiming)
+	
+	mo.momx = FixedMul($, mo.drag)
+	mo.momy = FixedMul($, mo.drag)
 	
 	if mo.timealive >= TICRATE/2
 		mo.aiming = $ - ANG1*flip
 	end
 	if mo.timealive >= TICRATE/3
 		mo.aiming = $ - (ANG1/3)*flip
+		mo.drag = max($ - FU/20, FU/10)
 	end
 	
 	if (mo.timealive % 4) == 0

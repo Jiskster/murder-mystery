@@ -6,12 +6,12 @@ states[freeslot("S_MM_REVOLV")] = {
 
 sfxinfo[freeslot "sfx_gequip"].caption = "Gun equip"
 sfxinfo[freeslot "sfx_gnfire"] = {
-	caption = "Gun fire",
-	flags = SF_X2AWAYSOUND
+	caption = "Shotgun fires",
+	flags = SF_X4AWAYSOUND
 }
 sfxinfo[freeslot "sfx_revlsh"] = {
-	caption = "Revolver fire",
-	flags = SF_X2AWAYSOUND
+	caption = "Revolver fires",
+	flags = SF_X4AWAYSOUND
 }
 sfxinfo[freeslot "sfx_revcrt"] = {
 	caption = "/",
