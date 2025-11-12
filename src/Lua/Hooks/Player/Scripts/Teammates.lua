@@ -2,9 +2,11 @@ local stateLUT = {
 	[MMROLE_MURDERER] = S_MM_TEAMMATE1,
 	[MMROLE_SHERIFF] = S_MM_TEAMMATE2,
 }
+--leveltime at which V_HUDTRANS starts fading in
+local HUD_STARTFADEIN = (50 / 2) + 10
 
 return function(p)
-	if MM:pregame() then return end
+	if leveltime < HUD_STARTFADEIN then return end
 	if (p.mm.role == MMROLE_INNOCENT) then return end
 	
 	--this is TECHNICALLY for teammates, so tic it here

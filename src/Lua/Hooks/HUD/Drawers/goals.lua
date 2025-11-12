@@ -7,6 +7,7 @@ local function HUD_GoalDrawer(v,p)
 	local flags = V_SNAPTOTOP|V_SNAPTOLEFT|V_ALLOWLOWERCASE|V_PERPLAYER
 	
 	local goals = {}
+	local gt = MM.returnGametype()
 	
 	if not MM_N.dueling
 		if p.mm.clues.startamount ~= nil then
@@ -22,6 +23,7 @@ local function HUD_GoalDrawer(v,p)
 		
 		if p.mm.role == MMROLE_MURDERER
 		and MM_N.minimum_killed > 0
+		and not gt.disable_killgoal
 			local complete = MM_N.peoplekilled >= MM_N.minimum_killed and V_GREENMAP or 0
 			local needed = MM_N.numbertokill
 			table.insert(goals,{

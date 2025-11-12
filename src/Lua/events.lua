@@ -15,7 +15,10 @@
 		* "Init", function()
 			Executes once MM has set the number of murderers, but before the map has loaded and before
 			clues have been given out.
-			
+		
+		* "RoundStart", function()
+			Executes when the round starts, ie. when Pregame ends, and after duel status and round time has been set.
+
 	--[Player]--
 		* "PlayerInit", function(player_t, boolean midgame?)
 			Executes when a player spawns in and all MM variables are initialized.
@@ -118,6 +121,7 @@ local handler_default = handler_snaptrue
 local events = {}
 events["PostMapLoad"] = {}
 events["Init"] = {}
+events["RoundStart"] = {}
 events["PlayerInit"] = {}
 events["PlayerThink"] = {}
 events["DeadPlayerThink"] = {}

@@ -71,6 +71,12 @@ return function()
 				MM_N.time = MM_N.duel_time
 				MM_N.maxtime = MM_N.duel_time
 			end
+
+			local hook_event = MM.events["RoundStart"]
+			for i,v in ipairs(hook_event)
+				MM.tryRunHook("RoundStart", v)
+			end
+			
 		end
 	end
 	

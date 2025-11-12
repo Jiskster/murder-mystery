@@ -1,10 +1,3 @@
-local huds = {
-	{"rings", "None", "game"};
-	{"score", "None", "game"};
-	{"time", "None", "game"};
-	{"lives", "None", "game"}
-}
-
 customhud.SetupFont("STCFN")
 
 -- Should match hud_disable_options in lua_hudlib.c
@@ -111,7 +104,7 @@ local fixedalignlut = {
 }
 
 --DO NOT SYNCH!!!!!!!!
-local MMHUD = {
+rawset(_G, "MMHUD", {
 	ticker = 0,
 	slidefrac = FU,
 	wslidefrac = FU,
@@ -122,8 +115,30 @@ local MMHUD = {
 
 	hudtrans = 10,
 	hudtranshalf = 10,
-}
-rawset(_G, "MMHUD", MMHUD)
+
+	huds = {
+		{"rings", "None", "game"};
+		{"score", "None", "game"};
+		{"time", "None", "game"};
+		{"lives", "None", "game"}
+	},
+})
+MMHUD.addHud = function(name, fromfile, path, a_func,a_hudtype,a_layer)
+	if (fromfile == nil)
+		fromfile = true
+	end
+	path = $ or "Hooks/HUD/Drawers/"
+
+	local func,hudtype,layer
+	if fromfile
+		func,hudtype,layer = dofile(path..name)
+	else
+		func,hudtype,layer = a_func,a_hudtype,a_layer
+	end
+
+	table.insert(MMHUD.huds, {name, func or "None", hudtype or "game", layer})
+end
+local addHud = MMHUD.addHud
 
 local hudwasmm = false
 local modname = "SAXAMM"
@@ -133,11 +148,6 @@ MMHUD.interpolate = function(v,set)
 	if v.interpolate ~= nil then v.interpolate(set) end
 end
 
-local function addHud(name)
-	local func,hudtype,layer = dofile("Hooks/HUD/Drawers/"..name)
-
-	table.insert(huds, {name, func or "None", hudtype or "game", layer})
-end
 
 addHook("MapLoad",do
 	MMHUD.ticker = 0
@@ -326,7 +336,7 @@ addHook("HUD", function(v,p,c)
 	
 	if MM:isMM() then
 		if not hudwasmm then
-			for i, data in ipairs(huds) do
+			for i, data in ipairs(MMHUD.huds) do
 				local drawFunc = data[2]
 				
 				if drawFunc == "None" then drawFunc = nil end
@@ -351,7 +361,7 @@ addHook("HUD", function(v,p,c)
 	MMHUD.xoffset = HUD_BEGINNINGXOFF
 	
 	if hudwasmm
-		for i,data in ipairs(huds) do
+		for i,data in ipairs(MMHUD.huds) do
 			if not is_hud_modded(data[1]) then
 				customhud.SetupItem(data[1], "vanilla")
 				continue
