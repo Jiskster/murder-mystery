@@ -215,41 +215,84 @@ local function HUD_TimeForWeapon(v,p)
 	
 	if splitscreen then return end
 	
-	v.drawString(160*FU,
-		150*FU + MMHUD.weaponslidein,
-		"\x85"..MM_N.special_count.." Murderer"..(MM_N.special_count ~= 1 and "s" or '').."\x80 this round.",
-		V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
-		"thin-fixed-center"
-	)
-	if p == consoleplayer
-	and not (p.spectator)
-		local mchance = p.mm_save.cons_murderer_chance
-		--local schance = p.mm_save.cons_sheriff_chance
-		local y = 158*FU + MMHUD.weaponslidein
-		
+	local gt = MM.returnGametype()
+	
+	-- not sure if this is the right variable i should be using?
+	if not gt.fill_teams
 		v.drawString(160*FU,
-			y,
-			string.format("%.2f",mchance).."% chance to be a Murderer",
-			V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_REDMAP,
+			170*FU + MMHUD.weaponslidein,
+			"\x85"..MM_N.special_count.." Murderer"..(MM_N.special_count ~= 1 and "s" or '').."\x80 this round.",
+			V_SNAPTOBOTTOM|V_ALLOWLOWERCASE,
 			"thin-fixed-center"
 		)
-		/*
-		v.drawString(160*FU,
-			y + (8*FU),
-			string.format("%.2f",schance).."% chance to be a Sheriff",
-			V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_BLUEMAP,
-			"thin-fixed-center"
-		)
-		*/
+		if p == consoleplayer
+		and not (p.spectator)
+			local mchance = p.mm_save.cons_murderer_chance
+			--local schance = p.mm_save.cons_sheriff_chance
+			local y = 178*FU + MMHUD.weaponslidein
+			
+			v.drawString(160*FU,
+				y,
+				string.format("%.2f",mchance).."% chance to be a Murderer",
+				V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_REDMAP,
+				"thin-fixed-center"
+			)
+			/*
+			v.drawString(160*FU,
+				y + (8*FU),
+				string.format("%.2f",schance).."% chance to be a Sheriff",
+				V_SNAPTOBOTTOM|V_ALLOWLOWERCASE|V_BLUEMAP,
+				"thin-fixed-center"
+			)
+			*/
+		end
 	end
 	
 	if (leveltime >= TR)
 		HUD_TFW_DrawTeammates(v,p)
+		
+		local anim = leveltime - TR
+		local vidwidth = v.width()
+		local vidheight = v.height()
+		local dup = v.dupx()
+		
+		local x = vidwidth/2
+		local y = (vidheight/2) + 20*dup
+		
+		local fhei = 10*FU
+		if anim <= 14
+			local frac = (FU/14)
+			x		= ease.linear(frac*anim, vidwidth*3/2, $)
+			fhei	= ease.linear(frac*anim, 1, $)
+		end
+		if anim >= (2*TR)
+			local dur = 20
+			local tics = min((anim - 2*TR), dur)
+			y = ease.outquad((FU/dur)*tics, $, 15*dup) - FixedDiv(MMHUD.weaponslidein, dup)
+		end
+		
+		v.drawStretched(0, y*FU - 2*dup + (10*FU - fhei)/2, vidwidth*FU,fhei,
+			v.cachePatch("1PIXEL"), V_NOSCALESTART|V_50TRANS
+		)
+		
+		v.drawString(x,y - 10*dup, "The gametype is:",
+			V_ALLOWLOWERCASE|V_GRAYMAP|V_NOSCALESTART,
+			"thin-center"
+		)
+		v.drawString(x,y, gt.name,
+			V_ALLOWLOWERCASE|V_YELLOWMAP|V_NOSCALESTART,
+			"center"
+		)
+		
+		/*
 		v.WslideDrawString(320,0,
 			MM.Gametypes[MM_N.gametype].name,
 			V_ALLOWLOWERCASE|V_SNAPTORIGHT|V_SNAPTOTOP|V_YELLOWMAP,
 			"thin-right",false
 		)
+		*/
+		
+		
 	end
 end
 
