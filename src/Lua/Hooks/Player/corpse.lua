@@ -102,21 +102,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if target and target.valid and target.player and target.player.valid then
 		target_player = target.player
 	end
-	
-	-- hmmm what if we made this an item variable, like item.ammokillincrease = 2
-	if attacker then
-		--there is no reason to use MM.hooksPassed since we never do anything with the result
-		--it would also prevent any other hooks from running which is not how these
-		--"one shot" hooks work.
-		local hook_event = MM.events["KilledPlayer"]
-		for i,v in ipairs(hook_event)
-			local hook = MM.tryRunHook("KilledPlayer", v, attacker, target_player)
-			if hook ~= nil then
-				return hook
-			end
-		end
-	end
-	
+		
 	for k,v in pairs(target.player.mm.inventory.items) do
 		MM:DropItem(target.player, k, false, true, true)
 	end
