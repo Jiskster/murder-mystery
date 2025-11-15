@@ -185,10 +185,10 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	end
 	
 	if not MM:canGameEnd()
-	and MM_N.special_count >= 2 then
+	and MM_N.special_count >= 2
+	and not gt.instant_body_discover then
 		if target.player.mm.role ~= MMROLE_INNOCENT then
-			if target.player.mm.role == MMROLE_MURDERER 
-			and not gt.instant_body_discover then
+			if target.player.mm.role == MMROLE_MURDERER
 				chatprint("\x82*"..target.player.name.." was a murderer!")
 				
 				--add immediately so we KNOW.
