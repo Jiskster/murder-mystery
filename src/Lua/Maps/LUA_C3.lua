@@ -56,7 +56,7 @@ addHook("LinedefExecute", function(line, me)
 	-- Hardcoded, but who cares.
 	local doll = P_SpawnMobj(363*FU, 2608*FU, 32*FU, MT_TAILSDOLL)
 	doll.markfordeath = me
-
+	doll.tracer = me
 end, "MM_TAILD")
 
 --Other Interactions
