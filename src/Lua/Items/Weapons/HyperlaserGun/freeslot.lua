@@ -14,6 +14,7 @@ sfxinfo[freeslot("sfx_hlgn_r")] = {
 }
 sfxinfo[freeslot("sfx_hlgn_h")] = {
 	caption = "/",
+	flags = SF_X2AWAYSOUND
 }
 
 return S_MM_HYPERLASER

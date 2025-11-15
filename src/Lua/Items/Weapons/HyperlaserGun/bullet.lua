@@ -11,8 +11,19 @@ mobjinfo[freeslot("MT_MM_LASER")] = {
 	spawnstate = S_MM_LASER_B,
 	flags = MF_NOGRAVITY,
 	deathstate = S_SMOKE1,
+	deathsound = sfx_hlgn_h,
 	speed = 60*FU
 }
+
+mobjinfo[MT_MM_LASER].sparkvfx_func = function(spark, mo)
+	spark.flags = $ | MF_NOGRAVITY
+	spark.colorized = true
+	spark.color = SKINCOLOR_SKY
+	spark.blendmode = AST_ADD
+	spark.alpha = FU * 3/4
+	spark.destscale = 0
+	spark.scalespeed = FixedDiv(spark.scale, spark.fuse*FU)
+end
 
 local off = 4
 addHook("MobjThinker", function(mo)

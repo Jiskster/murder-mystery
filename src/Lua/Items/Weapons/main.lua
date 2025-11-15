@@ -22,7 +22,12 @@ MM.BulletDies = function(mo, moagainst, line)
 	local sfx = P_SpawnGhostMobj(mo)
 	sfx.flags2 = $|MF2_DONTDRAW
 	sfx.fuse = TICRATE
-	S_StartSound(sfx,sfx_turhit)
+
+	if mo.info.deathsound == nil then
+		S_StartSound(sfx,sfx_turhit)
+	else
+		S_StartSound(sfx,mo.info.deathsound)
+	end
 	
 	local angle = mo.angle + ANGLE_90
 	if (moagainst and moagainst.valid)
@@ -75,6 +80,11 @@ MM.BulletDies = function(mo, moagainst, line)
 		spark.destscale = 0
 		spark.scalespeed = FixedDiv(spark.scale, spark.fuse*FU)
 		*/
+
+		if mo.info.sparkvfx_func then
+			mo.info.sparkvfx_func(spark)
+		end
+		
 		P_SetOrigin(spark, spark.x, spark.y, spark.z)
 	end
 	
