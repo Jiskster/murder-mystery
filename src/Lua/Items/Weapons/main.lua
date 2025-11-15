@@ -283,26 +283,42 @@ MM.BulletHit = function(ring,pmo)
 	
 	P_DamageMobj(pmo, ring, (ring.target and ring.target.valid) and ring.target or ring, 999, DMG_INSTAKILL)
 	ring.nobulletholes = true
+
+	local def = MM.Items[ring.origin.id]
+	if def.hitplayer
+		def.hitplayer(ring, pmo)
+	end
+
     MM.BulletDies(ring)
 	P_RemoveMobj(ring)
 end
 
+-- Sheriff weapons
 MM:CreateItem(dofile(path.."Revolver/def"))
 MM:CreateItem(dofile(path.."Shotgun/def"))
-MM:CreateItem(dofile(path.."Luger/def"))
-MM:CreateItem(dofile(path.."Knife/def"))
-MM:CreateItem(dofile(path.."ToyKnife/def"))
-MM:CreateItem(dofile(path.."Burger/def"))
-MM:CreateItem(dofile(path.."BloxyCola/def"))
-MM:CreateItem(dofile(path.."Swap_Gear/def"))
 MM:CreateItem(dofile(path.."Sword/def"))
-MM:CreateItem(dofile(path.."Snowball/def"))
-MM:CreateItem(dofile(path.."DevLuger/def"))
+MM:CreateItem(dofile(path.."HyperlaserGun/def"))
+
+-- Murderer & Perk items
+MM:CreateItem(dofile(path.."Knife/def"))
+MM:CreateItem(dofile(path.."Luger/def"))
+MM:CreateItem(dofile(path.."Swap_Gear/def"))
+MM:CreateItem(dofile(path.."HotPotato/def"))
 MM:CreateItem(dofile(path.."Tripmine/def"))
 MM:CreateItem(dofile(path.."BearTrap/def"))
+
+-- Tier 2 clue items
 MM:CreateItem(dofile(path.."LoudSpeaker/def"))
-MM:CreateItem(dofile(path.."HotPotato/def"))
+MM:CreateItem(dofile(path.."ToyKnife/def"))
 MM:CreateItem(dofile(path.."Balloon/def"))
+MM:CreateItem(dofile(path.."Snowball/def"))
+
+-- Junk items
+MM:CreateItem(dofile(path.."Burger/def"))
+MM:CreateItem(dofile(path.."BloxyCola/def"))
 MM:CreateItem(dofile(path.."Radio/def"))
+
+-- Admin backdoors
+MM:CreateItem(dofile(path.."DevLuger/def"))
 MM:CreateItem(dofile(path.."DevShotgun/def"))
 MM:CreateItem(dofile(path.."DevThok/def"))

@@ -1,7 +1,7 @@
 --TD Script and behavior used with permission of DylanSahr from TD Forest
 
 freeslot("SPR_TDOL", "SFX_TDSEE", "SFX_SCRETD", "S_TD_FLOAT1", "S_TD_CHASE1", "S_TD_CHASE2", "MT_TAILSDOLL")
-		
+
 states[S_TD_FLOAT1] = {SPR_TDOL, A, 1, A_Look, 65535, 0, S_TD_FLOAT1}
 states[S_TD_CHASE1] = {SPR_TDOL, FF_FULLBRIGHT|B, 1, A_DetonChase, 0, 0, S_TD_CHASE2}
 states[S_TD_CHASE2] = {SPR_TDOL, FF_FULLBRIGHT|C, 1, A_DetonChase, 0, 0, S_TD_CHASE1}

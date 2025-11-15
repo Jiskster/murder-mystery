@@ -19,7 +19,7 @@ local teamversus_mode = MM.RegisterGametype("Team Versus", {
 
 local TR = TICRATE
 local ANIM = 2*TR
-local FADEIN = 12
+local FADEIN = 6
 local msgstatus = {
 	str = "",
 	tics = 0,

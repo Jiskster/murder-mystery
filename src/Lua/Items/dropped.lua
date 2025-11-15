@@ -187,6 +187,7 @@ local function manage_unpicked_weapon(mobj, releaseTic)
 	if (mobj.flags & MF_NOTHINK)
 	or ((MM_N.gameover and MM_N.end_ticker < releaseTic) or MM_N.voting)
 		mobj.flags = $|MF_NOTHINK
+		mobj.flags2 = $|MF2_DONTDRAW
 		return
 	end
 	
@@ -195,7 +196,8 @@ local function manage_unpicked_weapon(mobj, releaseTic)
 
 	local def = MM.Items[mobj.pickupid]
 
-	mobj.flags = $ & ~(MF_NOCLIP|MF_NOCLIPHEIGHT)
+	mobj.flags = $ &~(MF_NOCLIP|MF_NOCLIPHEIGHT)
+	mobj.flags2 = $ &~MF2_DONTDRAW
 
 	mobj.spriteyoffset = z
 	mobj.angle = angle

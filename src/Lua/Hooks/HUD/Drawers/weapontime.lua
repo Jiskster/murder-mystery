@@ -268,10 +268,12 @@ local function HUD_TimeForWeapon(v,p)
 		if anim >= (2*TR)
 			local dur = 20
 			local tics = min((anim - 2*TR), dur)
-			y = ease.outquad((FU/dur)*tics, $, 15*dup) - FixedDiv(MMHUD.weaponslidein, dup)
+			y = ease.outquad((FU/dur)*tics, $, 15*dup)
+			local offset = FixedDiv(MMHUD.weaponslidein, 380*FU) -- we love magic numbers around here
+			y = $ - FixedMul(vidwidth, offset)
 		end
 		
-		v.drawStretched(0, y*FU - 2*dup + (10*FU - fhei)/2, vidwidth*FU,fhei,
+		v.drawStretched(0, y*FU - 2*FU + FixedMul(10*dup, FU - FixedDiv(fhei, 10*FU))/2, vidwidth*FU,fhei,
 			v.cachePatch("1PIXEL"), V_NOSCALESTART|V_50TRANS
 		)
 		

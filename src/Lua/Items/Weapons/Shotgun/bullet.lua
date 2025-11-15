@@ -16,7 +16,8 @@ addHook("MobjThinker", function(mo)
 	end
 	
 	if mo.z <= mo.floorz
-	or mo.z+mo.height >= mo.ceilingz then
+	or mo.z+mo.height >= mo.ceilingz
+	or (mo.eflags & MFE_JUSTSTEPPEDDOWN) then
 		MM.BulletDies(mo)
 		P_RemoveMobj(mo)
 		return

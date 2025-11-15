@@ -120,6 +120,8 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	
 	--numbers for hacky hud stuff
 	target.player.mm.whokilledme = source or 123123
+	target.inflictor = inflictor
+	target.source = source
 	
 	if (source
 	and source.player
@@ -312,10 +314,10 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		local corpse = P_SpawnMobjFromMobj(target, 0,0,0, MT_THOK)
 		
 		target.flags2 = $|MF2_DONTDRAW
-
+		
 		if gt.instant_body_discover and target.player and target.player.valid then
 			chatprint("\x82*"..target.player.name.." has died!")
-
+			
 			MM_N.knownDeadPlayers[#target.player] = true
 		end
 		
@@ -323,6 +325,9 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		corpse.color = target.color
 		corpse.state = S_PLAY_BODY
 		corpse.colorized = target.colorized
+		
+		corpse.inflictor = inflictor
+		corpse.source = source
 		
 		corpse.angle = angle
 		corpse.flags = 0
@@ -483,14 +488,18 @@ addHook("ThinkFrame", function()
 			continue
 		end
 		
+		local player
 		if (corpse.playerid ~= nil)
-		and (players[corpse.playerid] and players[corpse.playerid].valid)
-		and (players[corpse.playerid].mo and players[corpse.playerid].mo.valid)
-			if not players[corpse.playerid].mo.health
-			and not (players[corpse.playerid].mo.flags2 & MF2_DONTDRAW) then
-				players[corpse.playerid].mo.flags2 = $|MF2_DONTDRAW
-			end
+			player = players[corpse.playerid]
 		end
+		
+		if (player and player.valid and not player.spectator
+		and player.mo and player.mo.valid and not player.mo.health)
+			player.mo.flags2 = $|MF2_DONTDRAW
+			
+			P_MoveOrigin(player.mo, corpse.x,corpse.y,corpse.z)
+		end
+		
         if MM_N.knownDeadPlayers[corpse.playerid]
         and (corpse.translation)
             corpse.translation = nil
@@ -502,6 +511,7 @@ addHook("ThinkFrame", function()
 				corpse
 			)
 		end
+		if not (corpse and corpse.valid) then return end
 		
         if MM_N.gameover then break end
 		
