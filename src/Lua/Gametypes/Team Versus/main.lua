@@ -18,16 +18,18 @@ local teamversus_mode = MM.RegisterGametype("Team Versus", {
 	reveal_roles = true;
 	all_droppable_items = true;
 	instant_body_discover = true;
-	allow_respawn = true;
+	--allow_respawn = true;
 	allow_corpses = true;
 	items = {"revolver", "shotgun", "sword", "knife", "hyperlaser"};
 	thinker = function()
+		/*
 		if MM_N.time <= 90*TICRATE and MM_N.allow_respawn then
 			MM_N.allow_respawn = false
 			--chatprint("\x82\*Respawning disabled!")
 			S_StartSound(nil, sfx_s3k9c)
 			respawn_anim = RESPAWNTIME
 		end
+		*/
 	end;
 })
 
