@@ -157,6 +157,10 @@ return function(self, maploaded)
 	MM_N.rounds = oldrounds or 0
 	MM_N.player_colors = {}
 	
+	if MM.Gametypes[nextgametype].allow_respawn then
+		MM_N.allow_respawn = true
+	end
+	
 	local count = 0
 	for p in players.iterate do
 		self:playerInit(p, true)

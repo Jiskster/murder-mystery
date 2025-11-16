@@ -102,11 +102,13 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if target and target.valid and target.player and target.player.valid then
 		target_player = target.player
 	end
-		
-	for k,v in pairs(target.player.mm.inventory.items) do
-		MM:DropItem(target.player, k, false, true, true)
-	end
 	
+	if not MM_N.allow_respawn then -- keep inventory
+		for k,v in pairs(target.player.mm.inventory.items) do
+			MM:DropItem(target.player, k, false, true, true)
+		end
+	end
+
 	if target.player.mm.role ~= MMROLE_MURDERER
 		--people like to shoot each other and fall into pits,
 		--so we wouldnt be able to get those kills
@@ -310,7 +312,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		return
 	end
 
-	if not MM_N.allow_respawn then
+	if not MM_N.allow_respawn or gt.allow_corpses then
 		local corpse = P_SpawnMobjFromMobj(target, 0,0,0, MT_THOK)
 		
 		target.flags2 = $|MF2_DONTDRAW
@@ -333,7 +335,13 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		corpse.flags = 0
 		corpse.flags2 = 0
 		corpse.tics = -1
-		corpse.fuse = -1
+		
+		if gt.allow_corpses then
+			corpse.fuse = 10*TICRATE
+		else
+			corpse.fuse = -1
+		end
+			
 		corpse.shadowscale = target.shadowscale
 		corpse.radius = target.radius
 		if not MM_N.knownDeadPlayers[#target.player]

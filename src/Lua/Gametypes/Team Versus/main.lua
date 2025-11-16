@@ -1,5 +1,6 @@
+
 local teamversus_mode = MM.RegisterGametype("Team Versus", {
-	max_time = 2*60*TICRATE;
+	max_time = 3*60*TICRATE;
 	required_players = 8;
 	inventory_count = 2;
 	fill_teams = true;
@@ -14,7 +15,16 @@ local teamversus_mode = MM.RegisterGametype("Team Versus", {
 	reveal_roles = true;
 	all_droppable_items = true;
 	instant_body_discover = true;
-	items = {"revolver", "shotgun", "sword", "knife"};
+	allow_respawn = true;
+	allow_corpses = true;
+	items = {"revolver", "shotgun", "sword", "knife", "hyperlaser"};
+	thinker = function()
+		if MM_N.time <= 90*TICRATE and MM_N.allow_respawn then
+			MM_N.allow_respawn = false
+			chatprint("\x82\*Respawning disabled!")
+			S_StartSound(nil, sfx_s3k9c)
+		end
+	end;
 })
 
 local TR = TICRATE
@@ -28,6 +38,8 @@ local msgstatus = {
 MM.addHook("KilledPlayer", function(attacking_p, player)
 	local gt = MM.returnGametype()
 	if gt.name ~= "Team Versus" then return end
+
+	if MM_N.time > 90*TICRATE then return end
 	
 	local count = MM.countPlayers()
 	if (consoleplayer and consoleplayer.valid and consoleplayer.mm)

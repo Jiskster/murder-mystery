@@ -209,4 +209,8 @@ return function()
     and not CV_MM.force_duel.value
 		MM_N.dueling = false
 	end
+
+	if MM.Gametypes[MM_N.gametype].thinker then
+		MM.Gametypes[MM_N.gametype].thinker()
+	end
 end

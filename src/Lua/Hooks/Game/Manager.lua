@@ -64,6 +64,8 @@ addHook("PlayerSpawn", function(player)
 	and player.mm.spectator
 		if not MM_N.allow_respawn then
 			player.spectator = true
+		else
+			MM_N.knownDeadPlayers[#player] = nil
 		end
 	end
 
