@@ -29,7 +29,7 @@ weapon.stick = true
 weapon.animation = true
 weapon.damage = false
 weapon.weaponize = true
-weapon.droppable = false
+weapon.droppable = true
 weapon.shootable = true
 weapon.shootmobj = dofile("Items/Weapons/HyperlaserGun/bullet")
 weapon.pickupsfx = sfx_gnpick
@@ -261,10 +261,11 @@ weapon.thinker = function(item, p)
 	if (MM_N.dueling) then return end
 	if (item.shots == nil) then item.shots = 0; end
 	
-	item.allowdropmobj = false
+	--item.allowdropmobj = false
 
 	if item.shots >= 3
-		MM:DropItem(p)
+		item.restrict[p.mm.role] = true
+		MM:DropItem(p, nil,nil,true,true)
 	end
 end
 
