@@ -489,6 +489,7 @@ addHook("ThinkFrame", function()
 	if not (MM_N.corpses) then return end --BRUH
 	
 	local body_found = false
+	local gt = MM.returnGametype()
 	
 	for _,corpse in ipairs(MM_N.corpses) do
 		if not (corpse and corpse.valid) then
@@ -531,7 +532,9 @@ addHook("ThinkFrame", function()
 			
 			if P_CheckSight(corpse, p.mo)
 			and R_PointToDist2(corpse.x, corpse.y, p.mo.x, p.mo.y) < 512*FU
-			and not (MM_N.knownDeadPlayers[corpse.playerid]) then
+			and not (MM_N.knownDeadPlayers[corpse.playerid])
+			-- This is a stupid hack, but nothing else works. Fuck you, Saxa.
+			and not gt.reveal_roles then
 				chatprint("\x82*The corpse of "..corpse.playername.." has been found!")
 				MM_N.knownDeadPlayers[corpse.playerid] = true
 				body_found = true
