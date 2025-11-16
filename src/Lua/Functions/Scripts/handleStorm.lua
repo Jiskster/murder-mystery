@@ -159,7 +159,7 @@ local function SpawnLaser(point,i, debug, x,y, ang, scale, clr, rawangle, dist, 
 	
 	local fade = FU
 	do
-		local starting = MM_N.storm_ticker < point.storm_graceperiod and FixedDiv(MM_N.storm_ticker*FU, point.storm_graceperiod*FU) or FU
+		local starting = FU
 		local dist = R_PointToDist(x,y)
 		local nofade = false
 		if (displayplayer and displayplayer.valid and displayplayer.realmo and displayplayer.realmo.valid)
@@ -365,7 +365,12 @@ local function SpawnAllLasers(point,dist)
 	local scale = circ / laserspace / numlasers
 	scale = max(abs($),FU/50)
 	
-	local color = SKINCOLOR_SUPERPURPLE1 + abs(((MM_N.storm_ticker>>1)%9)-4) --laser_colors[P_RandomRange(1, #laser_colors)]
+	local offset = abs(((MM_N.storm_ticker>>1)%9)-4)
+	local color = SKINCOLOR_SUPERPURPLE1 + offset --laser_colors[P_RandomRange(1, #laser_colors)]
+	if (MM_N.storm_ticker < point.storm_graceperiod)
+		color = SKINCOLOR_SUPERRUST1 + offset
+	end
+	
 	for i = 1,numlasers
 		local ang = FixedAngle((i-1)*angoff) + ticker_offset
 		local x = point.x + P_ReturnThrustX(nil,ang, dist)
