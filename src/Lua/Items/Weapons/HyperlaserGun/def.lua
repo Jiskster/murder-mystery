@@ -183,7 +183,7 @@ MM.addHook("CorpseThink", function(mo)
 	mo.state = S_PLAY_DEAD
 
 	local off = FixedDiv(mo.radius, mo.scale)/FU
-	local hei = FixedDiv(me.height + 8*me.scale,me.scale)/FU
+	local hei = FixedDiv(mo.height + 8*mo.scale,mo.scale)/FU
 	local effect = P_SpawnMobjFromMobj(mo,
 		P_RandomRange(-off, off)*FU,
 		P_RandomRange(-off, off)*FU,
