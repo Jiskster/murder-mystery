@@ -70,6 +70,8 @@ local player_variables =
 		name = string
 		*/
 	},
+	teammates = {},
+	refreshteammates = false,
 	
 	effects = {},
 }

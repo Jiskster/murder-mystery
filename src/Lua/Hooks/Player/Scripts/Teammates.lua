@@ -17,6 +17,7 @@ return function(p)
 	
 	if not p.mm.teammates
 	or (#p.mm.teammates == 0)
+	or (p.mm.refreshteammates)
 		p.mm.teammates = {}
 		
 		for p2 in players.iterate
@@ -27,6 +28,7 @@ return function(p)
 			
 			table.insert(p.mm.teammates,p2)
 		end
+		p.mm.refreshteammates = false
 	end
 	
 	for k,play in ipairs(p.mm.teammates)
@@ -36,6 +38,7 @@ return function(p)
 		--!?!?
 		or (play.mm.role ~= p.mm.role)
 			table.remove(p.mm.teammates,k)
+			p.mm.refreshteammates = true
 			continue
 		end
 		

@@ -15,25 +15,24 @@ local function wrap(v,p,c)
 			z = att.z
 		}
 		
-		local icon = v.cachePatch("BGLSH0") --v.getSprite2Patch(player.skin, SPR2_LIFE, false, A, 0)
 		-- i think its fine if we pass a table instead, sglib doesnt need
 		-- anything outside of coords anyways
 		local to_screen = sglib.ObjectTracking(v,p,c,dest)
 		
 		if not to_screen.onScreen then return end
 		
-		v.drawScaled(to_screen.x,
-			to_screen.y,
-			to_screen.scale, icon,
-			0
-		)
-		
 		if att.name ~= nil
 			v.drawString(to_screen.x,
 				to_screen.y,
 				att.name,
-				0,
+				V_SMALLSCALEPATCH|V_ALLOWLOWERCASE,
 				"thin-fixed-center"
+			)
+			v.drawScaled(to_screen.x,
+				to_screen.y,
+				v.cachePatch("MM_TNYCROSS"),
+				FU/2,
+				V_SMALLSCALEPATCH|V_ALLOWLOWERCASE,
 			)
 		end
 	end
