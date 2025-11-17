@@ -118,7 +118,7 @@ local function V_DrawBox(props)
 
 	if timeleft >= 0 then
 		v.slideDrawString(x, y,
-			tostring(timeleft/TICRATE),
+			tostring((timeleft/TICRATE) + 1),
 			flags|trans,
 			"fixed", true
 		)

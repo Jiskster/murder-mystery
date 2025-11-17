@@ -1,5 +1,9 @@
+local RESPAWNTIME = 5*TICRATE
+local respawn_anim = 0
+local halfsecond = TR/2
+
 local teamversus_mode = MM.RegisterGametype("Team Versus", {
-	max_time = 2*60*TICRATE;
+	max_time = 3*60*TICRATE;
 	required_players = 8;
 	inventory_count = 2;
 	fill_teams = true;
@@ -14,21 +18,30 @@ local teamversus_mode = MM.RegisterGametype("Team Versus", {
 	reveal_roles = true;
 	all_droppable_items = true;
 	instant_body_discover = true;
-	items = {"revolver", "shotgun", "sword", "knife"};
+	--allow_respawn = true;
+	allow_corpses = true;
+	items = {"revolver", "shotgun", "sword", "knife", "hyperlaser"};
+	thinker = function()
+		/*
+		if MM_N.time <= 90*TICRATE and MM_N.allow_respawn then
+			MM_N.allow_respawn = false
+			--chatprint("\x82\*Respawning disabled!")
+			S_StartSound(nil, sfx_s3k9c)
+			respawn_anim = RESPAWNTIME
+		end
+		*/
+	end;
 })
 
 local TR = TICRATE
 local ANIM = 2*TR
-local FADEIN = 12
+local FADEIN = 6
 local msgstatus = {
 	str = "",
 	tics = 0,
 }
 
-MM.addHook("KilledPlayer", function(attacking_p, player)
-	local gt = MM.returnGametype()
-	if gt.name ~= "Team Versus" then return end
-	
+local function ShowStandings()
 	local count = MM.countPlayers()
 	if (consoleplayer and consoleplayer.valid and consoleplayer.mm)
 		if consoleplayer.mm.role == MMROLE_MURDERER
@@ -37,7 +50,17 @@ MM.addHook("KilledPlayer", function(attacking_p, player)
 			msgstatus.str = "\x84"..count.sheriffs.."\x80 vs \x85"..count.murderers
 		end
 		msgstatus.tics = ANIM
-	end
+	end	
+end
+
+-- Show how many we're fighting against on round start
+MM.addHook("RoundStart", ShowStandings)
+MM.addHook("KilledPlayer", function(attacking_p, player)
+	local gt = MM.returnGametype()
+	if gt.name ~= "Team Versus" then return end
+	if MM_N.time > 90*TICRATE then return end
+	
+	ShowStandings()
 end)
 
 local byteLUT = {}
@@ -48,11 +71,35 @@ end
 MMHUD.addHud("TVS_VsCount", false,false, function(v,p,c)
 	local gt = MM.returnGametype()
 	if gt.name ~= "Team Versus" then return end
-	if not (msgstatus.tics) then return end
+	
 	if (MM_N.gameover)
 		msgstatus.tics = 0
+		respawn_anim = 0
 		return
 	end
+	
+	if (respawn_anim)
+		local x = 160*FU
+		local y = 20*FU
+		
+		if (RESPAWNTIME - respawn_anim <= halfsecond)
+			x = ease.outquad((FU/(halfsecond)) * (RESPAWNTIME - respawn_anim),
+				300*FU,
+				$
+			)
+		elseif respawn_anim <= halfsecond
+			x = ease.inback((FU/(halfsecond)) * (halfsecond - respawn_anim),
+				$,
+				-300*FU,
+				FU/2
+			)
+		end
+		
+		v.drawString(x, y, "Respawning Disabled!", V_SNAPTOTOP|V_ORANGEMAP, "thin-fixed-center")
+		respawn_anim = $ - 1
+	end
+	
+	if not (msgstatus.tics) then return end
 	
 	local x = 160*FU
 	local y = 30*FU

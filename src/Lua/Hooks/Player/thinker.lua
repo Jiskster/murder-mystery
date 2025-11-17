@@ -23,10 +23,10 @@ addHook("PlayerThink", function(p)
 	end
 
 	--Force a respawn
-	--why was the " and p.mo.health" part removed?
 	if not (p.mo and p.mo.valid and p.mo.health) then
-		if p.deadtimer >= 3*TICRATE
-		and p.playerstate == PST_DEAD
+		if (p.deadtimer >= 3*TICRATE
+		and p.playerstate == PST_DEAD)
+		and not MM_N.allow_respawn
 			G_DoReborn(#p)
 			p.deadtimer = 0
 		end
@@ -68,6 +68,8 @@ addHook("PlayerThink", function(p)
 	if not (MM_N.gameover
 	or MM:pregame())
 		p.mm.timesurvived = $+1
+		-- This is a stupid hack, but nothing else works. Fuck you, Saxa.
+		MM_N.knownDeadPlayers[#p] = false
 	end
 	
 	-- Check if valid again, hooks could kill the player.

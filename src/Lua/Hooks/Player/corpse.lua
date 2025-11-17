@@ -102,11 +102,13 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if target and target.valid and target.player and target.player.valid then
 		target_player = target.player
 	end
-		
-	for k,v in pairs(target.player.mm.inventory.items) do
-		MM:DropItem(target.player, k, false, true, true)
-	end
 	
+	if not MM_N.allow_respawn then -- keep inventory
+		for k,v in pairs(target.player.mm.inventory.items) do
+			MM:DropItem(target.player, k, false, true, true)
+		end
+	end
+
 	if target.player.mm.role ~= MMROLE_MURDERER
 		--people like to shoot each other and fall into pits,
 		--so we wouldnt be able to get those kills
@@ -120,6 +122,8 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	
 	--numbers for hacky hud stuff
 	target.player.mm.whokilledme = source or 123123
+	target.inflictor = inflictor
+	target.source = source
 	
 	if (source
 	and source.player
@@ -183,10 +187,10 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	end
 	
 	if not MM:canGameEnd()
-	and MM_N.special_count >= 2 then
+	and MM_N.special_count >= 2
+	and not gt.instant_body_discover then
 		if target.player.mm.role ~= MMROLE_INNOCENT then
-			if target.player.mm.role == MMROLE_MURDERER 
-			and not gt.instant_body_discover then
+			if target.player.mm.role == MMROLE_MURDERER
 				chatprint("\x82*"..target.player.name.." was a murderer!")
 				
 				--add immediately so we KNOW.
@@ -308,14 +312,14 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		return
 	end
 
-	if not MM_N.allow_respawn then
+	if not MM_N.allow_respawn or gt.allow_corpses then
 		local corpse = P_SpawnMobjFromMobj(target, 0,0,0, MT_THOK)
 		
 		target.flags2 = $|MF2_DONTDRAW
-
+		
 		if gt.instant_body_discover and target.player and target.player.valid then
 			chatprint("\x82*"..target.player.name.." has died!")
-
+			
 			MM_N.knownDeadPlayers[#target.player] = true
 		end
 		
@@ -324,11 +328,20 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 		corpse.state = S_PLAY_BODY
 		corpse.colorized = target.colorized
 		
+		corpse.inflictor = inflictor
+		corpse.source = source
+		
 		corpse.angle = angle
 		corpse.flags = 0
 		corpse.flags2 = 0
 		corpse.tics = -1
-		corpse.fuse = -1
+		
+		if gt.allow_corpses then
+			corpse.fuse = 10*TICRATE
+		else
+			corpse.fuse = -1
+		end
+			
 		corpse.shadowscale = target.shadowscale
 		corpse.radius = target.radius
 		if not MM_N.knownDeadPlayers[#target.player]
@@ -476,6 +489,7 @@ addHook("ThinkFrame", function()
 	if not (MM_N.corpses) then return end --BRUH
 	
 	local body_found = false
+	local gt = MM.returnGametype()
 	
 	for _,corpse in ipairs(MM_N.corpses) do
 		if not (corpse and corpse.valid) then
@@ -483,14 +497,18 @@ addHook("ThinkFrame", function()
 			continue
 		end
 		
+		local player
 		if (corpse.playerid ~= nil)
-		and (players[corpse.playerid] and players[corpse.playerid].valid)
-		and (players[corpse.playerid].mo and players[corpse.playerid].mo.valid)
-			if not players[corpse.playerid].mo.health
-			and not (players[corpse.playerid].mo.flags2 & MF2_DONTDRAW) then
-				players[corpse.playerid].mo.flags2 = $|MF2_DONTDRAW
-			end
+			player = players[corpse.playerid]
 		end
+		
+		if (player and player.valid and not player.spectator
+		and player.mo and player.mo.valid and not player.mo.health)
+			player.mo.flags2 = $|MF2_DONTDRAW
+			
+			P_MoveOrigin(player.mo, corpse.x,corpse.y,corpse.z)
+		end
+		
         if MM_N.knownDeadPlayers[corpse.playerid]
         and (corpse.translation)
             corpse.translation = nil
@@ -502,6 +520,7 @@ addHook("ThinkFrame", function()
 				corpse
 			)
 		end
+		if not (corpse and corpse.valid) then return end
 		
         if MM_N.gameover then break end
 		
@@ -513,7 +532,9 @@ addHook("ThinkFrame", function()
 			
 			if P_CheckSight(corpse, p.mo)
 			and R_PointToDist2(corpse.x, corpse.y, p.mo.x, p.mo.y) < 512*FU
-			and not (MM_N.knownDeadPlayers[corpse.playerid]) then
+			and not (MM_N.knownDeadPlayers[corpse.playerid])
+			-- This is a stupid hack, but nothing else works. Fuck you, Saxa.
+			and not gt.reveal_roles then
 				chatprint("\x82*The corpse of "..corpse.playername.." has been found!")
 				MM_N.knownDeadPlayers[corpse.playerid] = true
 				body_found = true

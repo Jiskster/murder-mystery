@@ -16,7 +16,8 @@ addHook("MobjThinker", function(mo)
 	end
 	
 	if mo.z <= mo.floorz
-	or mo.z+mo.height >= mo.ceilingz then
+	or mo.z+mo.height >= mo.ceilingz
+	or (mo.eflags & MFE_JUSTSTEPPEDDOWN) then
 		MM.BulletDies(mo)
 		P_RemoveMobj(mo)
 		return
@@ -32,7 +33,7 @@ addHook("MobjThinker", function(mo)
 	end
 	
 	local flip = P_MobjFlip(mo)
-	local speed = 100
+	local speed = 130
 	mo.momx = FixedMul(speed*cos(mo.angle), cos(mo.aiming))
 	mo.momy = FixedMul(speed*sin(mo.angle), cos(mo.aiming))
 	mo.momz = speed*sin(mo.aiming)
@@ -40,10 +41,10 @@ addHook("MobjThinker", function(mo)
 	mo.momx = FixedMul($, mo.drag)
 	mo.momy = FixedMul($, mo.drag)
 	
-	if mo.timealive >= TICRATE/2
+	if mo.timealive >= TICRATE/4
 		mo.aiming = $ - ANG1*flip
 	end
-	if mo.timealive >= TICRATE/3
+	if mo.timealive >= TICRATE/6
 		mo.aiming = $ - (ANG1/3)*flip
 		mo.drag = max($ - FU/20, FU/10)
 	end

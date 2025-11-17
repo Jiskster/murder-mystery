@@ -256,8 +256,12 @@ MM:addPlayerScript(function(p)
 					if p.mm.role == MMROLE_MURDERER
 						reward = "luger"
 						
-						if P_RandomChance(FixedDiv(3*FU, 10*FU)) then
+						if P_RandomChance(FixedDiv(4*FU, 10*FU)) then
 							reward = "hotpotato"
+						end
+
+						if P_RandomChance(FixedDiv(3*FU, 10*FU)) then
+							reward = "hyperlaser"
 						end
 					else
 						if MM_N.clues_weaponsleft

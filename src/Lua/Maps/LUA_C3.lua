@@ -1,7 +1,7 @@
 --TD Script and behavior used with permission of DylanSahr from TD Forest
 
 freeslot("SPR_TDOL", "SFX_TDSEE", "SFX_SCRETD", "S_TD_FLOAT1", "S_TD_CHASE1", "S_TD_CHASE2", "MT_TAILSDOLL")
-		
+
 states[S_TD_FLOAT1] = {SPR_TDOL, A, 1, A_Look, 65535, 0, S_TD_FLOAT1}
 states[S_TD_CHASE1] = {SPR_TDOL, FF_FULLBRIGHT|B, 1, A_DetonChase, 0, 0, S_TD_CHASE2}
 states[S_TD_CHASE2] = {SPR_TDOL, FF_FULLBRIGHT|C, 1, A_DetonChase, 0, 0, S_TD_CHASE1}
@@ -21,7 +21,7 @@ mobjinfo[MT_TAILSDOLL] = {
 	radius = 10*FRACUNIT,
 	height = 40*FRACUNIT,
 	damage = 1,
-	flags = MF_RUNSPAWNFUNC|MF_ENEMY|MF_FLOAT|MF_NOGRAVITY|MF_PAIN
+	flags = MF_RUNSPAWNFUNC|MF_ENEMY|MF_FLOAT|MF_NOGRAVITY|MF_SPECIAL
 }
 
 --Script by: SpectrumUK
@@ -31,6 +31,33 @@ addHook("MobjThinker", function(mo)
 		S_StartSound(mo, sfx_tdsee)
 	end
 end, MT_TAILSDOLL)
+
+local td_kill = function(mo, mo2)
+	local icankillthisguy = false
+	if (mo.markfordeath and mo.markfordeath.valid)
+		icankillthisguy = mo2 == mo.markfordeath
+	else
+		icankillthisguy = true
+	end
+	
+	if (icankillthisguy)
+		P_KillMobj(mo2, mo, mo)
+	else
+		P_DamageMobj(mo2, mo,mo)
+	end
+	P_KillMobj(mo)
+	return true
+end
+addHook("TouchSpecial", td_kill, MT_TAILSDOLL)
+addHook("LinedefExecute", function(line, me)
+	local p = me.player
+	if not (p and p.valid) then return end
+	
+	-- Hardcoded, but who cares.
+	local doll = P_SpawnMobj(363*FU, 2608*FU, 32*FU, MT_TAILSDOLL)
+	doll.markfordeath = me
+	doll.tracer = me
+end, "MM_TAILD")
 
 --Other Interactions
 
