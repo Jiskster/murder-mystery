@@ -21,7 +21,7 @@ mobjinfo[MT_TAILSDOLL] = {
 	radius = 10*FRACUNIT,
 	height = 40*FRACUNIT,
 	damage = 1,
-	flags = MF_RUNSPAWNFUNC|MF_ENEMY|MF_FLOAT|MF_NOGRAVITY|MF_SPECIAL
+	flags = MF_RUNSPAWNFUNC|MF_ENEMY|MF_SHOOTABLE|MF_FLOAT|MF_NOGRAVITY|MF_SPECIAL
 }
 
 --Script by: SpectrumUK
@@ -57,6 +57,7 @@ addHook("LinedefExecute", function(line, me)
 	local doll = P_SpawnMobj(363*FU, 2608*FU, 32*FU, MT_TAILSDOLL)
 	doll.markfordeath = me
 	doll.tracer = me
+	doll.state = S_TD_CHASE1
 end, "MM_TAILD")
 
 --Other Interactions
