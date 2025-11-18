@@ -62,7 +62,7 @@ end)
 MM.addHook("KilledPlayer", function(attacking_p, player)
 	local gt = MM.returnGametype()
 	if gt.name ~= "Team Versus" then return end
-	if MM_N.time > 90*TICRATE then return end
+	--if MM_N.time > 90*TICRATE then return end
 	
 	ShowStandings()
 end)
