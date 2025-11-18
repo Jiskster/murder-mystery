@@ -12,7 +12,7 @@ mobjinfo[freeslot("MT_MM_LASER")] = {
 	flags = MF_NOGRAVITY,
 	deathstate = S_SMOKE1,
 	deathsound = sfx_hlgn_h,
-	speed = 60*FU
+	speed = 90*FU
 }
 
 mobjinfo[MT_MM_LASER].sparkvfx_func = function(spark, mo)
