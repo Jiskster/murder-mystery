@@ -306,7 +306,11 @@ addHook("PlayerMsg", function(src, t, trgt, msg)
 			{mo = src.mo,			x = src.mo.x,			y = src.mo.y,			z = src.mo.z},
 			{
 				angle = R_PointToAngle2(consoleplayer.mo.x,consoleplayer.mo.y, src.mo.x,src.mo.y),
-				aiming = R_PointToAngle2(0, consoleplayer.mo.z, dist, src.mo.z),
+				aiming = R_PointToAngle2(0,
+					(consoleplayer.mo.z + (41*consoleplayer.mo.height/48)) - 8*consoleplayer.mo.scale,
+					dist,
+					(src.mo.z + (41*src.mo.height/48)) - 8*src.mo.scale
+				),
 				dist = dist,
 			}
 		)

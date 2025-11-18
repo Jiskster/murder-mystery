@@ -59,7 +59,9 @@ local function checkRayCast(from, to, props)
 		end
 		
 		if debug
-			P_SpawnMobjFromMobj(namecheck,0,0,0,MT_SPARK)
+			local g = P_SpawnMobjFromMobj(namecheck,0,0,0,MT_THOK)
+			g.tics = 70
+			g.scale = $ / 3
 		end
 		
 		P_XYMovement(namecheck)
@@ -616,7 +618,11 @@ MM:addPlayerScript(function(p)
 				{mo = p2.mo,	x = p2.mo.x,	y = p2.mo.y,	z = p2.mo.z},
 				{
 					angle = R_PointToAngle2(p.mo.x,p.mo.y, p2.mo.x,p2.mo.y),
-					aiming = R_PointToAngle2(0, p.mo.z, dist, p2.mo.z),
+					aiming = R_PointToAngle2(0,
+						(p.mo.z + (41*p.mo.height/48)) - 8*p.mo.scale,
+						dist,
+						(p2.mo.z + (41*p2.mo.height/48)) - 8*p2.mo.scale
+					),
 					dist = dist,
 				}
 			) then
