@@ -1,6 +1,6 @@
 local RESPAWNTIME = 5*TICRATE
 local respawn_anim = 0
-local halfsecond = TR/2
+local halfsecond = TICRATE/2
 
 local teamversus_mode = MM.RegisterGametype("Team Versus", {
 	max_time = 3*60*TICRATE;
@@ -33,8 +33,7 @@ local teamversus_mode = MM.RegisterGametype("Team Versus", {
 	end;
 })
 
-local TR = TICRATE
-local ANIM = 2*TR
+local ANIM = 2*TICRATE
 local FADEIN = 6
 local msgstatus = {
 	str = "",
