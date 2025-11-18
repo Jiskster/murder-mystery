@@ -54,7 +54,12 @@ local function ShowStandings()
 end
 
 -- Show how many we're fighting against on round start
-MM.addHook("RoundStart", ShowStandings)
+MM.addHook("RoundStart", do
+	local gt = MM.returnGametype()
+	if gt.name ~= "Team Versus" then return end
+	
+	ShowStandings()
+end)
 MM.addHook("KilledPlayer", function(attacking_p, player)
 	local gt = MM.returnGametype()
 	if gt.name ~= "Team Versus" then return end

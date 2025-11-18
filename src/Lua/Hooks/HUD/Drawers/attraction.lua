@@ -32,7 +32,7 @@ local function wrap(v,p,c)
 				to_screen.y,
 				v.cachePatch("MM_TNYCROSS"),
 				FU/2,
-				V_SMALLSCALEPATCH|V_ALLOWLOWERCASE,
+				V_SMALLSCALEPATCH|V_ALLOWLOWERCASE
 			)
 		end
 	end
