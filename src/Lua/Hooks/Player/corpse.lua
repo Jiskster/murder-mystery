@@ -210,13 +210,14 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 						)
 						S_StartSound(nil,sfx_alart, consoleplayer)
 					end
-					p.mm.attract = {
+					table.insert(p.mm.attract, {
 						x = target.x,
 						y = target.y,
 						z = target.z,
 						tics = 10*TICRATE,
-						name = target.player.name
-					}
+						str = target.player.name,
+						patch = "MM_TNYCROSS",
+					})
 				end
 			end
 		end

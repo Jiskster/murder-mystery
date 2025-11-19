@@ -8,10 +8,14 @@ local function SafeFreeslot(...)
 end
 
 SafeFreeslot("sfx_brtrap")
-
 sfxinfo[sfx_brtrap] = {
 	priority = 64,
 	flags = SF_X4AWAYSOUND,
+	caption = "Beartrap set off"
+}
+SafeFreeslot("sfx_bt_off")
+sfxinfo[sfx_bt_off] = {
+	priority = 64,
 	caption = "Beartrap set off"
 }
 
@@ -187,6 +191,27 @@ addHook("TouchSpecial",function(mine,me)
 		P_SetScale(fx, me.scale * 2, true)
 		fx.spritexscale = $ / 2
 		fx.spriteyscale = $ / 2
+	end
+
+	for player in players.iterate
+		local showme = false
+		if (mine.tracer and mine.tracer.player)
+			if mine.tracer.player == player
+				showme = true
+			elseif player.mm.role == mine.tracer.player.mm.role
+				showme = true
+			end
+		end
+		if not showme then continue end
+		
+		S_StartSound(nil, sfx_bt_off, player)
+		table.insert(player.mm.attract, {
+			x = mine.x,
+			y = mine.y,
+			z = mine.z,
+			tics = 4*TICRATE,
+			patch = "MM_BEARTRAP_OUT",
+		})
 	end
 	
 end,MT_MM_BEARTRAP)

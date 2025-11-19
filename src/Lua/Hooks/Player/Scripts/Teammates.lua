@@ -10,7 +10,13 @@ return function(p)
 	if (p.mm.role == MMROLE_INNOCENT) then return end
 	
 	--this is TECHNICALLY for teammates, so tic it here
-	p.mm.attract.tics = max($-1, 0)
+	for k, att in ipairs(p.mm.attract)
+		if (att.tics <= 0)
+			table.remove(p.mm.attract, k)
+			continue
+		end
+		att.tics = $ - 1
+	end
 	
 	--endgame cutscene
 	if (p.mo.flags & MF_NOTHINK) then return end
