@@ -34,7 +34,6 @@ local function wrap(v,p,c)
 		local to_screen = sglib.ObjectTracking(v,p,c,dest)
 		local x = to_screen.x
 		local y = to_screen.y
-		local snap = 0
 		local patch = att.patch
 		
 		local base = to_screen.base
@@ -54,18 +53,19 @@ local function wrap(v,p,c)
 		end
 		
 		if offscreen
-			local border = 30
+			local borderx = 30
+			local bordery = 50
 			local center = {
 				x = 160*FU,
 				y = 100*FU,
 			}
 			local scr = {
-				x = (160 - border)*FU + sch_w,
-				y = (100 - border)*FU + sch_h,
+				x = (160 - borderx)*FU + sch_w,
+				y = (100 - bordery)*FU + sch_h,
 			}
 			x = center.x + FixedMul(scr.x, sin(to_screen.angle))
 			y = center.y - FixedMul(scr.y, cos(to_screen.angle))
-
+			
 			-- whatever
 			if (patch == "MM_BEARTRAP_OUT")
 				MMHUD.interpolate(v,k)
@@ -74,26 +74,35 @@ local function wrap(v,p,c)
 					v.getSpritePatch(SPR_BGLS, W, 0, 
 						InvAngle(angdiff) + ANGLE_90
 					),
-					snap
+					0
 				)
-
+				
 				patch = "MM_BEARTRAP_OUT2"
 			end
 		end
-
+		
 		MMHUD.interpolate(v,k)
 		if (att.str ~= nil)
 			v.drawString(x, y,
 				att.str,
-				V_SMALLSCALEPATCH|V_ALLOWLOWERCASE|snap,
+				V_ALLOWLOWERCASE,
 				"thin-fixed-center"
 			)
 		end
 		if (patch ~= nil)
 			v.drawScaled(x, y,
-				FU/2,
+				att.scale or FU/2,
 				v.cachePatch(patch),
-				snap
+				0
+			)
+		end
+		if (patch == "MM_BEARTRAP_OUT"
+		or patch == "MM_BEARTRAP_OUT2")
+			if patch == "MM_BEARTRAP_OUT2" then y = $ + 10*FU; end
+			v.drawString(x,y,
+				((R_PointToDist2(p.mo.x, p.mo.y, dest.x,dest.y)/FU)/32).." fu",
+				V_ALLOWLOWERCASE,
+				"thin-fixed-center"
 			)
 		end
 		MMHUD.interpolate(v,false)

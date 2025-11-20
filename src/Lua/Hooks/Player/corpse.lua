@@ -217,6 +217,7 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 						tics = 10*TICRATE,
 						str = target.player.name,
 						patch = "MM_TNYCROSS",
+						scale = FU,
 					})
 				end
 			end
