@@ -53,14 +53,10 @@ return function(self)
 		end
 		
 		if mapWasIn then continue end
-
-		if not (data.typeoflevel & TOL_SAXAMM) then
-			continue
-		end
 		if data.bonustype then continue end
+
 		local chosen_gametype = 1
-		
-		if P_RandomChance(FU/8) and #MM.Gametypes > 1 then
+		if P_RandomChance(FU/8) and #MM.Gametypes > 1 and MM_N.forced_gametype == nil then
 			chosen_gametype = P_RandomRange(2, #MM.Gametypes) -- set type to random mode
 			
 			local gmt = MM.Gametypes[chosen_gametype]
@@ -68,6 +64,13 @@ return function(self)
 			if gmt.required_players and player_count < gmt.required_players then
 				chosen_gametype = 1 -- revert back to gametype 1 if not enough players.
 			end
+		-- make sure nothing goes wrong when forcing a gametype
+		elseif MM_N.forced_gametype ~= nil then
+			chosen_gametype = MM_N.forced_gametype
+		end
+
+		if not (data.typeoflevel & MM.Gametypes[chosen_gametype].tol) then
+			continue
 		end
 		
 		table.insert(MM_N.mapVote.maps, {

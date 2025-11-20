@@ -2,15 +2,26 @@ MM.Gametypes = {}
 
 local DEFAULT_MAX_TIME = 3*60*TICRATE
 
+-- TODO: default variables should go here
+-- TODO: gamemodes should have a dueling toggle
+local gametype_t = {
+	tol = TOL_SAXAMM,
+	max_time = DEFAULT_MAX_TIME
+}
+registerMetatable(gametype_t)
+
 function MM.RegisterGametype(name, _data)
 	local gametype_id = #MM.Gametypes + 1
-	MM.Gametypes[gametype_id] = _data or {}
+	_data = $ or {}
+	
+	setmetatable(_data, {
+		__index = gametype_t,
+	})
+	MM.Gametypes[gametype_id] = _data
+	
+	
 	MM.Gametypes[gametype_id].name = name
 	MM.Gametypes[gametype_id].id = gametype_id
-	
-	if MM.Gametypes[gametype_id].max_time == nil then
-		MM.Gametypes[gametype_id].max_time = DEFAULT_MAX_TIME
-	end
 	
 	return MM.Gametypes[gametype_id]
 end

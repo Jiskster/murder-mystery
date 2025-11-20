@@ -146,6 +146,9 @@ return function(self, maploaded)
 		MM_N.end_camera = nil
 	end
     local nextgametype = MM_N.next_gametype or 1
+	if (MM_N.forced_gametype)
+		nextgametype = MM_N.forced_gametype
+	end
 	
 	MM_N = shallowCopy(matchVars)
 	MM_N.gametype = nextgametype
@@ -156,6 +159,7 @@ return function(self, maploaded)
 	MM_N.map_weather = PRECIP_BLANK
 	MM_N.rounds = oldrounds or 0
 	MM_N.player_colors = {}
+	MM_N.forced_gametype = nil
 	
 	if MM.Gametypes[nextgametype].allow_respawn then
 		MM_N.allow_respawn = true

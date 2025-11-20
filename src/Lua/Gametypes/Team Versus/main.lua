@@ -3,6 +3,7 @@ local respawn_anim = 0
 local halfsecond = TICRATE/2
 
 local teamversus_mode = MM.RegisterGametype("Team Versus", {
+	tol = TOL_SAXAMM|TOL_MATCH;
 	max_time = 3*60*TICRATE;
 	required_players = 8;
 	inventory_count = 2;
@@ -21,16 +22,16 @@ local teamversus_mode = MM.RegisterGametype("Team Versus", {
 	--allow_respawn = true;
 	allow_corpses = true;
 	items = {"revolver", "shotgun", "sword", "knife", "hyperlaser"};
+	/*
 	thinker = function()
-		/*
 		if MM_N.time <= 90*TICRATE and MM_N.allow_respawn then
 			MM_N.allow_respawn = false
 			--chatprint("\x82\*Respawning disabled!")
 			S_StartSound(nil, sfx_s3k9c)
 			respawn_anim = RESPAWNTIME
 		end
-		*/
 	end;
+	*/
 })
 
 local ANIM = 2*TICRATE
