@@ -18,8 +18,6 @@ function MM.RegisterGametype(name, _data)
 		__index = gametype_t,
 	})
 	MM.Gametypes[gametype_id] = _data
-	
-	
 	MM.Gametypes[gametype_id].name = name
 	MM.Gametypes[gametype_id].id = gametype_id
 	
