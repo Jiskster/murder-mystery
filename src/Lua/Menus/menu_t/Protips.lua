@@ -166,23 +166,19 @@ MenuLib.addMenu({
 			"\x82".."Fire rate\x80: 2 seconds per shot",
 		})
 		y = $ + 25
-
-		x = props.corner_x + 2		
+		
+		x = props.corner_x + 2
 		v.drawString(x,y, "Tier 2", V_ALLOWLOWERCASE|V_YELLOWMAP, "left")
-		v.drawFill(props.corner_x, y + 10, 300, 1, 1)
+		v.drawFill(props.corner_x, y + 10, 300, 1, 73)
 		x = $ + 2; y = $ + 12
 		x = $ + drawWeaponText(v, x,y, "loudspeaker", {
-			"When equipped, sending a message will",
-			"broadcast it to everyone.",
-			"\x82".."Single Use\x80.",
+			"When equipped, sending a message will broadcast it to everyone.",
+			"Single use.",
 		})
-		x = $ + drawWeaponText(v, x,y, "snowball", {
+		v.drawFill(x,y - 1, 70,23, 30)
+		drawWeaponText(v, props.corner_x + menu.width - 117,y, "snowball", {
 			"8 snowballs that can push people around.",
 			"Great for non-violent self defense.",
-		})
-		x = $ + drawWeaponText(v, x,y, "balloon", {
-			"Let's you get a very",
-			"floaty high jump!",
 		})
 		y = $ + 25
 		
