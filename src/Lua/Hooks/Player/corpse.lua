@@ -33,6 +33,7 @@ end
 
 addHook("ShouldDamage", function(me, inf, sor, d, dmgt)
 	if not MM:isMM() then return end
+	if (dmgt & DMG_DEATHMASK) then return end
 	if MM:pregame() then return false; end
 	
 	local hook_event = MM.events["ShouldDamage"]
@@ -43,7 +44,6 @@ addHook("ShouldDamage", function(me, inf, sor, d, dmgt)
 		end
 	end
 
-	if (dmgt & DMG_DEATHMASK) then return end
 	
 	local p = me.player
 	if (p.powers[pw_flashing]) then return end
@@ -67,6 +67,7 @@ end,MT_PLAYER)
 addHook("MobjDeath", function(target, inflictor, source, dmgt)
 	if not MM:isMM() then return end
 	if MM:pregame() then return end
+	if MM_N.waiting_for_players then return end
 
 	local gt = MM.returnGametype()
 	
@@ -210,13 +211,15 @@ addHook("MobjDeath", function(target, inflictor, source, dmgt)
 						)
 						S_StartSound(nil,sfx_alart, consoleplayer)
 					end
-					p.mm.attract = {
+					table.insert(p.mm.attract, {
 						x = target.x,
 						y = target.y,
 						z = target.z,
 						tics = 10*TICRATE,
-						name = target.player.name
-					}
+						str = target.player.name,
+						patch = "MM_TNYCROSS",
+						scale = FU,
+					})
 				end
 			end
 		end
@@ -519,8 +522,9 @@ addHook("ThinkFrame", function()
 			MM.tryRunHook("CorpseThink", v,
 				corpse
 			)
+			-- hook removed our mobj
+			if not (corpse and corpse.valid) then return end
 		end
-		if not (corpse and corpse.valid) then return end
 		
         if MM_N.gameover then break end
 		

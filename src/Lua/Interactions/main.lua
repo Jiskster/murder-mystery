@@ -177,7 +177,7 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$StringArg0ToolTip The top text on the\ninteraction prompt. (Ex. Button)
 	
 	--$StringArg1 Action
-	--$StringArg1ToolTip The bottom text on the\ninteraction prompt. (Ex. Press)
+	--$StringArg1ToolTip The bottom text on the\ninteraction prompt. (Ex. Activate)
 	
 	--$Arg0 Interact Duration
 	--$Arg0Default 0
@@ -197,7 +197,7 @@ mobjinfo[MT_MM_INTERACT_POINT] = {
 	--$Arg3 Cooldown
 	--$Arg3Default 0
 	--$Arg3Type 0
-	--$Arg3Tooltip How long the point will need to wait (in tics) in order for players to interact with it again.\n Set to -1 for one-time use.
+	--$Arg3Tooltip How long the point will need to wait (in tics) in order for players to interact with it again.\nSet to -1 for one-time use.
 	
 	--$Arg4 Restrict
 	--$Arg4Default 0
@@ -245,7 +245,7 @@ end,MT_MM_INTERACT_POINT)
 
 local rolebits = {
 	[MMROLE_INNOCENT] = 1 << 0,
-	[MMROLE_SHERIFF] = 1 << 1,
+	[MMROLE_SHERIFF]  = 1 << 1,
 	[MMROLE_MURDERER] = 1 << 2,
 }
 

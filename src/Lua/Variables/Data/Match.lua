@@ -12,6 +12,7 @@ return {
 	
 	gametype = 1,
 	next_gametype = nil, -- changes to this gametype when map changes
+	forced_gametype = nil, -- for the command, force next gamemode to this
 
 	special_count = 0,
 

@@ -123,6 +123,15 @@ function module.ObjectTracking(v, p, c, point, reverse, allowspectator)
 	result.pitch = dp
 	result.fov = fg
 
+	result.base = {
+		fov = R_FOV(),
+		viewangle = viewangle,
+		viewaiming = viewaiming,
+		viewx = viewx,
+		viewy = viewy,
+		viewz = viewz
+	}
+
 	-- Rotate for screen roll...
 	if viewpointRoll then
 		local tempx = result.x

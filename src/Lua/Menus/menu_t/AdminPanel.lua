@@ -10,6 +10,11 @@ MenuLib.addMenu({
 	height = 120,
 	
 	drawer = function(v, ML, menu, props)
+		if not ((consoleplayer == server) or (IsPlayerAdmin(consoleplayer)))
+			MenuLib.initMenu(-1)
+			return
+		end
+		
 		MenuLib.interpolate(v, false)
 		local x,y = props.corner_x, props.corner_y
 		x = $ + 5

@@ -20,7 +20,7 @@ local function isDead(p, alwaysknow)
 	or alwaysknow
 		if (not (p and p.mo and p.mo.valid))
 		or p.spectator
-		or p.mo.health <= 0
+		or (p.mo.health <= 0 and not MM:pregame())
 		or (p.mm and p.mm.spectator)
 			return true
 		end
@@ -108,7 +108,7 @@ local function getViewedPlayerRole(player, viewer)
 	
 	local imDead = (not (viewer and viewer.mo and viewer.mo.valid))
 	or viewer.spectator
-	or viewer.mo.health <= 0
+	or (viewer.mo.health <= 0 and not MM:pregame())
 	or (viewer.mm and viewer.mm.spectator)
 	
 	if (player.mm.role == viewer.mm.role)

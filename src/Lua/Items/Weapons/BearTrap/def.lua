@@ -52,6 +52,7 @@ local function DropBearTrap(p)
 	mine.angle = me.angle
 	mine.scale = me.scale
 	mine.tracer = me
+	mine.tracer_player = p
 end
 
 MM.addHook("KeepingItem", function(p, def, item)

@@ -71,7 +71,11 @@ return function()
 				S_StartSound(nil, sfx_s3kb3)
 			end
 		elseif MM_N.mapVote.state == "done" and MM_N.mapVote.ticker <= 0 then
-			MM_N.next_gametype = MM_N.mapVote.selected_pool.gametype
+			if (MM_N.forced_gametype == nil)
+				MM_N.next_gametype = MM_N.mapVote.selected_pool.gametype
+			else
+				MM_N.next_gametype = MM_N.forced_gametype
+			end
 			print("MM Gametype: "..MM.Gametypes[MM_N.next_gametype].name) 
 			G_SetCustomExitVars(MM_N.mapVote.selected_map, 2)
 			G_ExitLevel()

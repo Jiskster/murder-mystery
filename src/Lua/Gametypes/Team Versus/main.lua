@@ -1,8 +1,9 @@
 local RESPAWNTIME = 5*TICRATE
 local respawn_anim = 0
-local halfsecond = TR/2
+local halfsecond = TICRATE/2
 
 local teamversus_mode = MM.RegisterGametype("Team Versus", {
+	tol = TOL_SAXAMM|TOL_MATCH;
 	max_time = 3*60*TICRATE;
 	required_players = 8;
 	inventory_count = 2;
@@ -21,20 +22,22 @@ local teamversus_mode = MM.RegisterGametype("Team Versus", {
 	--allow_respawn = true;
 	allow_corpses = true;
 	items = {"revolver", "shotgun", "sword", "knife", "hyperlaser"};
+	/*
 	thinker = function()
-		/*
 		if MM_N.time <= 90*TICRATE and MM_N.allow_respawn then
 			MM_N.allow_respawn = false
 			--chatprint("\x82\*Respawning disabled!")
 			S_StartSound(nil, sfx_s3k9c)
 			respawn_anim = RESPAWNTIME
 		end
-		*/
 	end;
+	*/
 })
 
-local TR = TICRATE
-local ANIM = 2*TR
+local dohitmarker = 0
+sfxinfo[freeslot("sfx_hitmrk")].caption = "Hitmarker"
+
+local ANIM = 2*TICRATE
 local FADEIN = 6
 local msgstatus = {
 	str = "",
@@ -54,11 +57,24 @@ local function ShowStandings()
 end
 
 -- Show how many we're fighting against on round start
-MM.addHook("RoundStart", ShowStandings)
+MM.addHook("RoundStart", do
+	local gt = MM.returnGametype()
+	if gt.name ~= "Team Versus" then return end
+	
+	ShowStandings()
+end)
 MM.addHook("KilledPlayer", function(attacking_p, player)
 	local gt = MM.returnGametype()
 	if gt.name ~= "Team Versus" then return end
-	if MM_N.time > 90*TICRATE then return end
+	--if MM_N.time > 90*TICRATE then return end
+	
+	if (consoleplayer and consoleplayer.valid)
+	and (attacking_p and attacking_p.valid)
+	and (consoleplayer == attacking_p)
+		dohitmarker = 8
+		S_StartSound(nil, sfx_hitmrk, consoleplayer)
+		S_StartSoundAtVolume(nil, sfx_hitmrk, 255/2, consoleplayer) --Bruh
+	end
 	
 	ShowStandings()
 end)
@@ -67,6 +83,19 @@ local byteLUT = {}
 for i = 26, 126
 	byteLUT[i] = ("%.3d"):format(i)
 end
+
+MMHUD.addHud("TVS_Hitmarker", false,false, function(v,p,c)
+	if not dohitmarker then return end
+	if c.chase then return end
+	
+	local alpha = 0
+	if dohitmarker < 5
+		alpha = (10 - (2 * dohitmarker))<<V_ALPHASHIFT
+	end
+	
+	v.drawScaled(160*FU,100*FU, FU/4, v.cachePatch("MM_HITMARK"),alpha, v.getColormap(nil, p.skincolor,nil))
+	dohitmarker = $ - 1
+end, "game")
 
 MMHUD.addHud("TVS_VsCount", false,false, function(v,p,c)
 	local gt = MM.returnGametype()

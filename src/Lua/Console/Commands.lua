@@ -357,7 +357,7 @@ COM_AddCommand("MM_NextGametype", function(p, modenum)
 	if (modenum == nil) then return CONS_Printf(p, "\x85\Invalid argument! #1 <modenum>") end
 	
 	if MM.Gametypes[modenum] then
-		MM_N.next_gametype = modenum
+		MM_N.forced_gametype = modenum
 		
 		print("\x82\An admin has set the next gametype to: "..MM.Gametypes[modenum].name)
 	else

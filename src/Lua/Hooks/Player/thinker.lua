@@ -66,7 +66,7 @@ addHook("PlayerThink", function(p)
 	end
 	
 	if not (MM_N.gameover
-	or MM:pregame())
+	or MM:pregame() or MM_N.waiting_for_players)
 		p.mm.timesurvived = $+1
 		-- This is a stupid hack, but nothing else works. Fuck you, Saxa.
 		MM_N.knownDeadPlayers[#p] = false
