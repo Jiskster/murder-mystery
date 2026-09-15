@@ -149,3 +149,17 @@ Selectheading = Murder Mystery
 Lua.MM_ClueAmount = 7
 Lua.MM_StormTimer = 30
 Lua.MM_StormTimer_Overtime = 25
+
+#@.do0fus
+Level DM
+LevelName = Mines
+NoZone = true
+Music = MINESM
+SkyNum = 7
+SkyboxScale = 10
+TypeOfLevel = SaxaMM
+NoVisitNeeded = true
+Selectheading = Murder Mystery
+Lua.MM_ClueAmount = 6
+Lua.MM_StormTimer = 30
+Lua.MM_StormTimer_Overtime = 25
